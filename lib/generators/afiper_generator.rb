@@ -1,6 +1,6 @@
 require 'rails/generators/base'
 
-class AsyncEndpointGenerator < Rails::Generators::Base
+class AfiperGenerator < Rails::Generators::Base
   source_root File.expand_path("../templates", __FILE__)
 
   def copy_initializer_file

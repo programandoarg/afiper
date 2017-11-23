@@ -1,6 +1,6 @@
 class CreateAsyncRequest < ActiveRecord::Migration
   def change
-    create_table :async_endpoint_async_requests do |t|
+    create_table :afiper_async_requests do |t|
       t.string :jid
       t.integer :status, default: 0, null: false
       t.text :response
@@ -10,6 +10,6 @@ class CreateAsyncRequest < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :async_endpoint_async_requests, :jid, unique: true
+    add_index :afiper_async_requests, :jid, unique: true
   end
 end

@@ -1,7 +1,7 @@
-require "async_endpoint/engine"
-require "async_endpoint/configuration"
+require "afiper/engine"
+require "afiper/configuration"
 
-module AsyncEndpoint
+module Afiper
   class << self
     attr_writer :configuration
   end

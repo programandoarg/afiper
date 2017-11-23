@@ -1,5 +1,5 @@
-module AsyncEndpoint
-  class AsyncEndpointWorker
+module Afiper
+  class AfiperWorker
     include Sidekiq::Worker
 
     def perform(async_request_id)

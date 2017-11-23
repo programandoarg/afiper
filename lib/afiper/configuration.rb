@@ -1,4 +1,4 @@
-module AsyncEndpoint
+module Afiper
   class Configuration
     attr_accessor :error_handlers
 

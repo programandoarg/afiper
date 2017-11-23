@@ -1,4 +1,4 @@
-module AsyncEndpoint
+module Afiper
   class AsyncRequest < ActiveRecord::Base
     enum status: [:pending, :processing, :done, :failed]
     attr_accessor :controller
@@ -62,7 +62,7 @@ module AsyncEndpoint
       save
     rescue StandardError => error
       failed "#{error.class}: #{error.message}"
-      AsyncEndpoint.configuration.error_handlers.each do |handler|
+      Afiper.configuration.error_handlers.each do |handler|
         handler.call(error)
       end
       save
@@ -91,7 +91,7 @@ module AsyncEndpoint
     end
 
     def start_worker
-      jid = AsyncEndpointWorker.perform_async(id)
+      jid = AfiperWorker.perform_async(id)
       update_attributes(jid: jid, status: AsyncRequest.statuses[:processing])
     end
 

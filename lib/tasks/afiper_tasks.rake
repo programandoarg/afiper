@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :async_endpoint do
+# task :afiper do
 #   # Task goes here
 # end

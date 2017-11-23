@@ -1,15 +1,15 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "async_endpoint/version"
+require "afiper/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "async_endpoint"
-  s.version     = AsyncEndpoint::VERSION
+  s.name        = "afiper"
+  s.version     = Afiper::VERSION
   s.authors     = ["Martín Rosso"]
   s.email       = ["mrosso10@gmail.com"]
-  s.homepage    = "https://github.com/mrosso10/async_endpoint"
+  s.homepage    = "https://github.com/mrosso10/afiper"
   s.summary     = "Make asynchronous endpoints in your Ruby on Rails application"
   s.description = "Often in our Rails applications we have tasks that may take a lot of time to finish, such as external API requests. This is risky to perform inside our endpoints because it blocks our threads and is not scalable. Here we provide a solution to this problem, using sidekiq to run our heavy work in background"
   s.license     = "MIT"

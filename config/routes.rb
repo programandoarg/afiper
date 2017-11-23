@@ -1,2 +1,2 @@
-AsyncEndpoint::Engine.routes.draw do
+Afiper::Engine.routes.draw do
 end

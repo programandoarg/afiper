@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    async_endpoint (0.0.1)
+    afiper (0.0.1)
       rails (~> 4.2)
       sidekiq (~> 4.1)
 
@@ -162,7 +162,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  async_endpoint!
+  afiper!
   database_cleaner
   factory_girl_rails (~> 4.0)
   faker
