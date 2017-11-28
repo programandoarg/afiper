@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Afiper::VERSION
   s.authors     = ["Martín Rosso"]
   s.email       = ["mrosso10@gmail.com"]
-  s.homepage    = "https://github.com/mrosso10/afiper"
+  s.homepage    = "https://github.com/programandoarg/afiper"
   s.summary     = "Make asynchronous endpoints in your Ruby on Rails application"
   s.description = "Often in our Rails applications we have tasks that may take a lot of time to finish, such as external API requests. This is risky to perform inside our endpoints because it blocks our threads and is not scalable. Here we provide a solution to this problem, using sidekiq to run our heavy work in background"
   s.license     = "MIT"
