@@ -1,5 +1,14 @@
 module Afiper
   class Comprobante < ActiveRecord::Base
+    ALICUOTAS = [
+        { desc: '21%', tipo_afip: 5, perc_iva: 21 },
+        { desc: '10.5%', tipo_afip: 4, perc_iva: 10.5 },
+        { desc: '5%', tipo_afip: 8, perc_iva: 5 },
+        { desc: '27%', tipo_afip: 6, perc_iva: 27 },
+        { desc: '2.5%', tipo_afip: 9, perc_iva: 2.5 },
+        { desc: '0%', tipo_afip: 3, perc_iva: 0 },
+      ]
+
     belongs_to :contribuyente
 
     before_validation do |comprobante|
@@ -22,6 +31,16 @@ module Afiper
 
     def subtotal_tributos
       0 # TODO
+    end
+
+    def alicuotas
+      ALICUOTAS.map do |alicuota|
+        {
+          base_imponible: self["iva_#{alicuota[:tipo_afip]}_base_imponible"],
+          importe: self["iva_#{alicuota[:tipo_afip]}_importe"],
+          tipo_afip: alicuota[:tipo_afip]
+        }
+      end.select { |alicuota| alicuota[:base_imponible] > 0 }
     end
   end
 end
