@@ -1,3 +1,3 @@
 module Afiper::Errors
-  class AfipHelperError < StandardError; end
+  class WsfeClientError < StandardError; end
 end

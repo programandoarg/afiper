@@ -1,5 +1,19 @@
 class CreateAfiperModels < ActiveRecord::Migration
   def change
+    create_table :afiper_contribuyentes do |t|
+      t.string :razon_social, null: false
+      t.string :cuit, null: false
+      t.string :iibb, null: false
+      t.date :inicio_actividades, null: false
+
+      t.string :afip_certificado
+      t.string :afip_clave
+      t.string :afip_certificado_homologacion
+      t.string :afip_clave_homologacion
+
+      t.timestamps null: false
+    end
+
     create_table :afiper_comprobantes do |t|
       t.references :afiper_contribuyente, null: false, foreign_key: true, index: true
 
@@ -55,15 +69,6 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :sign, null: false
       t.string :cuit, null: false
       t.boolean :homologacion, null: false
-
-      t.timestamps null: false
-    end
-
-    create_table :afiper_contribuyentes do |t|
-      t.string :razon_social, null: false
-      t.string :cuit, null: false
-      t.string :iibb, null: false
-      t.date :inicio_actividades, null: false
 
       t.timestamps null: false
     end

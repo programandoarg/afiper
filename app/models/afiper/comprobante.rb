@@ -9,7 +9,7 @@ module Afiper
         { desc: '0%', tipo_afip: 3, perc_iva: 0 },
       ]
 
-    belongs_to :contribuyente
+    belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
 
     before_validation do |comprobante|
       comprobante.concepto = 1 unless comprobante.concepto.present?

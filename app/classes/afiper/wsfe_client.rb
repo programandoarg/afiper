@@ -1,5 +1,9 @@
 module Afiper
   class WsfeClient
+    def initialize(contribuyente)
+      @contribuyente = contribuyente
+    end
+
     def solicitar_cae(comprobante)
       if !homologacion && Rails.env != 'production'
         fail 'Guarda al parche'
@@ -33,7 +37,7 @@ module Afiper
       }
       if comprobante.subtotal_gravado > 0
         parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
-          AlicIva: comprobante.alicuotas.map do |id, alicuota|
+          AlicIva: comprobante.alicuotas.map do |alicuota|
             {
               Id: alicuota[:tipo_afip],
               BaseImp: alicuota[:base_imponible],
@@ -145,17 +149,17 @@ module Afiper
       end
     end
 
-    def comercio
-      return @comercio if @comercio.present?
-      return @comprobante.comercio if @comprobante.present?
-    end
+    # def comercio
+    #   return @comercio if @comercio.present?
+    #   return @comprobante.comercio if @comprobante.present?
+    # end
 
     def auth_hash
       unless @auth_hash.present?
-        token = AfipToken.where(comercio_id: comercio.id, testing: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
+        token = WsaaToken.where(afiper_contribuyente_id: @contribuyente.id, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
         unless token.present?
           new_token = wsaa
-          token = AfipToken.create(comercio_id: comercio.id, cuit: comercio.cuit, testing: homologacion, token: new_token[0], sign: new_token[1])
+          token = WsaaToken.create(afiper_contribuyente_id: @contribuyente.id, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
         end
         @auth_hash = token.auth_hash
       end
@@ -163,16 +167,16 @@ module Afiper
     end
 
     def wsaa
-      unless comercio.afip_configured?
-        fail CustomApplicationError, 'Los certificados de la AFIP no están configurados'
-      end
+      # unless @contribuyente.afip_configured?
+      #   fail CustomApplicationError, 'Los certificados de la AFIP no están configurados'
+      # end
       if homologacion
-        raw = comercio.afip_certificado_homologacion
-        key_file = comercio.afip_clave_homologacion
+        raw = @contribuyente.afip_certificado_homologacion
+        key_file = @contribuyente.afip_clave_homologacion
         url = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms?wsdl"
       else
-        raw = comercio.afip_certificado
-        key_file = comercio.afip_clave
+        raw = @contribuyente.afip_certificado
+        key_file = @contribuyente.afip_clave
         url = "https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl"
       end
       certificate = OpenSSL::X509::Certificate.new raw
@@ -182,9 +186,7 @@ module Afiper
       signed = OpenSSL::PKCS7::sign certificate, key, generar_tra
       signed = signed.to_pem.lines.to_a[1..-2].join
       client = Savon.client do
-
         wsdl url
-
         convert_request_keys_to :none  # or one of [:lower_camelcase, :upcase, :none]
       end
       response = client.call(:login_cms, message: {in0: signed})
@@ -214,23 +216,24 @@ module Afiper
     end
 
     def build_client
-      if homologacion
-        client = Savon.client do
-          wsdl "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
-          convert_request_keys_to :none
-        end
-      else
-        client = Savon.client do
-          wsdl "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
-          convert_request_keys_to :none
-        end
+      Savon.client do
+        wsdl service_url
+        convert_request_keys_to :none
       end
     end
 
-    def dummy
-      client = build_client
-      response = client.call(:fe_dummy)
-      response.body
+    def service_url
+      if homologacion
+        "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+      else
+        "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
+      end
     end
+
+    # def dummy
+    #   client = build_client
+    #   response = client.call(:fe_dummy)
+    #   response.body
+    # end
   end
 end
