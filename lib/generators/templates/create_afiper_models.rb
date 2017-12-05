@@ -37,23 +37,12 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.decimal :subtotal_no_gravado,     precision: 15, scale: 2, null: false, default: 0.0
       t.decimal :subtotal_exento,         precision: 15, scale: 2, null: false, default: 0.0
 
-      # t.decimal :imp_total, precision: 15, scale: 2, null: false
-      # t.decimal :imp_neto, precision: 15, scale: 2, null: false
-      # t.decimal :imp_trib, precision: 15, scale: 2, null: false
-      # t.decimal :imp_iva, precision: 15, scale: 2, null: false
-
-      t.decimal :iva_3_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_3_importe,         precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_4_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_4_importe,         precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_5_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_5_importe,         precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_6_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_6_importe,         precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_8_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_8_importe,         precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_9_base_imponible,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :iva_9_importe,         precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_3,  precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_4,  precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_5,  precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_6,  precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_8,  precision: 15, scale: 2, null: false, default: 0.0
+      t.decimal :neto_gravado_9,  precision: 15, scale: 2, null: false, default: 0.0
 
       t.string :cae
       t.date :vencimiento_cae

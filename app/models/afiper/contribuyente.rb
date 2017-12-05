@@ -7,7 +7,9 @@ module Afiper
     end
 
     def proximo_numero(tipo, punto_de_venta)
-      wsfe_client.ultimo_cmp(tipo, punto_de_venta) + 1
+      # wsfe_client.ultimo_cmp(tipo, punto_de_venta) + 1
+      last = comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: punto_de_venta).order(:numero).last
+      (last.try(:numero) || 0) + 1
     end
   end
 end

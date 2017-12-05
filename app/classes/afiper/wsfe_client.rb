@@ -42,7 +42,7 @@ module Afiper
         parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
           AlicIva: comprobante.alicuotas.map do |alicuota|
             {
-              Id: alicuota[:tipo_afip],
+              Id: alicuota[:codigo_alicuota],
               BaseImp: alicuota[:base_imponible],
               Importe: alicuota[:importe]
             }
@@ -57,13 +57,14 @@ module Afiper
       cae = response[:fe_det_resp][:fecae_det_response][:cae]
       fch_vto = response[:fe_det_resp][:fecae_det_response][:cae_fch_vto]
       # TODO: parsear fecha
+      # fch_vto = Date.strptime(result[:fch_vto], '%Y%m%d'),
       comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
       response
     end
 
     def get_cmp(comprobante)
       @comprobante = comprobante # No borrar
-      get_cmp_det(comprobante.tipo, comprobante.punto_de_venta, comprobante.numero)
+      get_cmp_det(comprobante.tipo.to_sym, comprobante.punto_de_venta, comprobante.numero)
     end
 
     def actualizar_comprobante(comprobante)
@@ -256,9 +257,9 @@ module Afiper
             fecha: Date.strptime(result[:cbte_fch], '%Y%m%d'),
             punto_de_venta: pto_vta,
             numero: numero,
-            emisor_inicio_actividades: @contribuyente.inicio_actividades,
-            emisor_cuit: @contribuyente.cuit,
-            emisor_iibb: @contribuyente.iibb,
+            # emisor_inicio_actividades: @contribuyente.inicio_actividades,
+            # emisor_cuit: @contribuyente.cuit,
+            # emisor_iibb: @contribuyente.iibb,
             receptor_doc_tipo: result[:doc_tipo],
             receptor_doc_nro: result[:doc_nro],
             receptor_razon_social: "-", # TODO
