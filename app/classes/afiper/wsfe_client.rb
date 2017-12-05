@@ -1,3 +1,6 @@
+require 'savon'
+require 'afiper/errors/wsfe_client_error'
+
 module Afiper
   class WsfeClient
     def initialize(contribuyente)
@@ -13,7 +16,7 @@ module Afiper
           FeCabReq: {
             CantReg: 1,
             PtoVta: comprobante.punto_de_venta,
-            CbteTipo: comprobante.tipo
+            CbteTipo: comprobante.tipo_afip
           },
           FeDetReq: {
             FECAEDetRequest: {
@@ -49,7 +52,7 @@ module Afiper
       response = call(:fecae_solicitar, parameters)
       if response[:fe_cab_resp][:resultado] != 'A'
         messages = response[:fe_det_resp][:fecae_det_response][:observaciones][:obs]
-        fail WsfeClientError.new ([messages].flatten).to_json
+        fail Afiper::Errors::WsfeClientError.new ([messages].flatten).to_json
       end
       cae = response[:fe_det_resp][:fecae_det_response][:cae]
       fch_vto = response[:fe_det_resp][:fecae_det_response][:cae_fch_vto]
@@ -68,21 +71,25 @@ module Afiper
       comprobante.update_attributes!(cae: res[:cod_autorizacion], fch_vto: res[:fch_vto]) # TODO: tal vez agregar afip_result?
     end
 
-    def get_cmp_det(t, pv, n)
+    def get_cmp_det(tipo, punto_de_venta, numero)
+      validar_tipo(tipo)
+      tipo_afip = Comprobante::TIPOS_AFIP[tipo]
       response = call(:fe_comp_consultar,
         FeCompConsReq: {
-          PtoVta: pv,
-          CbteNro: n,
-          CbteTipo: t
+          PtoVta: punto_de_venta,
+          CbteNro: numero,
+          CbteTipo: tipo_afip
         }
       )
       response = response[:result_get]
       response
     end
 
-    def ultimo_cmp(cbte_tipo, pto_vta)
-      response = call(:fe_comp_ultimo_autorizado, PtoVta: pto_vta, CbteTipo: cbte_tipo)
-      response[:cbte_nro]
+    def ultimo_cmp(tipo, pto_vta)
+      validar_tipo(tipo)
+      tipo_afip = Comprobante::TIPOS_AFIP[tipo]
+      response = call(:fe_comp_ultimo_autorizado, PtoVta: pto_vta, CbteTipo: tipo_afip)
+      response[:cbte_nro].to_i
     end
 
     def get_comp_tot_x_request
@@ -141,18 +148,13 @@ module Afiper
         response = response.body[:"#{method}_response"][:"#{method}_result"]
         if response[:errors].present?
           messages = response[:errors][:err]
-          fail WsfeClientError.new ([messages].flatten).to_json
+          fail Afiper::Errors::WsfeClientError.new ([messages].flatten).to_json
         end
         response
       else
-        fail WsfeClientError.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
+        fail Afiper::Errors::WsfeClientError.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
       end
     end
-
-    # def comercio
-    #   return @comercio if @comercio.present?
-    #   return @comprobante.comercio if @comprobante.present?
-    # end
 
     def auth_hash
       unless @auth_hash.present?
@@ -216,24 +218,96 @@ module Afiper
     end
 
     def build_client
-      Savon.client do
-        wsdl service_url
-        convert_request_keys_to :none
+      if homologacion
+        client = Savon.client do
+          wsdl "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+          convert_request_keys_to :none
+        end
+      else
+        client = Savon.client do
+          wsdl "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
+          convert_request_keys_to :none
+        end
       end
     end
 
-    def service_url
-      if homologacion
-        "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
-      else
-        "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
-      end
-    end
+    # def service_url
+    #   if homologacion
+    #     "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+    #   else
+    #     "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
+    #   end
+    # end
 
     # def dummy
     #   client = build_client
     #   response = client.call(:fe_dummy)
     #   response.body
     # end
+
+    def fetch_comprobantes(tipo, pto_vta)
+      validar_tipo(tipo)
+      ultimo = ultimo_cmp(tipo, pto_vta)
+      (1..ultimo).each do |numero|
+        unless @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: pto_vta, numero: numero).exists?
+          result = get_cmp_det(tipo, pto_vta, numero)
+          @contribuyente.comprobantes.create!(
+            tipo: tipo,
+            fecha: Date.strptime(result[:cbte_fch], '%Y%m%d'),
+            punto_de_venta: pto_vta,
+            numero: numero,
+            emisor_inicio_actividades: @contribuyente.inicio_actividades,
+            emisor_cuit: @contribuyente.cuit,
+            emisor_iibb: @contribuyente.iibb,
+            receptor_doc_tipo: result[:doc_tipo],
+            receptor_doc_nro: result[:doc_nro],
+            receptor_razon_social: "-", # TODO
+
+            concepto: result[:concepto],
+            mon_id: result[:mon_id],
+            mon_cotiz: result[:mon_cotiz],
+
+            subtotal_no_gravado: result[:imp_tot_conc],
+            subtotal_exento: result[:imp_op_ex],
+
+            cae: result[:cod_autorizacion],
+            vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
+            afip_result: result
+          )
+        end
+      end
+    end
+
+    def validar_tipo(tipo)
+      return unless Comprobante::TIPOS_AFIP[tipo].nil?
+      raise Afiper::Errors::WsfeClientError.new "Tipo erróneo #{tipo}"
+    end
+# {
+# :concepto=>"1",
+# :doc_tipo=>"80",
+# :doc_nro=>"20351404478",
+# # :cbte_fch=> Date.strptime("20171205", '%Y%m%d'),
+# :imp_total=>"0",
+# :imp_tot_conc=>"0",
+# :imp_neto=>"0",
+# :imp_op_ex=>"0",
+# :imp_trib=>"0",
+# :imp_iva=>"0",
+# :mon_id=>"PES",
+# :mon_cotiz=>"1",
+# # :resultado=>"A",
+# :cod_autorizacion=>"67491627188026",
+# # :emision_tipo=>"CAE",
+# :fch_vto=>"20171215",
+# :fch_proceso=>"20171205120348",
+# :observaciones=>{
+#   :obs=> {
+#     :code=>"10063",
+#     :msg=>"Factura (CbteDesde igual a CbteHasta), DocTipo, DocNro, no se encuentra inscripto en condicion ACTIVA en el impuesto (IVA)."
+#   }
+# },
+# :pto_vta=>"2",
+# :cbte_tipo=>"1"}
+
   end
 end
