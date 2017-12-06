@@ -55,7 +55,7 @@ module Afiper
     end
 
     def iva_base_imponible(codigo_alicuota)
-      self["neto_gravado_#{alicuota[:codigo_alicuota]}"]
+      self["neto_gravado_#{codigo_alicuota}"]
     end
 
     def iva_importe(codigo_alicuota)
@@ -72,7 +72,7 @@ module Afiper
     end
 
     def alicuotas
-      ALICUOTAS.map do |alicuota|
+      ALICUOTAS.values.map do |alicuota|
         {
           base_imponible: iva_base_imponible(alicuota[:codigo_alicuota]),
           importe: iva_importe(alicuota[:codigo_alicuota]),

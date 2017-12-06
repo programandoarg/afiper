@@ -219,26 +219,20 @@ module Afiper
     end
 
     def build_client
-      if homologacion
-        client = Savon.client do
-          wsdl "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
-          convert_request_keys_to :none
-        end
-      else
-        client = Savon.client do
-          wsdl "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
-          convert_request_keys_to :none
-        end
+      url = service_url
+      client = Savon.client do
+        wsdl url
+        convert_request_keys_to :none
       end
     end
 
-    # def service_url
-    #   if homologacion
-    #     "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
-    #   else
-    #     "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
-    #   end
-    # end
+    def service_url
+      if homologacion
+        "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+      else
+        "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
+      end
+    end
 
     # def dummy
     #   client = build_client
@@ -252,14 +246,11 @@ module Afiper
       (1..ultimo).each do |numero|
         unless @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: pto_vta, numero: numero).exists?
           result = get_cmp_det(tipo, pto_vta, numero)
-          @contribuyente.comprobantes.create!(
+          comprobante = @contribuyente.comprobantes.new(
             tipo: tipo,
             fecha: Date.strptime(result[:cbte_fch], '%Y%m%d'),
             punto_de_venta: pto_vta,
             numero: numero,
-            # emisor_inicio_actividades: @contribuyente.inicio_actividades,
-            # emisor_cuit: @contribuyente.cuit,
-            # emisor_iibb: @contribuyente.iibb,
             receptor_doc_tipo: result[:doc_tipo],
             receptor_doc_nro: result[:doc_nro],
             receptor_razon_social: "-", # TODO
@@ -275,6 +266,12 @@ module Afiper
             vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
             afip_result: result
           )
+          if result[:iva] && result[:iva][:alic_iva]
+            [result[:iva][:alic_iva]].flatten.each do |iva|
+              comprobante["neto_gravado_#{iva[:id]}"] = iva[:base_imp]
+            end
+          end
+          comprobante.save!
         end
       end
     end
@@ -283,32 +280,5 @@ module Afiper
       return unless Comprobante::TIPOS_AFIP[tipo].nil?
       raise Afiper::Errors::WsfeClientError.new "Tipo erróneo #{tipo}"
     end
-# {
-# :concepto=>"1",
-# :doc_tipo=>"80",
-# :doc_nro=>"20351404478",
-# # :cbte_fch=> Date.strptime("20171205", '%Y%m%d'),
-# :imp_total=>"0",
-# :imp_tot_conc=>"0",
-# :imp_neto=>"0",
-# :imp_op_ex=>"0",
-# :imp_trib=>"0",
-# :imp_iva=>"0",
-# :mon_id=>"PES",
-# :mon_cotiz=>"1",
-# # :resultado=>"A",
-# :cod_autorizacion=>"67491627188026",
-# # :emision_tipo=>"CAE",
-# :fch_vto=>"20171215",
-# :fch_proceso=>"20171205120348",
-# :observaciones=>{
-#   :obs=> {
-#     :code=>"10063",
-#     :msg=>"Factura (CbteDesde igual a CbteHasta), DocTipo, DocNro, no se encuentra inscripto en condicion ACTIVA en el impuesto (IVA)."
-#   }
-# },
-# :pto_vta=>"2",
-# :cbte_tipo=>"1"}
-
   end
 end
