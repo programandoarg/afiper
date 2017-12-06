@@ -69,7 +69,7 @@ module Afiper
 
     def actualizar_comprobante(comprobante)
       res = get_cmp(comprobante)
-      comprobante.update_attributes!(cae: res[:cod_autorizacion], fch_vto: res[:fch_vto]) # TODO: tal vez agregar afip_result?
+      comprobante.update_attributes!(cae: res[:cod_autorizacion], vencimiento_cae: res[:fch_vto]) # TODO: tal vez agregar afip_result?
     end
 
     def get_cmp_det(tipo, punto_de_venta, numero)

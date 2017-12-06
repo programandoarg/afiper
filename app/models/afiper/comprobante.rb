@@ -80,5 +80,17 @@ module Afiper
         }
       end.select { |alicuota| alicuota[:base_imponible] > 0 }
     end
+
+    def solicitar_cae
+      contribuyente.wsfe_client.solicitar_cae(self)
+    end
+
+    def actualizar_comprobante
+      contribuyente.wsfe_client.actualizar_comprobante(self)
+    end
+
+    def readonly?
+      persisted? && cae_was.present?
+    end
   end
 end
