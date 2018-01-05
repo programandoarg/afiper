@@ -1,0 +1,31 @@
+- content_for(:title, 'Contribuyentes')
+- content_for :actions do
+  = link_to new_contribuyente_path, class: 'btn btn-primary' do 
+    span.glyphicon.glyphicon-plus
+    |  Nuevo contribuyente
+
+table.table.table-bordered.table-striped.table-condensed
+  tr
+    th Razón social
+    th CUIT
+    th Ingresos brutos
+    th Inicio de actividades
+    th Acciones
+  - @contribuyentes.each do |contribuyente|
+    tr
+      td = contribuyente.razon_social
+      td = contribuyente.cuit
+      td = contribuyente.iibb
+      td = dmy contribuyente.inicio_actividades
+      td
+        span rel="tooltip" title="Ver"
+          = link_to contribuyente, class: 'btn btn-xs btn-primary' do
+            span.glyphicon.glyphicon-eye-open
+        | &nbsp;
+        span rel="tooltip" title="Editar"
+          = link_to edit_contribuyente_path(contribuyente), class: 'btn btn-xs btn-default' do
+            span.glyphicon.glyphicon-edit
+        | &nbsp;
+        span rel="tooltip" title="Borrar"
+          = link_to contribuyente, data: {confirm: '¿Estás seguro?'}, method: :delete, class: 'btn btn-xs btn-danger' do
+            span.glyphicon.glyphicon-trash

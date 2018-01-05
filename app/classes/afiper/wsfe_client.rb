@@ -240,6 +240,7 @@ module Afiper
     #   response.body
     # end
 
+    # fetch_comprobantes(:factura_a, 1)
     def fetch_comprobantes(tipo, pto_vta)
       validar_tipo(tipo)
       ultimo = ultimo_cmp(tipo, pto_vta)

@@ -2,6 +2,8 @@ module Afiper
   class Contribuyente < ActiveRecord::Base
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id
 
+    validates :razon_social, :cuit, :iibb, :inicio_actividades, presence: true
+
     def wsfe_client
       WsfeClient.new(self)
     end

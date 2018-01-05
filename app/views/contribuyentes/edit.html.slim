@@ -1,0 +1,10 @@
+- content_for(:title, 'Editar contribuyente')
+- content_for :actions do
+  = link_to contribuyente_path(@contribuyente), class: 'btn btn-default' do 
+    span.glyphicon.glyphicon-info-sign
+    |  Ver 
+  = link_to contribuyentes_path, class: 'btn btn-default' do 
+    span.glyphicon.glyphicon-list-alt
+    |  Listado 
+
+= render 'form'

@@ -1,0 +1,52 @@
+.form-wrapper-small
+  = form_for(@contribuyente, html: { class: "form-horizontal", role: "form" }) do |f|
+    - if @contribuyente.errors.any?
+      .alert.alert-danger.alert-dismissable role="alert"
+        button.close type="button" data-dismiss="alert"
+          span aria-hidden="true"
+            | &times;
+          span.sr-only
+            | Close
+        h4= "#{pluralize(@contribuyente.errors.count,"error")} prohibited this contribuyente from being saved:"
+        ul
+          - @contribuyente.errors.full_messages.each do |msg|
+            li= msg
+    .form-group
+      = f.label :razon_social, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_field :razon_social, class: "form-control", required: true
+    .form-group
+      = f.label :cuit, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_field :cuit, class: "form-control", required: true
+    .form-group
+      = f.label :iibb, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_field :iibb, class: "form-control", required: true
+    .form-group
+      = f.label :inicio_actividades, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_field :inicio_actividades, class: "datefield form-control", required: true
+    .form-group
+      = f.label :afip_certificado, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_area :afip_certificado, class: "form-control"
+    .form-group
+      = f.label :afip_clave, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_area :afip_clave, class: "form-control"
+    .form-group
+      = f.label :afip_certificado_homologacion, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_area :afip_certificado_homologacion, class: "form-control"
+    .form-group
+      = f.label :afip_clave_homologacion, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_area :afip_clave_homologacion, class: "form-control"
+   
+    .form-group
+      .col-sm-offset-4.col-sm-8
+        = f.submit class: "btn btn-primary"
+
+javascript:
+  $('form').validate();

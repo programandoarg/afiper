@@ -1,0 +1,7 @@
+- content_for(:title, 'Nuevo contribuyente')
+- content_for :actions do
+  = link_to contribuyentes_path, class: 'btn btn-default' do 
+    span.glyphicon.glyphicon-list-alt
+    |  Volver 
+
+= render 'form'
