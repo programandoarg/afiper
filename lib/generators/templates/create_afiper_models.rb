@@ -34,19 +34,32 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :mon_id, null: false
       t.integer :mon_cotiz, null: false
 
-      t.decimal :subtotal_no_gravado,     precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :subtotal_exento,         precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :subtotal_no_gravado,     precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :subtotal_exento,         precision: 15, scale: 2, null: false, default: 0.0
 
-      t.decimal :neto_gravado_3,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :neto_gravado_4,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :neto_gravado_5,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :neto_gravado_6,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :neto_gravado_8,  precision: 15, scale: 2, null: false, default: 0.0
-      t.decimal :neto_gravado_9,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_3,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_4,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_5,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_6,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_8,  precision: 15, scale: 2, null: false, default: 0.0
+      # t.decimal :neto_gravado_9,  precision: 15, scale: 2, null: false, default: 0.0
 
       t.string :cae
       t.date :vencimiento_cae
       t.string :afip_result # JSON que retorna la API al solicitar CAE, se guarda por las dudas
+
+      t.timestamps null: false
+    end
+
+    create_table :afiper_items do |t|
+      t.references :afiper_comprobante, null: false, foreign_key: true, index: true
+      t.integer :tipo, null: false
+      t.decimal :percepcion_iva, null: false
+
+      t.string :codigo, null: false
+      t.string :detalle, null: false
+      t.integer :cantidad, null: false, default: 1
+      t.decimal :importe, precision: 15, scale: 2, null: false
 
       t.timestamps null: false
     end

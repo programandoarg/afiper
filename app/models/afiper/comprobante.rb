@@ -1,14 +1,5 @@
 module Afiper
   class Comprobante < ActiveRecord::Base
-    ALICUOTAS = {
-      3 => { desc: '0%', codigo_alicuota: 3, perc_iva: 0 },
-      4 => { desc: '10.5%', codigo_alicuota: 4, perc_iva: 10.5 },
-      5 => { desc: '21%', codigo_alicuota: 5, perc_iva: 21 },
-      6 => { desc: '27%', codigo_alicuota: 6, perc_iva: 27 },
-      8 => { desc: '5%', codigo_alicuota: 8, perc_iva: 5 },
-      9 => { desc: '2.5%', codigo_alicuota: 9, perc_iva: 2.5 },
-    }
-
     TIPOS_AFIP = {
       factura_a: 1,
       factura_b: 6,
@@ -31,6 +22,7 @@ module Afiper
     ]
 
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
+    has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id
 
     before_create do |comprobante|
       comprobante.concepto = 1 unless comprobante.concepto.present? # Productos
@@ -42,25 +34,35 @@ module Afiper
       comprobante.numero = comprobante.contribuyente.proximo_numero(comprobante.tipo.to_sym, comprobante.punto_de_venta) unless comprobante.numero.present?
     end
 
+
+    # Validaciones
+
+    def validate_total
+      return if items?
+      errors[:base] << 'El comprobante debe tener al menos un renglón'
+    end
+
+
+    # Totales
+
+    def subtotal_no_gravado
+      items.no_gravado.sum('cantidad * importe')
+    end
+
+    def subtotal_exento
+      items.exento.sum('cantidad * importe')
+    end
+
+    def subtotal_gravado
+      items.gravado.sum('cantidad * importe')
+    end
+
     def total
       subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
     end
 
-    def subtotal_gravado
-      iva_base_imponible(3) + iva_base_imponible(4) + iva_base_imponible(5) + iva_base_imponible(6) + iva_base_imponible(8) + iva_base_imponible(9)
-    end
-
     def subtotal_iva
-      iva_importe(3) + iva_importe(4) + iva_importe(5) + iva_importe(6) + iva_importe(8) + iva_importe(9)
-    end
-
-    def iva_base_imponible(codigo_alicuota)
-      self["neto_gravado_#{codigo_alicuota}"]
-    end
-
-    def iva_importe(codigo_alicuota)
-      alicuota = ALICUOTAS[codigo_alicuota]
-      (iva_base_imponible(codigo_alicuota) * alicuota[:perc_iva] * 0.01).round(2)
+      items.gravado.sum('round(cantidad * importe * 0.01 * percepcion_iva, 2)')
     end
 
     def subtotal_tributos
@@ -72,11 +74,11 @@ module Afiper
     end
 
     def alicuotas
-      ALICUOTAS.values.map do |alicuota|
+      items.gravado.group_by(&:tipo).map do |k, v|
         {
-          base_imponible: iva_base_imponible(alicuota[:codigo_alicuota]),
-          importe: iva_importe(alicuota[:codigo_alicuota]),
-          codigo_alicuota: alicuota[:codigo_alicuota]
+          base_imponible: v.map { |e| (e.cantidad * e.importe).round(2) }.sum.to_f
+          importe: v.map { |e| (e.cantidad * e.importe * 0.01 * Item.tipos[k][:percepcion_iva]).round(2) }.sum.to_f
+          codigo_alicuota: Item.tipos[k][:codigo_alicuota]
         }
       end.select { |alicuota| alicuota[:base_imponible] > 0 }
     end
