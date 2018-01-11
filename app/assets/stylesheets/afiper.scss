@@ -1,0 +1,105 @@
+// Place all the styles related to the Comprobantes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.field_with_errors {
+  display: inline;
+}
+
+.table.cuenta-corriente {
+  td {
+    white-space: nowrap;
+  }
+}
+input.combined-left {
+  width: 66px!important;
+  padding: 0px;
+  border-radius: 4px 0px 0px 4px;
+  display: inline-block;
+  text-align: center;
+}
+input.combined-right {
+  padding: 0px;
+  border-radius: 0px 4px 4px 0px;
+  border-left: none;
+  text-align: right;
+  display: inline-block;
+  width: calc(100% - 66px)!important;
+}
+.table.items {
+  // table-layout: fixed;
+  input {
+    outline: none;
+  }
+  tr {
+    td {
+      border: 1px solid silver;
+      padding: 0px;
+      select, input {
+        border: none;
+        width: 100%;
+        height: 29px;
+      }
+      // .remove_nested_fields {
+      //   font-size: 19px;
+      //   line-height: 4px;
+      //   color: darkred;
+      //   width: 100%;
+      //   height: 32px;
+      //   padding-top: 5px;
+      //   display: block;
+      // }
+    }
+    th.type, td.type {
+      width: 110px;
+    }
+    th.details, td.details {
+      width: 380px;
+      padding-left: 20px;
+      // text-align: center;
+    }
+    input.importe {
+      text-align: right;
+    }
+    td.importe {
+      border-left: none;
+    }
+    th.price, td.price {
+      text-align: right;
+      width: 100px;
+    }
+    td.price-symbol {
+      border-right: none;
+      font-weight: normal;
+      font-size: 19px;
+      padding: 2px 0px 0px 6px;
+      width: 23px;
+    }
+    th.remove, td.remove {
+      width: 34px;
+      padding-top: 7px;
+      border: none;
+      text-align: center;
+    }
+  }
+}
+
+.resumen-print {
+  font-size: 18px;
+}
+@media print {
+  .container {
+    max-width: 700px;
+  }
+  .table.cuenta-corriente {
+    font-size: 18px;
+    // font-size: 12px;
+    td {
+      padding: 0px;
+    }
+    th {
+      padding: 0px;
+      border: 0;
+    }
+  }
+}

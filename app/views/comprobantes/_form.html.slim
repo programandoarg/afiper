@@ -1,0 +1,321 @@
+= nested_form_for @comprobante do |f|
+  = f.hidden_field :tipo
+  = f.hidden_field :creado_por_el_sistema
+
+  - if @comprobante.errors.any?
+    #error_expl.panel.panel-danger
+      .panel-heading
+        h3.panel-title
+          = pluralize(@comprobante.errors.count, "error")
+          | :
+      .panel-body
+        ul
+          - @comprobante.errors.full_messages.each do |msg|
+            li
+              = msg
+  .row
+    .col-sm-3.col-lg-2
+      .control-group
+        = f.label 'Número', :class => 'control-label'
+        .controls
+          = f.number_field :punto_de_venta, value: f.object.pventa_formatted, :class => 'form-control combined-left', readonly: true
+          = f.number_field :numero, value: f.object.numero_formatted, :class => 'form-control combined-right', readonly: true
+        / = error_span(@comprobante[:punto_de_venta])
+        / = error_span(@comprobante[:numero])
+    / .col-sm-5
+      .control-group.cliente-control
+        = f.label :cliente_id, :class => 'control-label'
+        .controls
+          = f.select :cliente_id, options_from_collection_for_select(comercio_actual.clientes, :id, :to_s, @comprobante.cliente_id), {:include_blank => '-'}, :class => 'form-control chosen'
+        / = error_span(@comprobante[:cliente_id])
+    / - if @comprobante.can_be_consumidor_final
+      .col-sm-2
+        .control-group
+          = label_tag nil, 'Sin cliente', :class => 'control-label'
+          .controls
+            = f.label :consumidor_final_true, 'Si'
+            |  
+            = f.radio_button :consumidor_final, true, class: 'consumidor-final si'
+            |  
+            = f.label :consumidor_final_false, 'No'
+            |  
+            = f.radio_button :consumidor_final, false, class: 'consumidor-final no'
+    .col-sm-2.col-lg-3.text-right
+      = f.submit nil, :class => 'btn btn-primary'
+  .row
+    .col-sm-3.col-lg-2
+      .control-group
+        = f.label :fecha, :class => 'control-label'
+        .controls
+          / = f.text_field :fecha, :class => 'form-control', readonly: true
+          = f.text_field :fecha, value: dmy(f.object.fecha), class: "form-control datefield"
+        / = error_span(@comprobante[:fecha])
+    / .col-sm-5
+      .control-group
+        = f.label :observaciones, :class => 'control-label'
+        .controls
+          = f.text_field :observaciones, :class => 'form-control'
+        / = error_span(@comprobante[:observaciones])
+    / - if @comprobante.can_be_contado
+    .col-sm-2
+      .control-group
+        = label_tag nil, 'Contado', :class => 'control-label'
+        .controls
+          = f.label :contado_true, 'Si'
+          |  
+          = f.radio_button :contado, true
+          |  
+          = f.label :contado_false, 'No'
+          |  
+          = f.radio_button :contado, false
+        / = error_span(@comprobante[:contado])
+  hr
+  .row
+    .col-sm-9
+      table.table.items
+        thead
+          tr
+            / - if @comprobante.form_element(:tipo_de_pago)
+              th.type Tipo de pago
+            / - if @comprobante.form_element(:articulo)
+              th Artículo
+            - if @comprobante.form_element(:iva)
+              th.type IVA
+            th.details Detalle
+            - if @comprobante.form_element(:cantidad)
+              th.price Cantidad
+            th.price colspan="2" Importe
+            - if @comprobante.form_element(:cantidad)
+              th.price Total
+            th.remove
+        tbody
+          = f.fields_for :items, :wrapper => false do |item_form|
+            tr.fields
+              / - if @comprobante.form_element(:tipo_de_pago)
+                td
+                  = item_form.select :articulo, Comprobante.tipo_pagos.keys.map(&:titleize), { include_blank: '-'}, class: ''
+              / - if @comprobante.form_element(:articulo)
+                td
+                  = item_form.select :producto_id, options_from_collection_for_select(comercio_actual.productos.all, :id, :nombre, item_form.object.producto_id), { include_blank: '-'}
+              - if @comprobante.form_element(:iva)
+                td
+                  = item_form.select :tipo, Item.tipos_for_select, {}, class: 'tipo-iva'
+              td.details
+                = item_form.text_field :detalle, class: ''
+              - if @comprobante.form_element(:cantidad)
+                td
+                  = item_form.number_field :cantidad, class: 'cantidad text-center', min: 1
+              - else
+                = item_form.hidden_field :cantidad, value: '1', class: 'cantidad'
+              td.price-symbol $
+              td.price
+                = item_form.number_field :importe, class: 'importe', step: "0.01"
+              - if @comprobante.form_element(:cantidad)
+                td.total style="text-align: center; vertical-align: middle; background-color: lightgrey;"
+              td.remove
+                = item_form.link_to_remove title: "Borrar"
+                  span.glyphicon.glyphicon-remove
+
+      = f.link_to_add :items, data: { target: 'table.items tbody'}, class: 'btn btn-default'
+        span.glyphicon.glyphicon-plus
+        |  Agregar
+      table.table.atributos
+        tr.subtotales
+br
+br
+br
+br
+css:
+  table.atributos {
+    text-align: right;
+  }
+
+  table.atributos td {
+    display: inline-block;
+    min-width: 100px;
+  }
+  .cliente-control {
+    transition: opacity 0.4s ease-in;
+  }
+
+javascript:
+  function round(value) {
+    return Math.round(value * 100) / 100;
+  }
+
+  jQuery(function($) {
+    // $('.select-on-click').on('click', function() {
+    //   this.setSelectionRange(0, this.value.length);
+    // });
+
+    // $('.consumidor-final').change(function() {
+    //   if( $('.consumidor-final.si').is(':checked') ) {
+    //     $('.cliente-control').css('opacity', 0);
+    //     $('.cliente-control select').val(null);
+    //   } else {
+    //     $('.cliente-control').css('opacity', 1);
+    //   }
+    // });
+    // $('.consumidor-final').change();
+
+    // $('.new_comprobante #comprobante_fecha').change(function() {
+    //   $(this.form).find('.old-alert').hide();
+    //   var value = moment($(this).val(), "DD/MM/YYYY");
+    //   if( value < moment().subtract(10, 'days') ) {
+    //     $(this.form).find('.old-alert .diff').text(moment.duration(value - moment()).humanize())
+    //     $(this.form).find('.old-alert').show();
+    //   }
+    // });
+    // $('.new_comprobante #comprobante_fecha, .edit_comprobante #comprobante_fecha').change(function() {
+    //   $(this.form).find('.future-alert').hide();
+    //   var value = moment($(this).val(), "DD/MM/YYYY");
+    //   if( value > moment() ) {
+    //     $(this.form).find('.future-alert .diff').text(moment.duration(value - moment()).humanize())
+    //     $(this.form).find('.future-alert').show();
+    //   }
+    // });
+    // $('.new_comprobante #comprobante_fecha, .edit_comprobante #comprobante_fecha').change();
+
+    $('table.items tr:not(.removed) td select.tipo-iva').change(updateTotal);
+    $('table.items tr:not(.removed) td input.cantidad').keyup(updateTotal);
+    $('table.items tr:not(.removed) td input.cantidad').change(updateTotal);
+    $('table.items tr:not(.removed) td.price input').keyup(updateTotal);
+    $('table.items tr:not(.removed) td.price input').change(updateTotal);
+    updateTotal();
+
+    $(document).on('nested:fieldAdded', function(event){
+      // this field was just inserted into your form
+      var field = event.field;
+      field.hide();
+      field.fadeIn(400);
+      updateTotal();
+      field.find('td select.tipo-iva').change(updateTotal);
+      field.find('td input.cantidad').keyup(updateTotal);
+      field.find('td input.cantidad').change(updateTotal);
+      field.find('td.price input').keyup(updateTotal);
+      field.find('td.price input').change(updateTotal);
+    });
+    $(document).on('nested:fieldRemoved', function(event){
+      // this field was just inserted into your form
+      var field = event.field;
+      field.addClass('removed');
+      field.show();
+      field.fadeOut(400);
+      updateTotal();
+    });
+
+    function build_alicuotas() {
+      return {
+        0: {
+          'perc_iva': 0.21,
+          'desc': 'IVA 21%',
+          'items': []
+        },
+        1: {
+          'perc_iva': 0.105,
+          'desc': 'IVA 10.5%',
+          'items': []
+        },
+        2: {
+          'perc_iva': 0.05,
+          'desc': 'IVA 5%',
+          'items': []
+        },
+        3: {
+          'perc_iva': 0.27,
+          'desc': 'IVA 27%',
+          'items': []
+        },
+        4: {
+          'perc_iva': 0.025,
+          'desc': 'IVA 2.5%',
+          'items': []
+        },
+        5: {
+          'perc_iva': 0,
+          'desc': 'IVA 0%',
+          'items': []
+        },
+        6: {
+          'perc_iva': null,
+          'desc': 'No gravado',
+          'items': []
+        },
+        7: {
+          'perc_iva': null,
+          'desc': 'Exento',
+          'items': []
+        }
+      };
+    }
+
+    function updateTotal() {
+      if( $('select.tipo-iva').length > 0 ) {
+        updateTotalIva();
+      } else {
+        updateTotalNoIva();
+      }
+    }
+
+    function updateTotalNoIva() {
+      var sum = 0;
+      var items = $('table.items tr.fields:not(.removed)');
+      items.each(function(i,e){
+        var importe = parseFloat($(e).find('input.importe').val());
+        var cantidad = parseInt($(e).find('input.cantidad').val());
+        if( importe > 0 && cantidad > 0) {
+          sum += round(cantidad * importe);
+          $(e).find('.total').text(round(cantidad * importe));
+        } else {
+          $(e).find('.total').text('');
+        }
+      });
+      $('.table.atributos tr.subtotales').html('');
+      $('.table.atributos tr.subtotales').append('<td>Total</td>');
+      $('.table.atributos tr.subtotales').append('<td>' + sum + '</td>');
+    }
+
+    function updateTotalIva() {
+      var alicuotas = build_alicuotas();
+      var total = 0;
+      var items = $('table.items tr.fields:not(.removed)');
+      items.each(function(i,e) {
+        var importe = parseFloat($(e).find('input.importe').val());
+        var cantidad = parseInt($(e).find('input.cantidad').val());
+        if( importe > 0 && cantidad > 0) {
+          $(e).find('.total').text(round(cantidad * importe));
+        } else {
+          $(e).find('.total').text('');
+        }
+        alicuotas[$(e).find('.tipo-iva').val()]['items'].push(e);
+      });
+
+      $('.table.atributos tr.subtotales').html('');
+      for( var id in alicuotas) {
+        var item = alicuotas[id];
+        var neto = item['items'].reduce(function(a, e, i, v) {
+          var importe = parseFloat($(e).find('input.importe').val());
+          var cantidad = parseInt($(e).find('input.cantidad').val());
+          if( importe > 0 && cantidad > 0) {
+            return a + round(cantidad * importe);
+          }
+          return a;
+        }, 0);
+        if( neto <= 0 ) {
+          continue;
+        }
+        total += neto;
+        var label = '<td>' + item['desc'] + '</td>';
+        $('.table.atributos tr.subtotales').append(label);
+        var valuerrr = neto.toFixed(2)
+        if( item['perc_iva'] !== null ) {
+          var iva = round(neto * item['perc_iva'])
+          total += iva;
+          valuerrr += ' + ' + iva;
+        }
+        $('.table.atributos tr.subtotales').append('<td>' + valuerrr + '</td>');
+      }
+      $('.table.atributos tr.subtotales').append('<td>Total</td>');
+      $('.table.atributos tr.subtotales').append('<td>' + total.toFixed(2) + '</td>');
+    }
+  });

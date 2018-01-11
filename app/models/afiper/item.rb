@@ -17,6 +17,10 @@ module Afiper
           7 => { descripcion: 'Exento',      codigo_alicuota: nil,  percepcion_iva: nil   }
         }
       end
+
+      def tipo_from_afip(tipo_afip)
+        tipos.find {|k,v| v[:codigo_alicuota] == tipo_afip.to_i }.first
+      end
     end
 
     DEFAULT_TIPO = 6 # No gravado

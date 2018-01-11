@@ -44,6 +44,14 @@ class CreateAfiperModels < ActiveRecord::Migration
       # t.decimal :neto_gravado_8,  precision: 15, scale: 2, null: false, default: 0.0
       # t.decimal :neto_gravado_9,  precision: 15, scale: 2, null: false, default: 0.0
 
+      t.date :fecha_servicio_desde
+      t.date :fecha_servicio_hasta
+      t.date :fecha_vencimiento_pago
+
+      t.boolean :contado, null: false
+      t.boolean :creado_por_el_sistema, null: false
+      t.boolean :fiscal, null: false
+
       t.string :cae
       t.date :vencimiento_cae
       t.string :afip_result # JSON que retorna la API al solicitar CAE, se guarda por las dudas

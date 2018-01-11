@@ -16,11 +16,11 @@ module Afiper
           FeCabReq: {
             CantReg: 1,
             PtoVta: comprobante.punto_de_venta,
-            CbteTipo: comprobante.tipo_afip
+            CbteTipo: comprobante.config[:codigo_afip]
           },
           FeDetReq: {
             FECAEDetRequest: {
-              Concepto: comprobante.concepto,
+              Concepto: comprobante.concepto_afip,
               DocTipo: comprobante.receptor_doc_tipo,
               DocNro: comprobante.receptor_doc_nro,
               CbteDesde: comprobante.numero,
@@ -38,6 +38,11 @@ module Afiper
           }
         }
       }
+      if comprobante.tiene_servicios?
+        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServDesde] = comprobante.fecha_servicio_desde.strftime("%Y%m%d")
+        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServHasta] = comprobante.fecha_servicio_hasta.strftime("%Y%m%d")
+        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchVtoPago] = comprobante.fecha_vencimiento_pago.strftime("%Y%m%d")
+      end
       if comprobante.subtotal_gravado > 0
         parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
           AlicIva: comprobante.alicuotas.map do |alicuota|
@@ -74,7 +79,7 @@ module Afiper
 
     def get_cmp_det(tipo, punto_de_venta, numero)
       validar_tipo(tipo)
-      tipo_afip = Comprobante::TIPOS_AFIP[tipo]
+      tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
       response = call(:fe_comp_consultar,
         FeCompConsReq: {
           PtoVta: punto_de_venta,
@@ -88,7 +93,7 @@ module Afiper
 
     def ultimo_cmp(tipo, pto_vta)
       validar_tipo(tipo)
-      tipo_afip = Comprobante::TIPOS_AFIP[tipo]
+      tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
       response = call(:fe_comp_ultimo_autorizado, PtoVta: pto_vta, CbteTipo: tipo_afip)
       response[:cbte_nro].to_i
     end
@@ -256,20 +261,23 @@ module Afiper
             receptor_doc_nro: result[:doc_nro],
             receptor_razon_social: "-", # TODO
 
-            concepto: result[:concepto],
+            concepto: result[:concepto].to_i,
             mon_id: result[:mon_id],
             mon_cotiz: result[:mon_cotiz],
 
-            subtotal_no_gravado: result[:imp_tot_conc],
-            subtotal_exento: result[:imp_op_ex],
+            contado: true,
+            creado_por_el_sistema: false,
+            fiscal: true,
 
             cae: result[:cod_autorizacion],
             vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
             afip_result: result
           )
+          comprobante.items << Item.new(tipo: 6, codigo: '', detalle: 'No gravado', importe: result[:imp_tot_conc])
+          comprobante.items << Item.new(tipo: 7, codigo: '', detalle: 'Exento', importe: result[:imp_op_ex])
           if result[:iva] && result[:iva][:alic_iva]
             [result[:iva][:alic_iva]].flatten.each do |iva|
-              comprobante["neto_gravado_#{iva[:id]}"] = iva[:base_imp]
+              comprobante.items << Item.new(tipo: Item.tipo_from_afip(iva[:id]), codigo: '', detalle: "Gravado #{iva[:id]}", importe: iva[:base_imp])
             end
           end
           comprobante.save!
@@ -278,7 +286,7 @@ module Afiper
     end
 
     def validar_tipo(tipo)
-      return unless Comprobante::TIPOS_AFIP[tipo].nil?
+      return unless Comprobante.tipo_by_config(:nombre, tipo).nil?
       raise Afiper::Errors::WsfeClientError.new "Tipo erróneo #{tipo}"
     end
   end
