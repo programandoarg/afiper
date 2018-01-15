@@ -14,8 +14,8 @@ module Afiper
           { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',       codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',   letra: 'C', multiplicador_saldo:  1 },
           { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',               codigo_afip: 4,    nombre_print: 'RECIBO',           letra: 'A', multiplicador_saldo:  0 },
           { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',               codigo_afip: 9,    nombre_print: 'RECIBO',           letra: 'B', multiplicador_saldo:  0 },
-          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',     codigo_afip: nil,  nombre_print: 'FACTURA',          letra: 'X', multiplicador_saldo:  1 },
-          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Devolución no fiscal', codigo_afip: nil,  nombre_print: 'FACTURA',          letra: 'X', multiplicador_saldo: -1 },
+          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',     codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',          letra: 'X', multiplicador_saldo:  1 },
+          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Devolución no fiscal', codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',          letra: 'X', multiplicador_saldo: -1 },
         ]
       end
 
