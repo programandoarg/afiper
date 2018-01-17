@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.2"
   s.add_dependency "sidekiq", "~> 4.1"
   s.add_dependency "savon", "~> 2.10.0"
+  s.add_dependency "barby", '~> 0.6.4'
 
 
   s.add_development_dependency "pry"

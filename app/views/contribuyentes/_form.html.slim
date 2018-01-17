@@ -11,22 +11,23 @@
         ul
           - @contribuyente.errors.full_messages.each do |msg|
             li= msg
+    h2 Datos principales
     .form-group
       = f.label :razon_social, class: "col-sm-4 control-label"
       .col-sm-8
         = f.text_field :razon_social, class: "form-control", required: true
     .form-group
-      = f.label :cuit, class: "col-sm-4 control-label"
+      = f.label :cuit, 'CUIT', class: "col-sm-4 control-label"
       .col-sm-8
-        = f.text_field :cuit, class: "form-control", required: true
+        = f.text_field :cuit, class: "form-control", style: "max-width: 130px", required: true
     .form-group
-      = f.label :iibb, class: "col-sm-4 control-label"
+      = f.label :iibb, 'Ingresos brutos', class: "col-sm-4 control-label"
       .col-sm-8
-        = f.text_field :iibb, class: "form-control", required: true
+        = f.text_field :iibb, class: "form-control", style: "max-width: 130px", required: true
     .form-group
       = f.label :inicio_actividades, class: "col-sm-4 control-label"
       .col-sm-8
-        = f.text_field :inicio_actividades, class: "datefield form-control", required: true
+        = f.text_field :inicio_actividades, value: dmy(f.object.inicio_actividades), class: "datefield form-control", style: "max-width: 120px", required: true
     .form-group
       = f.label :afip_certificado, class: "col-sm-4 control-label"
       .col-sm-8
@@ -43,7 +44,13 @@
       = f.label :afip_clave_homologacion, class: "col-sm-4 control-label"
       .col-sm-8
         = f.text_area :afip_clave_homologacion, class: "form-control"
-   
+
+    h2 Puntos de venta
+    - @contribuyente.tipos_de_comprobante_que_emite.each do |tipo|
+      .form-group
+        = f.label nil, tipo[:descripcion], class: "col-sm-4 control-label"
+        .col-sm-8
+          = text_field_tag "puntos_de_venta[#{tipo[:nombre]}]", @contribuyente.puntos_de_venta[tipo[:nombre].to_s], class: "form-control", style: "max-width: 130px"
     .form-group
       .col-sm-offset-4.col-sm-8
         = f.submit class: "btn btn-primary"

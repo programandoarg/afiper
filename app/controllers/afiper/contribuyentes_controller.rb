@@ -5,7 +5,7 @@ module Afiper
     end
 
     def index
-      @contribuyentes = Contribuyente.all
+      @contribuyentes = Contribuyente.order(:id)
     end
 
     def new
@@ -27,6 +27,8 @@ module Afiper
 
     def update
       respond_to do |format|
+        @contribuyente.puntos_de_venta = params.require(:puntos_de_venta)
+        @contribuyente.save
         if @contribuyente.update(contribuyente_params)
           format.html { redirect_to contribuyentes_path, notice: 'contribuyente was successfully updated.' }
           format.json { head :no_content }

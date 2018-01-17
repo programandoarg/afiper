@@ -21,7 +21,7 @@ module Afiper
           FeDetReq: {
             FECAEDetRequest: {
               Concepto: comprobante.concepto_afip,
-              DocTipo: comprobante.receptor_doc_tipo,
+              DocTipo: comprobante.receptor_doc_tipo_values[:codigo_afip],
               DocNro: comprobante.receptor_doc_nro,
               CbteDesde: comprobante.numero,
               CbteHasta: comprobante.numero,
