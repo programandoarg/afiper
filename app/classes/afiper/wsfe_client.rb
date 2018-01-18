@@ -39,9 +39,12 @@ module Afiper
         }
       }
       if comprobante.tiene_servicios?
-        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServDesde] = comprobante.fecha_servicio_desde.strftime("%Y%m%d")
-        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServHasta] = comprobante.fecha_servicio_hasta.strftime("%Y%m%d")
-        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchVtoPago] = comprobante.fecha_vencimiento_pago.strftime("%Y%m%d")
+        begin
+          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServDesde] = comprobante.fecha_servicio_desde.strftime("%Y%m%d")
+          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServHasta] = comprobante.fecha_servicio_hasta.strftime("%Y%m%d")
+          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchVtoPago] = comprobante.fecha_vencimiento_pago.strftime("%Y%m%d")
+        rescue NoMethodError => e
+        end
       end
       if comprobante.subtotal_gravado > 0
         parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
@@ -286,7 +289,7 @@ module Afiper
     end
 
     def validar_tipo(tipo)
-      return unless Comprobante.tipo_by_config(:nombre, tipo).nil?
+      return unless Comprobante.find_config(:nombre, tipo).nil?
       raise Afiper::Errors::WsfeClientError.new "Tipo erróneo #{tipo}"
     end
   end

@@ -3,19 +3,19 @@ module Afiper
     class << self
       def configuracion_tipos
         [
-          { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',              codigo_afip: 1,    nombre_print: 'FACTURA',                             letra: 'A', multiplicador_saldo:  1, iva: true },
-          { id: 2,  nombre: :factura_b,            descripcion: 'Factura B',              codigo_afip: 6,    nombre_print: 'FACTURA',                             letra: 'B', multiplicador_saldo:  1, iva: true },
-          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',              codigo_afip: 11,   nombre_print: 'FACTURA',                             letra: 'C', multiplicador_saldo:  1, iva: true },
-          { id: 4,  nombre: :nota_de_credito_a,    descripcion: 'Nota de crédito A',      codigo_afip: 3,    nombre_print: 'NOTA DE CREDITO',                     letra: 'A', multiplicador_saldo: -1, iva: true },
-          { id: 5,  nombre: :nota_de_credito_b,    descripcion: 'Nota de crédito B',      codigo_afip: 8,    nombre_print: 'NOTA DE CREDITO',                     letra: 'B', multiplicador_saldo: -1, iva: true },
-          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',      codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                     letra: 'C', multiplicador_saldo: -1, iva: true },
-          { id: 7,  nombre: :nota_de_debito_a,     descripcion: 'Nota de débito A',       codigo_afip: 2,    nombre_print: 'NOTA DE DEBITO',                      letra: 'A', multiplicador_saldo:  1, iva: true },
-          { id: 8,  nombre: :nota_de_debito_b,     descripcion: 'Nota de débito B',       codigo_afip: 7,    nombre_print: 'NOTA DE DEBITO',                      letra: 'B', multiplicador_saldo:  1, iva: true },
-          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',       codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                      letra: 'C', multiplicador_saldo:  1, iva: true },
-          { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',               codigo_afip: 4,    nombre_print: 'RECIBO',                              letra: 'A', multiplicador_saldo:  0, iva: true },
-          { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',               codigo_afip: 9,    nombre_print: 'RECIBO',                              letra: 'B', multiplicador_saldo:  0, iva: true },
-          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',       codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',  letra: 'X', multiplicador_saldo:  1, iva: false },
-          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Devolución no fiscal',   codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',  letra: 'X', multiplicador_saldo: -1, iva: false },
+          { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',              codigo_afip: 1,    nombre_print: 'FACTURA',                             letra: 'A', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: true },
+          { id: 2,  nombre: :factura_b,            descripcion: 'Factura B',              codigo_afip: 6,    nombre_print: 'FACTURA',                             letra: 'B', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',              codigo_afip: 11,   nombre_print: 'FACTURA',                             letra: 'C', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 4,  nombre: :nota_de_credito_a,    descripcion: 'Nota de crédito A',      codigo_afip: 3,    nombre_print: 'NOTA DE CREDITO',                     letra: 'A', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: true },
+          { id: 5,  nombre: :nota_de_credito_b,    descripcion: 'Nota de crédito B',      codigo_afip: 8,    nombre_print: 'NOTA DE CREDITO',                     letra: 'B', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',      codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                     letra: 'C', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 7,  nombre: :nota_de_debito_a,     descripcion: 'Nota de débito A',       codigo_afip: 2,    nombre_print: 'NOTA DE DEBITO',                      letra: 'A', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: true },
+          { id: 8,  nombre: :nota_de_debito_b,     descripcion: 'Nota de débito B',       codigo_afip: 7,    nombre_print: 'NOTA DE DEBITO',                      letra: 'B', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',       codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                      letra: 'C', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false  },
+          { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',               codigo_afip: 4,    nombre_print: 'RECIBO',                              letra: 'A', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: true },
+          { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',               codigo_afip: 9,    nombre_print: 'RECIBO',                              letra: 'B', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false  },
+          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',       codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',  letra: 'X', multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false  },
+          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Devolución no fiscal',   codigo_afip: nil,  nombre_print: 'COMPROBANTE NO VALIDO COMO FACTURA',  letra: 'X', multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false  },
         ]
       end
 
@@ -71,6 +71,10 @@ module Afiper
         comprobante.contado = false unless comprobante.contado.present?
         comprobante.creado_por_el_sistema = true unless comprobante.creado_por_el_sistema.present?
         comprobante.numero = comprobante.contribuyente.proximo_numero(comprobante.tipo.to_sym, comprobante.punto_de_venta)
+        comprobante.fecha = Time.zone.today
+        comprobante.fecha_servicio_desde = Time.zone.today
+        comprobante.fecha_servicio_hasta = Time.zone.today
+        comprobante.fecha_vencimiento_pago = Time.zone.today
         comprobante
       end
     end
@@ -100,20 +104,43 @@ module Afiper
       comprobante.emisor_cuit = comprobante.contribuyente.cuit unless comprobante.emisor_cuit.present?
       comprobante.emisor_iibb = comprobante.contribuyente.iibb unless comprobante.emisor_iibb.present?
       comprobante.numero = comprobante.contribuyente.proximo_numero(comprobante.tipo.to_sym, comprobante.punto_de_venta) unless comprobante.numero.present?
-      comprobante.receptor_doc_tipo = :doc_otro unless comprobante.receptor_doc_tipo.present?
-      comprobante.receptor_doc_nro = 0 unless comprobante.receptor_doc_nro.present?
-      comprobante.receptor_razon_social = 'Consumidor final' unless comprobante.receptor_razon_social.present?
+      if comprobante.receptor_doc_tipo.nil? && comprobante.receptor_doc_nro.nil?
+        comprobante.receptor_doc_tipo = :doc_otro
+        comprobante.receptor_doc_nro = 0
+        comprobante.receptor_razon_social = 'Consumidor final'
+      end
       comprobante.fiscal = comprobante.fiscal?
       true
     end
 
 
     # Validaciones
-    validates :punto_de_venta, :numero, :tipo, :fecha, presence: true
+    validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
     validates :contado, inclusion: { in: [true, false] }
+
+    def receptor_condicion_iva
+      'Consumidor final'
+    end
+
+    def receptor_domicilio
+      '-'
+    end
+
+    def condicion_venta
+      'CONTADO'
+    end
+
+    def consmumidor_final?
+      # byebug
+      receptor_doc_tipo == 'doc_otro'
+    end
 
     def autorizado?
       cae.present?
+    end
+
+    def mostrar_iva?
+      config[:tiene_iva] && config[:adicionar_iva]
     end
 
     def fiscal?
@@ -147,15 +174,34 @@ module Afiper
     end
 
     def subtotal_gravado
-      items.gravado.sum('cantidad * importe')
+      if config[:tiene_iva] && !config[:adicionar_iva]
+        items.gravado.sum('round(cantidad * (importe / (1 + 0.01 * percepcion_iva)), 2)')
+      else
+        items.gravado.sum('cantidad * importe')
+      end
     end
 
     def total
-      subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
+      if config[:adicionar_iva]
+        items.sum('round(cantidad * importe * (1 + 0.01 * percepcion_iva), 2)')
+        # items.sum('cantidad * importe') # Faltarían los tributos
+      else
+        items.sum('round(cantidad * importe, 2)')
+        # subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
+      end
+      # if config[:ingresar_con_iva]
+      #   items.sum('cantidad * importe') # Faltarían los tributos
+      # else
+      #   subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
+      # end
     end
 
     def subtotal_iva
-      items.gravado.sum('round(cantidad * importe * 0.01 * percepcion_iva, 2)')
+      if config[:adicionar_iva]
+        items.gravado.sum('round(cantidad * importe * 0.01 * percepcion_iva, 2)')
+      else
+        items.gravado.sum('round(cantidad * (importe - (importe / (1 + 0.01 * percepcion_iva))), 2)')
+      end
     end
 
     def subtotal_tributos
@@ -170,8 +216,8 @@ module Afiper
     def alicuotas
       items.gravado.group_by(&:tipo).map do |k, v|
         {
-          base_imponible: v.map { |e| (e.cantidad * e.importe).round(2) }.sum.to_f,
-          importe: v.map { |e| (e.cantidad * e.importe * 0.01 * Item.tipos[k][:percepcion_iva]).round(2) }.sum.to_f,
+          base_imponible: v.map { |e| (e.cantidad * e.importe_neto).round(2) }.sum.to_f,
+          importe: v.map { |e| (e.cantidad * e.importe_neto * 0.01 * Item.tipos[k][:percepcion_iva]).round(2) }.sum.to_f,
           codigo_alicuota: Item.tipos[k][:codigo_alicuota],
           descripcion: Item.tipos[k][:descripcion],
         }
@@ -213,7 +259,7 @@ module Afiper
       data << config[:codigo_afip].to_s.rjust(2, '0')
       data << punto_de_venta.to_s.rjust(4, '0')
       data << cae.to_s.rjust(14, '0')
-      data << vencimiento_cae.strftime('%d%m%Y')
+      data << vencimiento_cae.strftime('%Y%m%d')
       data
     end
 

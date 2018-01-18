@@ -46,13 +46,22 @@ module Afiper
       cantidad * importe
     end
 
-    def total_mas_iva
-      total * multiplicador_iva
+    def importe_neto
+      if comprobante.config[:adicionar_iva]
+        importe
+      else
+        importe / multiplicador_iva
+      end
     end
 
-    def importe_mas_iva
-      importe * multiplicador_iva
-    end
+    # def total_mas_iva
+    #   total * multiplicador_iva
+    # end
+
+    # def importe_mas_iva
+    #   return unless importe.present?
+    #   (importe * multiplicador_iva).round(2)
+    # end
 
     def multiplicador_iva
       return 1.0 unless percepcion_iva.present?
