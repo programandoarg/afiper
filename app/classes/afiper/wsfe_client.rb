@@ -146,7 +146,8 @@ module Afiper
     end
 
     def homologacion
-      Rails.env != 'production'
+      # Rails.env != 'production'
+      true
     end
 
     def call(method, params = {})
