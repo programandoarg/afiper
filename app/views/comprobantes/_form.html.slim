@@ -57,18 +57,6 @@
           = f.text_field :observaciones, :class => 'form-control'
         / = error_span(@comprobante[:observaciones])
     / - if @comprobante.can_be_contado
-    .col-sm-2
-      .control-group
-        = label_tag nil, 'Contado', :class => 'control-label'
-        .controls
-          = f.label :contado_true, 'Si'
-          |  
-          = f.radio_button :contado, true
-          |  
-          = f.label :contado_false, 'No'
-          |  
-          = f.radio_button :contado, false
-        / = error_span(@comprobante[:contado])
   hr
   .row
     .col-sm-9

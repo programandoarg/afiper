@@ -11,6 +11,9 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :afip_certificado_homologacion
       t.string :afip_clave_homologacion
 
+      t.integer :condicion_iva
+      t.string :domicilio
+
       t.json :puntos_de_venta, default: {}, null: false
 
       t.timestamps null: false
@@ -27,10 +30,14 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.date :emisor_inicio_actividades, null: false
       t.string :emisor_cuit, null: false
       t.string :emisor_iibb, null: false
+      t.string :emisor_razon_social, null: false
 
       t.integer :receptor_doc_tipo, null: false
       t.string :receptor_doc_nro, null: false
       t.string :receptor_razon_social, null: false
+      t.integer :receptor_condicion_iva, null: false
+
+      t.integer :condicion_venta, null: false
 
       t.integer :concepto, null: false
       t.string :mon_id, null: false
@@ -50,7 +57,6 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.date :fecha_servicio_hasta
       t.date :fecha_vencimiento_pago
 
-      t.boolean :contado, null: false
       t.boolean :creado_por_el_sistema, null: false
       t.boolean :fiscal, null: false
 

@@ -269,7 +269,6 @@ module Afiper
             mon_id: result[:mon_id],
             mon_cotiz: result[:mon_cotiz],
 
-            contado: true,
             creado_por_el_sistema: false,
             fiscal: true,
 

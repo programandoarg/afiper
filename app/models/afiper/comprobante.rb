@@ -68,7 +68,6 @@ module Afiper
         comprobante = new(params)
         comprobante.contribuyente = Afiper::Contribuyente.first unless comprobante.contribuyente.present?
         comprobante.punto_de_venta = comprobante.contribuyente.default_punto_de_venta(comprobante.tipo) unless comprobante.punto_de_venta.present?
-        comprobante.contado = false unless comprobante.contado.present?
         comprobante.creado_por_el_sistema = true unless comprobante.creado_por_el_sistema.present?
         comprobante.numero = comprobante.contribuyente.proximo_numero(comprobante.tipo.to_sym, comprobante.punto_de_venta)
         comprobante.fecha = Time.zone.today
@@ -116,7 +115,6 @@ module Afiper
 
     # Validaciones
     validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
-    validates :contado, inclusion: { in: [true, false] }
 
     def receptor_condicion_iva
       'Consumidor final'
