@@ -146,8 +146,8 @@ module Afiper
     end
 
     def homologacion
-      # Rails.env != 'production'
-      true
+      fail 'Configurar homologacion' unless Afiper.configuration.homologacion.in?([true, false])
+      Afiper.configuration.homologacion
     end
 
     def call(method, params = {})

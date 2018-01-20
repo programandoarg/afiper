@@ -1,9 +1,9 @@
 module Afiper
   class Configuration
-    attr_accessor :error_handlers
+    attr_accessor :homologacion
 
     def initialize
-      @error_handlers = []
+      @error_handlers = nil
     end
   end
 end
