@@ -87,6 +87,8 @@ module Afiper
     end
 
     enum concepto: { productos: 1, servicios: 2, productos_y_servicios: 3 }
+    enum receptor_condicion_iva: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
+    enum condicion_venta: { contado: 0 }
 
     enum tipo: Comprobante.configuracion_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
     enum receptor_doc_tipo: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
@@ -119,17 +121,17 @@ module Afiper
     # Validaciones
     validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
 
-    def receptor_condicion_iva
-      'Consumidor final'
-    end
+    # def receptor_condicion_iva
+    #   'Consumidor final'
+    # end
 
     def receptor_domicilio
       '-'
     end
 
-    def condicion_venta
-      'CONTADO'
-    end
+    # def condicion_venta
+    #   'CONTADO'
+    # end
 
     def consmumidor_final?
       # byebug
