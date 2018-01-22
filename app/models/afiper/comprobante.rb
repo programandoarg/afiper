@@ -99,6 +99,7 @@ module Afiper
       comprobante.concepto = :productos unless comprobante.concepto.present? # Productos
       comprobante.mon_id = 'PES' unless comprobante.mon_id.present?
       comprobante.mon_cotiz = 1 unless comprobante.mon_cotiz.present?
+      comprobante.emisor_razon_social = comprobante.contribuyente.razon_social unless comprobante.emisor_razon_social.present?
       comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades unless comprobante.emisor_inicio_actividades.present?
       comprobante.emisor_cuit = comprobante.contribuyente.cuit unless comprobante.emisor_cuit.present?
       comprobante.emisor_iibb = comprobante.contribuyente.iibb unless comprobante.emisor_iibb.present?
@@ -109,6 +110,8 @@ module Afiper
         comprobante.receptor_razon_social = 'Consumidor final'
       end
       comprobante.fiscal = comprobante.fiscal?
+      comprobante.condicion_venta = 0 unless comprobante.condicion_venta.present?
+      comprobante.receptor_condicion_iva = 0 unless comprobante.receptor_condicion_iva.present?
       true
     end
 
