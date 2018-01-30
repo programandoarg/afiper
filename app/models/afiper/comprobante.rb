@@ -124,17 +124,9 @@ module Afiper
     # Validaciones
     validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
 
-    # def receptor_condicion_iva
-    #   'Consumidor final'
-    # end
-
     def receptor_domicilio
       '-'
     end
-
-    # def condicion_venta
-    #   'CONTADO'
-    # end
 
     def conceptos_posibles
       if config[:recibo]
