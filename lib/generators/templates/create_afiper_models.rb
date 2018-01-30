@@ -5,14 +5,14 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :cuit, null: false
       t.string :iibb, null: false
       t.date :inicio_actividades, null: false
+      t.integer :condicion_iva, null: false
+      t.string :domicilio, null: false
 
       t.string :afip_certificado
       t.string :afip_clave
       t.string :afip_certificado_homologacion
       t.string :afip_clave_homologacion
 
-      t.integer :condicion_iva
-      t.string :domicilio
 
       t.json :puntos_de_venta, default: {}, null: false
 
