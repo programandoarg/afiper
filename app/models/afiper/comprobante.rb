@@ -70,10 +70,10 @@ module Afiper
         comprobante.punto_de_venta = comprobante.contribuyente.default_punto_de_venta(comprobante.tipo) unless comprobante.punto_de_venta.present?
         comprobante.creado_por_el_sistema = true unless comprobante.creado_por_el_sistema.present?
         comprobante.numero = comprobante.contribuyente.proximo_numero(comprobante.tipo.to_sym, comprobante.punto_de_venta)
-        comprobante.fecha = Time.zone.today
-        comprobante.fecha_servicio_desde = Time.zone.today
-        comprobante.fecha_servicio_hasta = Time.zone.today
-        comprobante.fecha_vencimiento_pago = Time.zone.today
+        comprobante.fecha = Time.zone.today unless comprobante.fecha.present?
+        comprobante.fecha_servicio_desde = Time.zone.today unless comprobante.fecha_servicio_desde.present?
+        comprobante.fecha_servicio_hasta = Time.zone.today unless comprobante.fecha_servicio_hasta.present?
+        comprobante.fecha_vencimiento_pago = Time.zone.today unless comprobante.fecha_vencimiento_pago.present?
         if comprobante.config[:recibo]
           comprobante.concepto = :servicios
         end
