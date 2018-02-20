@@ -42,15 +42,19 @@ module Afiper
                             end
     end
 
-    def total
+    def subtotal
       cantidad * importe
+    end
+
+    def total
+      cantidad * importe * (1 - descuento * 0.01)
     end
 
     def importe_neto
       if comprobante.config[:adicionar_iva]
-        importe
+        importe * (1 - descuento * 0.01)
       else
-        importe / multiplicador_iva
+        importe * (1 - descuento * 0.01) / multiplicador_iva
       end
     end
 

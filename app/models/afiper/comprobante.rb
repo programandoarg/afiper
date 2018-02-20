@@ -172,41 +172,42 @@ module Afiper
     # Totales
 
     def subtotal_no_gravado
-      items.no_gravado.sum('cantidad * importe')
+      items.no_gravado.sum('cantidad * importe * (1 - 0.01 * descuento)')
     end
 
     def subtotal_exento
-      items.exento.sum('cantidad * importe')
+      items.exento.sum('cantidad * importe * (1 - 0.01 * descuento)')
     end
 
     def subtotal_gravado
       if config[:tiene_iva] && !config[:adicionar_iva]
-        items.gravado.sum('round(cantidad * (importe / (1 + 0.01 * percepcion_iva)), 2)')
+        items.gravado.sum('round(cantidad * importe * (1 - 0.01 * descuento) / (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.gravado.sum('cantidad * importe')
+        items.gravado.sum('cantidad * importe * (1 - 0.01 * descuento)')
       end
     end
 
     def total
       if config[:adicionar_iva]
-        items.sum('round(cantidad * importe * (1 + 0.01 * percepcion_iva), 2)')
-        # items.sum('cantidad * importe') # Faltarían los tributos
+        items.sum('round(cantidad * importe * (1 - 0.01 * descuento) * (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.sum('round(cantidad * importe, 2)')
-        # subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
+        items.sum('round(cantidad * importe * (1 - 0.01 * descuento), 2)')
       end
-      # if config[:ingresar_con_iva]
-      #   items.sum('cantidad * importe') # Faltarían los tributos
-      # else
-      #   subtotal_no_gravado + subtotal_exento + subtotal_gravado + subtotal_iva + subtotal_tributos
-      # end
+    end
+
+    def descuento_total
+      if config[:adicionar_iva]
+        items.sum('round(cantidad * importe * (0.01 * descuento) * (1 + 0.01 * percepcion_iva), 2)')
+      else
+        items.sum('round(cantidad * importe * (0.01 * descuento), 2)')
+      end
     end
 
     def subtotal_iva
       if config[:adicionar_iva]
-        items.gravado.sum('round(cantidad * importe * 0.01 * percepcion_iva, 2)')
+        items.gravado.sum('round(cantidad * importe * (1 - 0.01 * descuento) * 0.01 * percepcion_iva, 2)')
       else
-        items.gravado.sum('round(cantidad * (importe - (importe / (1 + 0.01 * percepcion_iva))), 2)')
+        items.gravado.sum('round(cantidad * importe * (1 - 0.01 * descuento) * (1 - 1 / (1 + 0.01 * percepcion_iva)), 2)')
       end
     end
 

@@ -40,40 +40,35 @@ input.combined-right {
         width: 100%;
         height: 29px;
       }
-      // .remove_nested_fields {
-      //   font-size: 19px;
-      //   line-height: 4px;
-      //   color: darkred;
-      //   width: 100%;
-      //   height: 32px;
-      //   padding-top: 5px;
-      //   display: block;
-      // }
     }
     th.type, td.type {
       width: 110px;
     }
     th.details, td.details {
-      width: 380px;
+      // width: 380px;
       padding-left: 20px;
-      // text-align: center;
     }
-    input.importe {
-      text-align: right;
+    td.money-field {
+      &:before {
+        content: '$';
+        font-size: 19px;
+        font-weight: normal;
+        position: fixed;
+        margin-left: 4px;
+      }
+
+      input {
+        text-align: right;
+      }
     }
-    td.importe {
-      border-left: none;
-    }
-    th.price, td.price {
+    th.number-field, td.number-field {
       text-align: right;
       width: 100px;
     }
-    td.price-symbol {
-      border-right: none;
-      font-weight: normal;
-      font-size: 19px;
-      padding: 2px 0px 0px 6px;
-      width: 23px;
+    .grey-field {
+      text-align: center;
+      vertical-align: middle;
+      background-color: lightgrey;
     }
     th.remove, td.remove {
       width: 34px;
