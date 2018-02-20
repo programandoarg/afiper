@@ -48,19 +48,6 @@ input.combined-right {
       // width: 380px;
       padding-left: 20px;
     }
-    td.money-field {
-      &:before {
-        content: '$';
-        font-size: 19px;
-        font-weight: normal;
-        position: fixed;
-        margin-left: 4px;
-      }
-
-      input {
-        text-align: right;
-      }
-    }
     th.number-field, td.number-field {
       text-align: right;
       width: 100px;
