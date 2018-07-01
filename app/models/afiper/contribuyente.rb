@@ -3,6 +3,7 @@ module Afiper
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id
 
     validates :razon_social, :cuit, :iibb, :inicio_actividades, presence: true
+    enum condicion_iva: { iva_responsable_inscripto: 0, monotributo: 1 }
 
     def wsfe_client
       WsfeClient.new(self)

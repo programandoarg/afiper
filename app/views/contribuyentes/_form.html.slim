@@ -25,6 +25,14 @@
       .col-sm-8
         = f.text_field :iibb, class: "form-control", style: "max-width: 130px", required: true
     .form-group
+      = f.label :domicilio, 'Domicilio', class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.text_field :domicilio, class: "form-control", required: true
+    .form-group
+      = f.label :condicion_iva, 'Condición IVA', class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.select :condicion_iva, options_for_select(Afiper::Contribuyente.condicion_ivas.map { |k,v| [k.titleize, k] }, f.object.condicion_iva), { include_blank: '-'}, class: 'form-control', style: "max-width: 230px", required: true
+    .form-group
       = f.label :inicio_actividades, class: "col-sm-4 control-label"
       .col-sm-8
         = f.text_field :inicio_actividades, value: dmy(f.object.inicio_actividades), class: "datefield form-control", style: "max-width: 120px", required: true
