@@ -168,10 +168,10 @@ module Afiper
 
     def auth_hash
       unless @auth_hash.present?
-        token = WsaaToken.where(afiper_contribuyente_id: @contribuyente.id, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
+        token = WsaaToken.where(afiper_contribuyente_id: @contribuyente.id, service: service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
         unless token.present?
           new_token = wsaa
-          token = WsaaToken.create(afiper_contribuyente_id: @contribuyente.id, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
+          token = WsaaToken.create(afiper_contribuyente_id: @contribuyente.id, service: service_name, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
         end
         @auth_hash = token.auth_hash
       end
@@ -206,8 +206,11 @@ module Afiper
       [ta.css('token').text, ta.css('sign').text]
     end
 
+    def service_name
+      "wsfe"
+    end
+
     def generar_tra
-      service = "wsfe"
       ttl = 20000
 
       xml = Builder::XmlMarkup.new indent: 2
@@ -219,7 +222,7 @@ module Afiper
           # TODO me parece que no le da mucha bola el WS al expirationTime
           xml.expirationTime xsd_datetime Time.now + ttl
         end
-        xml.service service
+        xml.service service_name
       end
     end
 

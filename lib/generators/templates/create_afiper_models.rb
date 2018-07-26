@@ -87,6 +87,7 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :token, null: false
       t.string :sign, null: false
       t.string :cuit, null: false
+      t.string :service, null: false
       t.boolean :homologacion, null: false
 
       t.timestamps null: false
