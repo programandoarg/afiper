@@ -13,6 +13,9 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :afip_certificado_homologacion
       t.string :afip_clave_homologacion
 
+      t.boolean :service_wsfe, null: false, default: false
+      t.boolean :service_padron, null: false, default: false
+
 
       t.json :puntos_de_venta, default: {}, null: false
 

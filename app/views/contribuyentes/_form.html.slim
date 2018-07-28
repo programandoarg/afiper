@@ -37,6 +37,14 @@
       .col-sm-8
         = f.text_field :inicio_actividades, value: dmy(f.object.inicio_actividades), class: "datefield form-control", style: "max-width: 120px", required: true
     .form-group
+      = f.label :service_wsfe, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.check_box :service_wsfe, class: "form-control"
+    .form-group
+      = f.label :service_padron, class: "col-sm-4 control-label"
+      .col-sm-8
+        = f.check_box :service_padron, class: "form-control"
+    .form-group
       = f.label :afip_certificado, class: "col-sm-4 control-label"
       .col-sm-8
         = f.text_area :afip_certificado, class: "form-control"

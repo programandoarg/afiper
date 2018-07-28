@@ -57,7 +57,7 @@ module Afiper
     end
 
     def contribuyente_params
-      params.require(:contribuyente).permit(:razon_social, :cuit, :iibb, :inicio_actividades, :condicion_iva, :domicilio, :afip_certificado, :afip_clave, :afip_certificado_homologacion, :afip_clave_homologacion)
+      params.require(:contribuyente).permit(:razon_social, :cuit, :iibb, :inicio_actividades, :condicion_iva, :domicilio, :service_wsfe, :service_padron, :afip_certificado, :afip_clave, :afip_certificado_homologacion, :afip_clave_homologacion)
     end
   end
 end

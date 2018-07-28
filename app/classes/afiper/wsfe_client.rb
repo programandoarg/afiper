@@ -146,8 +146,8 @@ module Afiper
     end
 
     def homologacion
-      fail 'Configurar homologacion' unless Afiper.configuration.homologacion.in?([true, false])
-      Afiper.configuration.homologacion
+      fail 'Configurar Afiper.configuration.wsfe_homologacion' unless Afiper.configuration.wsfe_homologacion.in?([true, false])
+      Afiper.configuration.wsfe_homologacion
     end
 
     def call(method, params = {})

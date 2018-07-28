@@ -5,6 +5,14 @@ module Afiper
     validates :razon_social, :cuit, :iibb, :inicio_actividades, presence: true
     enum condicion_iva: { iva_responsable_inscripto: 0, monotributo: 1 }
 
+    def self.for_wsfe
+      self.where(service_wsfe: true).first
+    end
+
+    def self.for_padron
+      self.where(service_padron: true).first
+    end
+
     def wsfe_client
       WsfeClient.new(self)
     end
