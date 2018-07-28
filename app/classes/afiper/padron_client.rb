@@ -8,9 +8,8 @@ module Afiper
     end
 
     def homologacion
-      false
-      # fail 'Configurar homologacion' unless Afiper.configuration.homologacion.in?([true, false])
-      # Afiper.configuration.homologacion
+      fail 'Configurar Afiper.configuration.padron_homologacion' unless Afiper.configuration.padron_homologacion.in?([true, false])
+      Afiper.configuration.padron_homologacion
     end
 
     def get_persona(cuit)
@@ -33,17 +32,22 @@ module Afiper
       client = build_client
       message = {token: token.token, sign: token.sign, cuitRepresentada: @contribuyente.cuit}
       response = client.call(method, message: message.merge(params))
-      return response
-      if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
-        response = response.body[:"#{method}_response"][:"#{method}_result"]
-        if response[:errors].present?
-          messages = response[:errors][:err]
-          fail Afiper::Errors::WsfeClientError.new ([messages].flatten).to_json
-        end
-        response
-      else
-        fail Afiper::Errors::WsfeClientError.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
-      end
+      # byebug
+      response
+    rescue OpenSSL::X509::CertificateError => exception
+      fail Afiper::Errors::WsfeClientError.new("Las credenciales para acceder al servicio de AFIP son incorrectas")
+    rescue Savon::SOAPFault => exception
+      fail Afiper::Errors::WsfeClientError.new(exception.message)
+      # if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
+      #   response = response.body[:"#{method}_response"][:"#{method}_result"]
+      #   if response[:errors].present?
+      #     messages = response[:errors][:err]
+      #     fail Afiper::Errors::WsfeClientError.new ([messages].flatten).to_json
+      #   end
+      #   response
+      # else
+      #   fail Afiper::Errors::WsfeClientError.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
+      # end
     end
 
     def token
