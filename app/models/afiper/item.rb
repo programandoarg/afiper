@@ -43,7 +43,7 @@ module Afiper
       if self.descuento_porcentaje > 0 && self.descuento == 0
         self.descuento = (self.importe * self.descuento_porcentaje * 0.01).round(2)
       else
-        self.descuento_porcentaje = (self.descuento / self.importe).round
+        self.descuento_porcentaje = (100.0 * self.descuento / self.importe).round
       end
     end
 
