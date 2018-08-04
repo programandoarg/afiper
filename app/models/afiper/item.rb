@@ -40,6 +40,11 @@ module Afiper
                             else
                               0
                             end
+      if self.descuento_porcentaje > 0 && self.descuento == 0
+        self.descuento = (self.importe * self.descuento_porcentaje * 0.01).round(2)
+      else
+        self.descuento_porcentaje = (self.descuento / self.importe).round
+      end
     end
 
     def subtotal
@@ -47,14 +52,14 @@ module Afiper
     end
 
     def total
-      cantidad * importe * (1 - descuento * 0.01)
+      cantidad * (importe - descuento)
     end
 
     def importe_neto
       if comprobante.config[:adicionar_iva]
-        importe * (1 - descuento * 0.01)
+        importe - descuento
       else
-        importe * (1 - descuento * 0.01) / multiplicador_iva
+        (importe - descuento) / multiplicador_iva
       end
     end
 
