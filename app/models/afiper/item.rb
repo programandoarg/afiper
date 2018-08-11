@@ -42,6 +42,7 @@ module Afiper
                             end
       if self.importe.present? && self.importe > 0
         if self.descuento_porcentaje_changed?
+          # TODO acá puede venir descuento_porcentaje en null
           self.descuento = (self.importe * self.descuento_porcentaje * 0.01).round(2)
         else
           self.descuento_porcentaje = (100.0 * self.descuento / self.importe).round
