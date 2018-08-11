@@ -97,7 +97,7 @@ module Afiper
     enum receptor_doc_tipo: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
 
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
-    has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, dependent: :destroy
+    has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id
     accepts_nested_attributes_for :items, allow_destroy: true
 
     before_create do |comprobante|
