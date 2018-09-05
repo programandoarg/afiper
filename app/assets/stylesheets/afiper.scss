@@ -49,8 +49,12 @@ input.combined-right {
       padding-left: 20px;
     }
     th.number-field, td.number-field {
-      text-align: right;
       width: 100px;
+      text-align: right;
+
+      input {
+        text-align: right;
+      }
     }
     .grey-field {
       text-align: center;

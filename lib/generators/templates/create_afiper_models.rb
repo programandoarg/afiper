@@ -79,7 +79,6 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.string :detalle, null: false
       t.integer :cantidad, null: false, default: 1
       t.decimal :importe, precision: 15, scale: 2, null: false
-      t.float :descuento_porcentaje, default: 0.0, null: false
       t.decimal :descuento, precision: 15, scale: 2, null: false
 
       t.timestamps null: false
