@@ -49,6 +49,7 @@ module Afiper
 
     def subtotal
       # cantidad * importe
+      return 0 unless importe.present? && descuento.present?
       cantidad * (importe - descuento)
     end
 
