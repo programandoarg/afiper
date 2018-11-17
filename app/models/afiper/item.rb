@@ -47,21 +47,26 @@ module Afiper
       (100 * descuento / importe).round(2)
     end
 
+    def recargo_porcentaje
+      return 0 unless importe.present? && importe > 0
+      (100 * recargo / importe).round(2)
+    end
+
     def subtotal
       # cantidad * importe
-      return 0 unless importe.present? && descuento.present?
-      cantidad * (importe - descuento)
+      return 0 unless importe.present? && descuento.present? && recargo.present?
+      cantidad * (importe - descuento + recargo)
     end
 
     def total
-      cantidad * (importe - descuento)
+      cantidad * (importe - descuento + recargo)
     end
 
     def importe_neto
       if comprobante.config[:adicionar_iva]
-        importe - descuento
+        importe - descuento + recargo
       else
-        (importe - descuento) / multiplicador_iva
+        (importe - descuento + recargo) / multiplicador_iva
       end
     end
 

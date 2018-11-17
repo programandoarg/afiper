@@ -173,26 +173,26 @@ module Afiper
     # Totales
 
     def subtotal_no_gravado
-      items.no_gravado.sum('cantidad * (importe - descuento)')
+      items.no_gravado.sum('cantidad * (importe - descuento + recargo)')
     end
 
     def subtotal_exento
-      items.exento.sum('cantidad * (importe - descuento)')
+      items.exento.sum('cantidad * (importe - descuento + recargo)')
     end
 
     def subtotal_gravado
       if config[:tiene_iva] && !config[:adicionar_iva]
-        items.gravado.sum('round(cantidad * (importe - descuento) / (1 + 0.01 * percepcion_iva), 2)')
+        items.gravado.sum('round(cantidad * (importe - descuento + recargo) / (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.gravado.sum('cantidad * (importe - descuento)')
+        items.gravado.sum('cantidad * (importe - descuento + recargo)')
       end
     end
 
     def total
       if config[:adicionar_iva]
-        items.sum('round(cantidad * (importe - descuento) * (1 + 0.01 * percepcion_iva), 2)')
+        items.sum('round(cantidad * (importe - descuento + recargo) * (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.sum('cantidad * (importe - descuento)')
+        items.sum('cantidad * (importe - descuento + recargo)')
       end
     end
 
@@ -212,11 +212,19 @@ module Afiper
       end
     end
 
+    def recargo_total
+      if config[:adicionar_iva]
+        items.sum('round(cantidad * recargo * (1 + 0.01 * percepcion_iva), 2)')
+      else
+        items.sum('cantidad * recargo')
+      end
+    end
+
     def subtotal_iva
       if config[:adicionar_iva]
-        items.gravado.sum('round(cantidad * (importe - descuento) * 0.01 * percepcion_iva, 2)')
+        items.gravado.sum('round(cantidad * (importe - descuento + recargo) * 0.01 * percepcion_iva, 2)')
       else
-        items.gravado.sum('round(cantidad * (importe - descuento) * (1 - 1 / (1 + 0.01 * percepcion_iva)), 2)')
+        items.gravado.sum('round(cantidad * (importe - descuento + recargo) * (1 - 1 / (1 + 0.01 * percepcion_iva)), 2)')
       end
     end
 
