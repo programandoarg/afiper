@@ -92,6 +92,7 @@ module Afiper
     enum concepto: { productos: 1, servicios: 2, productos_y_servicios: 3 }
     enum receptor_condicion_iva: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
     enum condicion_venta: { contado: 0 }
+    enum moneda: { pesos: 0, dolares: 1, euros: 2 }
 
     enum tipo: Comprobante.configuracion_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
     enum receptor_doc_tipo: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
@@ -102,8 +103,6 @@ module Afiper
 
     before_create do |comprobante|
       comprobante.concepto = :productos unless comprobante.concepto.present? # Productos
-      comprobante.mon_id = 'PES' unless comprobante.mon_id.present?
-      comprobante.mon_cotiz = 1 unless comprobante.mon_cotiz.present?
       comprobante.emisor_razon_social = comprobante.contribuyente.razon_social unless comprobante.emisor_razon_social.present?
       comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades unless comprobante.emisor_inicio_actividades.present?
       comprobante.emisor_cuit = comprobante.contribuyente.cuit unless comprobante.emisor_cuit.present?
@@ -126,6 +125,11 @@ module Afiper
 
     def receptor_domicilio
       '-'
+    end
+
+    def moneda_codigo_afip
+      return 'PES' if moneda == 'pesos'
+      return 'DOL' if moneda == 'dolares'
     end
 
     def conceptos_posibles
@@ -194,6 +198,10 @@ module Afiper
       else
         items.sum('cantidad * (importe - descuento + recargo)')
       end
+    end
+
+    def total_en_pesos
+      total * moneda_cotizacion
     end
 
     def total_sin_descuentos
@@ -290,6 +298,17 @@ module Afiper
     def readonly?
       persisted? && cae_was.present?
     end
+
+    # Metodos de show
+    def tipo_y_numero_de_documento
+      if receptor_doc_tipo.present? 
+        "#{receptor_doc_tipo_values[:descripcion]} #{receptor_doc_nro}"
+      else
+        "-"
+      end
+    end
+
+
   end
 end
 

@@ -32,8 +32,8 @@ module Afiper
               ImpOpEx: comprobante.subtotal_exento,
               ImpTrib: comprobante.subtotal_tributos,
               ImpIVA: comprobante.subtotal_iva,
-              MonId: comprobante.mon_id,
-              MonCotiz: comprobante.mon_cotiz,
+              MonId: comprobante.moneda_codigo_afip,
+              MonCotiz: comprobante.moneda_cotizacion,
             }
           }
         }

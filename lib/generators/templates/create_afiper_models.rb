@@ -43,8 +43,8 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.integer :condicion_venta, null: false
 
       t.integer :concepto, null: false
-      t.string :mon_id, null: false
-      t.integer :mon_cotiz, null: false
+      t.integer :moneda, null: false, default: 0
+      t.float :moneda_cotizacion, null: false, default: 1.0
 
       # t.decimal :subtotal_no_gravado,     precision: 15, scale: 2, null: false, default: 0.0
       # t.decimal :subtotal_exento,         precision: 15, scale: 2, null: false, default: 0.0
