@@ -224,12 +224,20 @@ module Afiper
       end
     end
 
+    def descuento_total_en_pesos
+      descuento_total * moneda_cotizacion
+    end
+
     def recargo_total
       if config[:adicionar_iva]
         items.sum('round(cantidad * recargo * (1 + 0.01 * percepcion_iva), 2)')
       else
         items.sum('cantidad * recargo')
       end
+    end
+
+    def recargo_total_en_pesos
+      recargo_total * moneda_cotizacion
     end
 
     def subtotal_iva
