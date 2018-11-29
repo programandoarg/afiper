@@ -212,6 +212,10 @@ module Afiper
       end
     end
 
+    def total_sin_descuentos_en_pesos
+      total_sin_descuentos * moneda_cotizacion
+    end
+
     def descuento_total
       if config[:adicionar_iva]
         items.sum('round(cantidad * descuento * (1 + 0.01 * percepcion_iva), 2)')
