@@ -14,8 +14,8 @@ module Afiper
 
     def get_persona(cuit)
       response = call(:get_persona, { idPersona: cuit })
-      response = response.body[:get_persona_response][:persona_return][:persona]
-      domicilio = response[:domicilio].first
+      response = response.body[:get_persona_response][:persona_return][:datos_generales]
+      domicilio = response[:domicilio_fiscal]
       nombre = "#{response[:nombre]} #{response[:apellido]} #{response[:razon_social]}".strip
       {
         nombre: nombre,
@@ -32,7 +32,6 @@ module Afiper
       client = build_client
       message = {token: token.token, sign: token.sign, cuitRepresentada: @contribuyente.cuit}
       response = client.call(method, message: message.merge(params))
-      # byebug
       response
     rescue OpenSSL::X509::CertificateError => exception
       fail Afiper::Errors::WsfeClientError.new("Las credenciales para acceder al servicio de AFIP son incorrectas")
@@ -63,7 +62,7 @@ module Afiper
     end
 
     def service_name
-      "ws_sr_padron_a4"
+      "ws_sr_padron_a5"
     end
 
     def wsaa
@@ -124,9 +123,9 @@ module Afiper
 
     def service_url
       if homologacion
-        "https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA4?WSDL"
+        "https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA5?WSDL"
       else
-        "https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA4?WSDL"
+        "https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA5?WSDL"
       end
     end
 
