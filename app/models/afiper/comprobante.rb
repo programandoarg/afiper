@@ -201,7 +201,7 @@ module Afiper
     end
 
     def total_en_pesos
-      total * moneda_cotizacion
+      (total * moneda_cotizacion).round(2)
     end
 
     def total_sin_descuentos
@@ -213,7 +213,7 @@ module Afiper
     end
 
     def total_sin_descuentos_en_pesos
-      total_sin_descuentos * moneda_cotizacion
+      (total_sin_descuentos * moneda_cotizacion).round(2)
     end
 
     def descuento_total
@@ -225,7 +225,7 @@ module Afiper
     end
 
     def descuento_total_en_pesos
-      descuento_total * moneda_cotizacion
+      (descuento_total * moneda_cotizacion).round(2)
     end
 
     def recargo_total
@@ -237,7 +237,7 @@ module Afiper
     end
 
     def recargo_total_en_pesos
-      recargo_total * moneda_cotizacion
+      (recargo_total * moneda_cotizacion).round(2)
     end
 
     def subtotal_iva
