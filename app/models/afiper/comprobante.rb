@@ -15,7 +15,7 @@ module Afiper
           { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',                    codigo_afip: 4,    nombre_print: 'RECIBO',                              letra: 'A', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
           { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',                    codigo_afip: 9,    nombre_print: 'RECIBO',                              letra: 'B', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
           { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',            codigo_afip: nil,  nombre_print: '',                                    letra: 'X', multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Nota de crédito no fiscal',   codigo_afip: nil,  nombre_print: '',                                    letra: 'X', multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Nota de crédito no fiscal',   codigo_afip: nil,  nombre_print: 'NOTA DE CREDITO',                     letra: 'X', multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
         ]
       end
 
