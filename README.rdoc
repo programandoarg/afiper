@@ -15,3 +15,5 @@ en Administrador de Relaciones de Clave Fiscal, habilitar el webservice "Factura
 
 
 
+Instalar sqlite
+sudo apt-get install sqlite3 libsqlite3-dev
