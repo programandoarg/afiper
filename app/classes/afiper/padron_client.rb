@@ -14,6 +14,9 @@ module Afiper
 
     def get_persona(cuit)
       response = call(:get_persona, { idPersona: cuit })
+      if response.body[:get_persona_response][:persona_return][:error_constancia].present?
+        fail Afiper::Errors::WsfeClientError.new(response.body[:get_persona_response][:persona_return][:error_constancia][:error])
+      end
       response = response.body[:get_persona_response][:persona_return][:datos_generales]
       domicilio = response[:domicilio_fiscal]
       nombre = "#{response[:nombre]} #{response[:apellido]} #{response[:razon_social]}".strip
