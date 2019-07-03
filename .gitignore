@@ -11,3 +11,4 @@ sftp-config.json
 *.ppk
 *.pem
 
+*.sublime-workspace
