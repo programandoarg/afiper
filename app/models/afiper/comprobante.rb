@@ -92,7 +92,7 @@ module Afiper
     enum concepto: { productos: 1, servicios: 2, productos_y_servicios: 3 }
     enum receptor_condicion_iva: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
     enum condicion_venta: { contado: 0 }
-    enum moneda: { pesos: 0, dolares: 1, euros: 2 }
+    enum moneda: { pesos: 0, dolares: 1, euros: 2, reales: 3, pesos_chilenos: 4, pesos_uruguayos: 5, pesos_mexicanos: 6, libras: 7 }
 
     enum tipo: Comprobante.configuracion_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
     enum receptor_doc_tipo: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
