@@ -130,6 +130,12 @@ module Afiper
     def moneda_codigo_afip
       return 'PES' if moneda == 'pesos'
       return 'DOL' if moneda == 'dolares'
+      return '060' if moneda == 'euros'
+      return '012' if moneda == 'reales'
+      return '033' if moneda == 'pesos_chilenos'
+      return '011' if moneda == 'pesos_uruguayos'
+      return '010' if moneda == 'pesos_mexicanos'
+      return '021' if moneda == 'libras'
     end
 
     def conceptos_posibles
