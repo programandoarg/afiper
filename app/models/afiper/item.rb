@@ -25,7 +25,7 @@ module Afiper
 
     DEFAULT_TIPO = 6 # No gravado
 
-    belongs_to :comprobante, class_name: 'Afiper::Comprobante', foreign_key: :afiper_comprobante_id
+    belongs_to :comprobante, class_name: 'Afiper::Comprobante', foreign_key: :afiper_comprobante_id, optional: true
 
     scope :gravado, -> { where(tipo: [0..5]) }
     scope :no_gravado, -> { where(tipo: 6) }

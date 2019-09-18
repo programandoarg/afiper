@@ -1,5 +1,7 @@
 module Afiper
   class Comprobante < ActiveRecord::Base
+    extend Enumerize
+
     class << self
       def configuracion_tipos
         [
@@ -89,13 +91,13 @@ module Afiper
       Comprobante.configuracion_doc_tipos.find { |tipo| tipo[:nombre] == receptor_doc_tipo.to_sym }
     end
 
-    enum concepto: { productos: 1, servicios: 2, productos_y_servicios: 3 }
-    enum receptor_condicion_iva: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
-    enum condicion_venta: { contado: 0 }
-    enum moneda: { pesos: 0, dolares: 1, euros: 2, reales: 3, pesos_chilenos: 4, pesos_uruguayos: 5, pesos_mexicanos: 6, libras: 7 }
+    enumerize :concepto, in: { productos: 1, servicios: 2, productos_y_servicios: 3 }
+    enumerize :receptor_condicion_iva, in: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
+    enumerize :condicion_venta, in: { contado: 0 }
+    enumerize :moneda, in: { pesos: 0, dolares: 1, euros: 2, reales: 3, pesos_chilenos: 4, pesos_uruguayos: 5, pesos_mexicanos: 6, libras: 7 }
 
-    enum tipo: Comprobante.configuracion_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
-    enum receptor_doc_tipo: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
+    enumerize :tipo, in: Comprobante.configuracion_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
+    enumerize :receptor_doc_tipo, in: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
 
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
     has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, dependent: :destroy
@@ -140,9 +142,9 @@ module Afiper
 
     def conceptos_posibles
       if config[:recibo]
-        Afiper::Comprobante.conceptos.select { |k,v| k == 'servicios'}
+        ['servicios']
       else
-        Afiper::Comprobante.conceptos
+        Afiper::Comprobante.concepto.values
       end
     end
 
