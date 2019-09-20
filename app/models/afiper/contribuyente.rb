@@ -34,5 +34,13 @@ module Afiper
           :ticket_no_fiscal, :devolucion_no_fiscal])
       end
     end
+
+    def afip_configured?(homologacion)
+      if homologacion
+        afip_certificado_homologacion.present? && afip_clave_homologacion.present?
+      else
+        afip_certificado.present? && afip_clave.present?
+      end
+    end
   end
 end

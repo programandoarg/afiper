@@ -69,9 +69,9 @@ module Afiper
     end
 
     def wsaa
-      # unless @contribuyente.afip_configured?
-      #   fail CustomApplicationError, 'Los certificados de la AFIP no están configurados'
-      # end
+      unless @contribuyente.afip_configured?(homologacion)
+        fail 'Los certificados de la AFIP no están configurados'
+      end
       if homologacion
         raw = @contribuyente.afip_certificado_homologacion
         key_file = @contribuyente.afip_clave_homologacion
