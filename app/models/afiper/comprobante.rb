@@ -208,15 +208,23 @@ module Afiper
       end
     end
 
-    def total_en_moneda(moneda = nil)
+    def total_en_moneda(moneda)
       if moneda == self.moneda
         total.round(2)
       elsif moneda == 'pesos' # el comprobante no está en pesos y quiero convertir a pesos
         # en este caso la cotizacion es la conversión a pesos desde cualquier otra moneda
         (total * moneda_cotizacion).round(2)
-      elsif self.moneda == 'pesos' # el comprobante está en pesos y quiero convertir a otra cosa
-        # en este caso la cotizacion es la conversión a la moneda del presupuesto
-        (total / moneda_cotizacion).round(2)
+      else
+        raise "No se puede convertir a #{moneda}"
+      end
+    end
+
+    def total_sin_descuentos_en_moneda(moneda)
+      if moneda == self.moneda
+        total_sin_descuentos.round(2)
+      elsif moneda == 'pesos' # el comprobante no está en pesos y quiero convertir a pesos
+        # en este caso la cotizacion es la conversión a pesos desde cualquier otra moneda
+        (total_sin_descuentos * moneda_cotizacion).round(2)
       else
         raise "No se puede convertir a #{moneda}"
       end
