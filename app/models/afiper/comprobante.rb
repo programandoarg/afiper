@@ -208,10 +208,6 @@ module Afiper
       end
     end
 
-    def total_en_pesos
-      (total * moneda_cotizacion).round(2)
-    end
-
     def total_en_moneda(moneda = nil)
       if moneda == self.moneda
         total.round(2)
