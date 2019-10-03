@@ -103,6 +103,12 @@ module Afiper
     has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, dependent: :destroy
     accepts_nested_attributes_for :items, allow_destroy: true
 
+    before_save do |comprobante|
+      if comprobante.moneda.pesos?
+        comprobante.moneda_cotizacion = 1
+      end
+    end
+
     before_create do |comprobante|
       comprobante.concepto = :productos unless comprobante.concepto.present? # Productos
       comprobante.emisor_razon_social = comprobante.contribuyente.razon_social unless comprobante.emisor_razon_social.present?
