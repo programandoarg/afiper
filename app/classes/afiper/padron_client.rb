@@ -40,6 +40,8 @@ module Afiper
       fail Afiper::Errors::WsfeClientError.new("Las credenciales para acceder al servicio de AFIP son incorrectas")
     rescue Savon::SOAPFault => exception
       fail Afiper::Errors::WsfeClientError.new(exception.message)
+    rescue Savon::HTTPError => exception
+      fail Afiper::Errors::WsfeClientError.new("Hubo un error al comunicarse con el sistema de AFIP. Por favor intentalo nuevamente más tarde.")
       # if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
       #   response = response.body[:"#{method}_response"][:"#{method}_result"]
       #   if response[:errors].present?
