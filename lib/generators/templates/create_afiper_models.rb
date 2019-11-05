@@ -42,6 +42,11 @@ class CreateAfiperModels < ActiveRecord::Migration
 
       t.integer :condicion_venta, null: false
 
+      t.bigint :receptor_codigo_pais
+      t.bigint :receptor_cuit_pais
+      t.string :receptor_domicilio
+      t.string :exportacion_id_impositivo
+
       t.integer :concepto, null: false
       t.integer :moneda, null: false, default: 0
       t.float :moneda_cotizacion, null: false, default: 1.0

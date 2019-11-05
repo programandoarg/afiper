@@ -23,9 +23,7 @@ module Afiper
       end
     end
 
-    DEFAULT_TIPO = 6 # No gravado
-
-    belongs_to :comprobante, class_name: 'Afiper::Comprobante', foreign_key: :afiper_comprobante_id, optional: true
+    belongs_to :comprobante, class_name: 'Afiper::Comprobante', foreign_key: :afiper_comprobante_id, inverse_of: :items, optional: true
 
     scope :gravado, -> { where(tipo: [0..5]) }
     scope :no_gravado, -> { where(tipo: 6) }
@@ -34,12 +32,20 @@ module Afiper
     before_save :set_percepcion_iva
 
     def set_percepcion_iva
-      self.tipo = DEFAULT_TIPO unless tipo.present?
+      self.tipo = default_tipo_iva unless tipo.present?
       self.percepcion_iva = if Item.tipos[tipo][:percepcion_iva].present?
                               Item.tipos[tipo][:percepcion_iva]
                             else
                               0
                             end
+    end
+
+    def default_tipo_iva
+      if comprobante.present?
+        comprobante.default_tipo_iva
+      else
+        6 # No gravado
+      end
     end
 
     def descuento_porcentaje

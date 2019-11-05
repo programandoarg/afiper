@@ -17,6 +17,10 @@ module Afiper
       WsfeClient.new(self)
     end
 
+    def wsfex_client
+      WsfexClient.new(self)
+    end
+
     def default_punto_de_venta(tipo)
       puntos_de_venta[tipo]
     end
@@ -31,7 +35,7 @@ module Afiper
       Comprobante.configuracion_tipos.select do |t|
         t[:nombre].in?([:factura_a, :nota_de_credito_a, :nota_de_debito_a, :recibo_a,
           :factura_b, :nota_de_credito_b, :nota_de_debito_b, :recibo_b,
-          :ticket_no_fiscal, :devolucion_no_fiscal])
+          :ticket_no_fiscal, :devolucion_no_fiscal, :factura_e, :nota_de_credito_e, :nota_de_debito_e])
       end
     end
 

@@ -1,5 +1,7 @@
 require "afiper/engine"
 require "afiper/configuration"
+require "afiper/paises"
+require "afiper/cuit_paises"
 
 module Afiper
   class << self

@@ -5,19 +5,22 @@ module Afiper
     class << self
       def configuracion_tipos
         [
-          { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',                   codigo_afip: 1,    nombre_print: 'FACTURA',                             letra: 'A', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
-          { id: 2,  nombre: :factura_b,            descripcion: 'Factura B',                   codigo_afip: 6,    nombre_print: 'FACTURA',                             letra: 'B', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',                   codigo_afip: 11,   nombre_print: 'FACTURA',                             letra: 'C', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 4,  nombre: :nota_de_credito_a,    descripcion: 'Nota de crédito A',           codigo_afip: 3,    nombre_print: 'NOTA DE CREDITO',                     letra: 'A', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
-          { id: 5,  nombre: :nota_de_credito_b,    descripcion: 'Nota de crédito B',           codigo_afip: 8,    nombre_print: 'NOTA DE CREDITO',                     letra: 'B', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',           codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                     letra: 'C', multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 7,  nombre: :nota_de_debito_a,     descripcion: 'Nota de débito A',            codigo_afip: 2,    nombre_print: 'NOTA DE DEBITO',                      letra: 'A', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
-          { id: 8,  nombre: :nota_de_debito_b,     descripcion: 'Nota de débito B',            codigo_afip: 7,    nombre_print: 'NOTA DE DEBITO',                      letra: 'B', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',            codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                      letra: 'C', multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',                    codigo_afip: 4,    nombre_print: 'RECIBO',                              letra: 'A', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
-          { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',                    codigo_afip: 9,    nombre_print: 'RECIBO',                              letra: 'B', multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
-          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',            codigo_afip: nil,  nombre_print: '',                                    letra: 'X', multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Nota de crédito no fiscal',   codigo_afip: nil,  nombre_print: 'NOTA DE CREDITO',                     letra: 'X', multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',                   codigo_afip: 1,    nombre_print: 'FACTURA',                             letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
+          { id: 2,  nombre: :factura_b,            descripcion: 'Factura B',                   codigo_afip: 6,    nombre_print: 'FACTURA',                             letra: 'B', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',                   codigo_afip: 11,   nombre_print: 'FACTURA',                             letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 4,  nombre: :nota_de_credito_a,    descripcion: 'Nota de crédito A',           codigo_afip: 3,    nombre_print: 'NOTA DE CREDITO',                     letra: 'A', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
+          { id: 5,  nombre: :nota_de_credito_b,    descripcion: 'Nota de crédito B',           codigo_afip: 8,    nombre_print: 'NOTA DE CREDITO',                     letra: 'B', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',           codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                     letra: 'C', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 7,  nombre: :nota_de_debito_a,     descripcion: 'Nota de débito A',            codigo_afip: 2,    nombre_print: 'NOTA DE DEBITO',                      letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
+          { id: 8,  nombre: :nota_de_debito_b,     descripcion: 'Nota de débito B',            codigo_afip: 7,    nombre_print: 'NOTA DE DEBITO',                      letra: 'B', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',            codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                      letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',                    codigo_afip: 4,    nombre_print: 'RECIBO',                              letra: 'A', exportacion: false, multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
+          { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',                    codigo_afip: 9,    nombre_print: 'RECIBO',                              letra: 'B', exportacion: false, multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
+          { id: 12, nombre: :ticket_no_fiscal,     descripcion: 'Ticket no fiscal',            codigo_afip: nil,  nombre_print: '',                                    letra: 'X', exportacion: false, multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 13, nombre: :devolucion_no_fiscal, descripcion: 'Nota de crédito no fiscal',   codigo_afip: nil,  nombre_print: 'NOTA DE CREDITO',                     letra: 'X', exportacion: false, multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 14, nombre: :factura_e,            descripcion: 'Factura E',                   codigo_afip: 19,   nombre_print: 'FACTURA',                             letra: 'E', exportacion: true,  multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 15, nombre: :nota_de_debito_e,     descripcion: 'Nota de débito E',            codigo_afip: 20,   nombre_print: 'NOTA DE CREDITO',                     letra: 'E', exportacion: true,  multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 16, nombre: :nota_de_credito_e,    descripcion: 'Nota de crédito E',           codigo_afip: 21,   nombre_print: 'NOTA DE DEBITO',                      letra: 'E', exportacion: true,  multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
         ]
       end
 
@@ -100,7 +103,7 @@ module Afiper
     enumerize :receptor_doc_tipo, in: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
 
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
-    has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, dependent: :destroy
+    has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, inverse_of: :comprobante, dependent: :destroy
     accepts_nested_attributes_for :items, allow_destroy: true
 
     before_save do |comprobante|
@@ -128,11 +131,14 @@ module Afiper
     end
 
 
-    # Validaciones
     validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
 
-    def receptor_domicilio
-      '-'
+    def default_tipo_iva
+      if config[:exportacion]
+        7 # Exento
+      else
+        6 # No gravado
+      end
     end
 
     def moneda_codigo_afip
@@ -155,7 +161,6 @@ module Afiper
     end
 
     def consmumidor_final?
-      # byebug
       receptor_doc_tipo == 'doc_otro'
     end
 
@@ -301,7 +306,11 @@ module Afiper
     end
 
     def solicitar_cae
-      contribuyente.wsfe_client.solicitar_cae(self)
+      if config[:exportacion]
+        contribuyente.wsfex_client.solicitar_cae(self)
+      else
+        contribuyente.wsfe_client.solicitar_cae(self)
+      end
     end
 
     def actualizar_comprobante
