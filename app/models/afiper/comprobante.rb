@@ -289,7 +289,7 @@ module Afiper
 
     def concepto_afip
       # El enum tiene los valores correspondientes de la afip
-      self['concepto']
+      concepto.value
     end
 
     def alicuotas
