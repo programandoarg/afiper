@@ -226,8 +226,7 @@ module Afiper
         # en este caso la cotizacion es la conversión a pesos desde cualquier otra moneda
         (valor * moneda_cotizacion).round(2)
       else
-        return 1
-        raise "No se puede convertir a #{moneda}"
+        raise "No se puede convertir a #{moneda} - comprobante #{id}"
       end
     end
 
