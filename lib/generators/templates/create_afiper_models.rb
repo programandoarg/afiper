@@ -72,6 +72,8 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.date :vencimiento_cae
       t.string :afip_result # JSON que retorna la API al solicitar CAE, se guarda por las dudas
 
+      t.datetime :deleted_at
+
       t.timestamps null: false
     end
 
@@ -86,6 +88,8 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.decimal :importe, precision: 15, scale: 2, null: false
       t.decimal :descuento, precision: 15, scale: 2, null: false, default: 0
       t.decimal :recargo, precision: 15, scale: 2, null: false, default: 0
+
+      t.datetime :deleted_at
 
       t.timestamps null: false
     end

@@ -94,6 +94,8 @@ module Afiper
       Comprobante.configuracion_doc_tipos.find { |tipo| tipo[:nombre] == receptor_doc_tipo.to_sym }
     end
 
+    acts_as_paranoid without_default_scope: true
+
     enumerize :concepto, in: { productos: 1, servicios: 2, productos_y_servicios: 3 }
     enumerize :receptor_condicion_iva, in: { consumidor_final: 0, responsable_inscripto: 1, monotributo: 2 }
     enumerize :condicion_venta, in: { contado: 0 }

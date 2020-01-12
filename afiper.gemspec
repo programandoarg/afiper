@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "savon", "~> 2.10.0"
   s.add_dependency "barby", '~> 0.6.4'
   s.add_dependency "enumerize"
+  s.add_dependency "paranoia"
 
   s.add_development_dependency "pry"
   s.add_development_dependency "rspec-rails"
