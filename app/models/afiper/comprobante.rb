@@ -105,6 +105,7 @@ module Afiper
     enumerize :receptor_doc_tipo, in: Comprobante.configuracion_doc_tipos.map { |config| [config[:nombre], config[:id]] }.to_h
 
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente', foreign_key: :afiper_contribuyente_id
+    belongs_to :comprobante_asociado, class_name: 'Afiper::Comprobante', optional: true
     has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id, inverse_of: :comprobante, dependent: :destroy
     accepts_nested_attributes_for :items, allow_destroy: true
 

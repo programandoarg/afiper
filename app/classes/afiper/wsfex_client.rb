@@ -25,7 +25,6 @@ module Afiper
           Imp_total: comprobante.total,
           # Obs: string,
           Idioma_cbte: 1, # Español
-          Fecha_pago: comprobante.fecha.strftime("%Y%m%d"),
           Items: {
             Item: {
               # Pro_codigo: string,
@@ -39,6 +38,18 @@ module Afiper
           }
         }
       }
+      if comprobante.comprobante_asociado.present?
+        parameters[:Cmp][:Cmps_asoc] = {
+          Cmp_asoc: {
+            Cbte_tipo: comprobante.comprobante_asociado.config[:codigo_afip],
+            Cbte_punto_vta: comprobante.comprobante_asociado.punto_de_venta,
+            Cbte_nro: comprobante.comprobante_asociado.numero,
+            Cbte_cuit: comprobante.comprobante_asociado.emisor_cuit,
+          }
+        }
+      else
+        parameters[:Cmp][:Fecha_pago] = comprobante.fecha.strftime("%Y%m%d")
+      end
       puts "###############################################################################"
       puts "###############################################################################"
       puts "###############################################################################"

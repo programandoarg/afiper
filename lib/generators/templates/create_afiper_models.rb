@@ -24,6 +24,7 @@ class CreateAfiperModels < ActiveRecord::Migration
 
     create_table :afiper_comprobantes do |t|
       t.references :afiper_contribuyente, null: false, foreign_key: true, index: true
+      t.references :comprobante_asociado, null: false, index: true
 
       t.integer :tipo, null: false
       t.date :fecha, null: false
@@ -76,6 +77,8 @@ class CreateAfiperModels < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_foreign_key :afiper_comprobantes, :afiper_comprobantes, column: :comprobante_asociado_id
 
     create_table :afiper_items do |t|
       t.references :afiper_comprobante, null: false, foreign_key: true, index: true
