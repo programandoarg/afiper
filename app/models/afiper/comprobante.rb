@@ -255,9 +255,9 @@ module Afiper
 
     def descuento_total
       if config[:adicionar_iva]
-        items.sum('round(cantidad * descuento * (1 + 0.01 * percepcion_iva), 2)')
+        config[:multiplicador_saldo] * items.sum('round(cantidad * descuento * (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.sum('cantidad * descuento')
+        config[:multiplicador_saldo] * items.sum('cantidad * descuento')
       end
     end
 
@@ -267,9 +267,9 @@ module Afiper
 
     def recargo_total
       if config[:adicionar_iva]
-        items.sum('round(cantidad * recargo * (1 + 0.01 * percepcion_iva), 2)')
+        config[:multiplicador_saldo] * items.sum('round(cantidad * recargo * (1 + 0.01 * percepcion_iva), 2)')
       else
-        items.sum('cantidad * recargo')
+        config[:multiplicador_saldo] * items.sum('cantidad * recargo')
       end
     end
 
