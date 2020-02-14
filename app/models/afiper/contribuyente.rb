@@ -29,8 +29,8 @@ module Afiper
 
     def tipos_de_comprobante_que_emite
       Comprobante.configuracion_tipos.select do |t|
-        t[:nombre].in?([:factura_a, :nota_de_credito_a, :nota_de_debito_a, :recibo_a,
-          :factura_b, :nota_de_credito_b, :nota_de_debito_b, :recibo_b,
+        t[:nombre].in?([:factura_a, :nota_de_credito_a, :nota_de_debito_a,
+          :factura_b, :nota_de_credito_b, :nota_de_debito_b,
           :ticket_no_fiscal, :devolucion_no_fiscal])
       end
     end
