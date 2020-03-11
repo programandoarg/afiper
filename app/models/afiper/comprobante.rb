@@ -134,7 +134,7 @@ module Afiper
     end
 
 
-    validates :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
+    validates :contribuyente, :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
 
     def default_tipo_iva
       if config[:exportacion]
