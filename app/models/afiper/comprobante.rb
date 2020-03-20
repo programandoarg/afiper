@@ -135,6 +135,7 @@ module Afiper
 
 
     validates :contribuyente, :punto_de_venta, :numero, :tipo, :fecha, :receptor_razon_social, presence: true
+    validates :receptor_doc_nro, numericality: { only_integer: true }
 
     def default_tipo_iva
       if config[:exportacion]

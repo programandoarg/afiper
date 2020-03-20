@@ -1,4 +1,10 @@
 module Afiper
+
+  # para debuguear
+  # client = self.build_client
+  # response = client.call(:fecae_solicitar, message: me)
+  # request = client.build_request(:fecae_solicitar, message: me)
+
   # Factura electrónica
   class WsfeClient < ClienteAfipWs
     def solicitar_cae(comprobante)
