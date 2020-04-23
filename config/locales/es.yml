@@ -1,0 +1,6 @@
+es:
+  activerecord:
+    attributes:
+      afiper/comprobante:
+        receptor_doc_nro: Número de documento
+
