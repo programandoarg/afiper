@@ -1,4 +1,4 @@
-class CreateAfiperModels < ActiveRecord::Migration
+class ModelosBase < ActiveRecord::Migration[5.2]
   def change
     create_table :afiper_contribuyentes do |t|
       t.string :razon_social, null: false
@@ -51,16 +51,6 @@ class CreateAfiperModels < ActiveRecord::Migration
       t.integer :concepto, null: false
       t.integer :moneda, null: false, default: 0
       t.float :moneda_cotizacion, null: false, default: 1.0
-
-      # t.decimal :subtotal_no_gravado,     precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :subtotal_exento,         precision: 15, scale: 2, null: false, default: 0.0
-
-      # t.decimal :neto_gravado_3,  precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :neto_gravado_4,  precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :neto_gravado_5,  precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :neto_gravado_6,  precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :neto_gravado_8,  precision: 15, scale: 2, null: false, default: 0.0
-      # t.decimal :neto_gravado_9,  precision: 15, scale: 2, null: false, default: 0.0
 
       t.date :fecha_servicio_desde
       t.date :fecha_servicio_hasta
