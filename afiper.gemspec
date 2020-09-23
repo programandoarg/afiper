@@ -37,6 +37,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency 'fuubar'
+  spec.add_development_dependency 'simplecov'
   spec.add_development_dependency "factory_bot_rails"
   spec.add_development_dependency 'faker'
   spec.add_development_dependency 'database_cleaner'
