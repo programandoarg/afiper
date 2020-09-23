@@ -1,5 +1,5 @@
-require "afiper/engine"
-require "afiper/configuration"
+require 'afiper/engine'
+require 'afiper/configuration'
 
 module Afiper
   class << self
