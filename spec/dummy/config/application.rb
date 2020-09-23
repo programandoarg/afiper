@@ -2,6 +2,9 @@ require_relative 'boot'
 
 require 'rails/all'
 
+require 'enumerize'
+require 'paranoia'
+
 Bundler.require(*Rails.groups)
 require "afiper"
 
