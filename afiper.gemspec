@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "barby", '~> 0.6.4'
   s.add_dependency "enumerize"
   s.add_dependency "paranoia"
+  s.add_dependency "pg"
 
   s.add_development_dependency "pry"
   s.add_development_dependency "rspec-rails"
@@ -30,5 +31,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'faker'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'sqlite3'
 end
