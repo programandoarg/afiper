@@ -1,10 +1,11 @@
 PATH
   remote: .
   specs:
-    afiper (0.0.1)
+    afiper (1.0.0.pre.alpha)
       barby (~> 0.6.4)
       enumerize
       paranoia
+      pg
       rails (~> 5.2)
       savon (~> 2.10.0)
       sidekiq (~> 5.2)
@@ -53,6 +54,8 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     akami (1.3.1)
       gyoku (>= 0.4.0)
       nokogiri
@@ -66,21 +69,25 @@ GEM
     crass (1.0.6)
     database_cleaner (1.8.4)
     diff-lcs (1.3)
+    docile (1.3.2)
     enumerize (2.3.1)
       activesupport (>= 3.2)
     erubi (1.9.0)
-    factory_girl (4.9.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
-      railties (>= 3.0.0)
+    factory_bot (6.1.0)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.1.0)
+      factory_bot (~> 6.1.0)
+      railties (>= 5.0.0)
     faker (2.11.0)
       i18n (>= 1.6, < 2)
+    fuubar (2.5.0)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     gyoku (1.3.1)
       builder (>= 2.1.2)
-    httpi (2.4.4)
+    httpi (2.4.5)
       rack
       socksify
     i18n (1.8.5)
@@ -109,11 +116,13 @@ GEM
       activerecord (>= 4.0, < 6.1)
     parser (2.7.1.0)
       ast (~> 2.4.0)
+    pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    public_suffix (4.0.6)
     rack (2.2.3)
-    rack-protection (2.0.8.1)
+    rack-protection (2.1.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -185,6 +194,10 @@ GEM
       rack (~> 2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 4.2)
+    simplecov (0.19.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+    simplecov-html (0.12.3)
     socksify (1.7.1)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
@@ -193,7 +206,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     systemu (2.6.5)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -202,7 +214,8 @@ GEM
     unicode-display_width (1.7.0)
     uuid (2.3.9)
       macaddr (~> 1.0)
-    wasabi (3.5.0)
+    wasabi (3.6.1)
+      addressable
       httpi (~> 2.0)
       nokogiri (>= 1.4.2)
     websocket-driver (0.7.3)
@@ -215,12 +228,13 @@ PLATFORMS
 DEPENDENCIES
   afiper!
   database_cleaner
-  factory_girl_rails (~> 4.0)
+  factory_bot_rails
   faker
+  fuubar
   pry
   rspec-rails
   rubocop
-  sqlite3
+  simplecov
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

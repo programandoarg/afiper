@@ -1,34 +1,46 @@
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "afiper/version"
 
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = "afiper"
-  s.version     = Afiper::VERSION
-  s.authors     = ["Martín Rosso"]
-  s.email       = ["mrosso10@gmail.com"]
-  s.homepage    = "https://github.com/programandoarg/afiper"
-  s.summary     = "Make asynchronous endpoints in your Ruby on Rails application"
-  s.description = "Often in our Rails applications we have tasks that may take a lot of time to finish, such as external API requests. This is risky to perform inside our endpoints because it blocks our threads and is not scalable. Here we provide a solution to this problem, using sidekiq to run our heavy work in background"
-  s.license     = "MIT"
+Gem::Specification.new do |spec|
+  spec.name        = "afiper"
+  spec.version     = Afiper::VERSION
+  spec.authors     = ["Martín Rosso"]
+  spec.email       = ["mrosso10@gmail.com"]
+  spec.homepage    = ""
+  spec.summary     = "Summary of Afiper."
+  spec.description = "Description of Afiper."
+  spec.license     = "MIT"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["spec/**/*"]
+  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
+  # to allow pushing to a single host or delete this section to allow pushing to any host.
+  if spec.respond_to?(:metadata)
+    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  else
+    raise "RubyGems 2.0 or newer is required to protect against " \
+      "public gem pushes."
+  end
 
-  s.add_dependency "rails", "~> 5.2"
-  s.add_dependency "sidekiq", "~> 5.2"
-  s.add_dependency "savon", "~> 2.10.0"
-  s.add_dependency "barby", '~> 0.6.4'
-  s.add_dependency "enumerize"
-  s.add_dependency "paranoia"
+  spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_development_dependency "pry"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "factory_girl_rails", "~> 4.0"
-  s.add_development_dependency 'faker'
-  s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'sqlite3'
+  spec.test_files = Dir["spec/**/*"]
+
+  spec.add_dependency "rails", "~> 5.2"
+  spec.add_dependency "sidekiq", "~> 5.2"
+  spec.add_dependency "savon", "~> 2.10.0"
+  spec.add_dependency "barby", '~> 0.6.4'
+  spec.add_dependency "enumerize"
+  spec.add_dependency "paranoia"
+  spec.add_dependency "pg"
+
+  spec.add_development_dependency "pry"
+  spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency 'fuubar'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency "factory_bot_rails"
+  spec.add_development_dependency 'faker'
+  spec.add_development_dependency 'database_cleaner'
+  spec.add_development_dependency 'rubocop'
 end
