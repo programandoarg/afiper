@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   class CuitPaises
     def self.opciones

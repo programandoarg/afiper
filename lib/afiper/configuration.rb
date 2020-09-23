@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   class Configuration
     attr_accessor :wsfe_homologacion, :padron_homologacion

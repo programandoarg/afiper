@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   # para debuguear
   # client = self.build_client
@@ -44,7 +46,7 @@ module Afiper
         rescue NoMethodError => e
         end
       end
-      if comprobante.subtotal_gravado > 0
+      if comprobante.subtotal_gravado.positive?
         parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
           AlicIva: comprobante.alicuotas.map do |alicuota|
             {

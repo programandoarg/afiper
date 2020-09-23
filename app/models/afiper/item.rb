@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   class Item < ActiveRecord::Base
     class << self
@@ -51,13 +53,13 @@ module Afiper
     end
 
     def descuento_porcentaje
-      return 0 unless importe.present? && importe > 0
+      return 0 unless importe.present? && importe.positive?
 
       (100 * descuento / importe).round(2)
     end
 
     def recargo_porcentaje
-      return 0 unless importe.present? && importe > 0
+      return 0 unless importe.present? && importe.positive?
 
       (100 * recargo / importe).round(2)
     end

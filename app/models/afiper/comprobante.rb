@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   class Comprobante < ActiveRecord::Base
     extend Enumerize
@@ -318,7 +320,7 @@ module Afiper
           codigo_alicuota: Item.tipos[k][:codigo_alicuota],
           descripcion: Item.tipos[k][:descripcion]
         }
-      end.select { |alicuota| alicuota[:base_imponible] > 0 }
+      end.select { |alicuota| (alicuota[:base_imponible]).positive? }
     end
 
     def solicitar_cae
@@ -348,8 +350,8 @@ module Afiper
     def verificador(data)
       # 2012079182701000466217207571810201606053
       array = data.scan(/\w/)
-      odds = array.values_at(* array.each_index.select { |i| i.even? }).map(&:to_i)
-      evens = array.values_at(* array.each_index.select { |i| i.odd? }).map(&:to_i)
+      odds = array.values_at(* array.each_index.select(&:even?)).map(&:to_i)
+      evens = array.values_at(* array.each_index.select(&:odd?)).map(&:to_i)
       odds_sum = odds.inject(0) { |sum, x| sum + x }
       evens_sum = evens.inject(0) { |sum, x| sum + x }
       ((10 - ((odds_sum * 3 + evens_sum) % 10)) % 10).to_s

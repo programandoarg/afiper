@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'savon'
 require 'afiper/errors/wsfe_client_error'
 

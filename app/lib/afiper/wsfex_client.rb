@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   # Factura electrónica de exportación
   class WsfexClient < ClienteAfipWs
@@ -121,7 +123,7 @@ module Afiper
       response = client.call(method, message: message.deep_merge(params))
       if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
         response = response.body[:"#{method}_response"][:"#{method}_result"]
-        if response[:fex_err].present? && response[:fex_err][:err_code].to_i > 0
+        if response[:fex_err].present? && response[:fex_err][:err_code].to_i.positive?
           messages = [response[:fex_err]].flatten.map do |error|
             { code: error[:err_code], msg: error[:err_msg] }
           end

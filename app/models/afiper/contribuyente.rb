@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Afiper
   class Contribuyente < ActiveRecord::Base
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id

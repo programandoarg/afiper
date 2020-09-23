@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'savon'
 require 'afiper/errors/wsfe_client_error'
 
@@ -21,7 +23,7 @@ module Afiper
       message = { Auth: auth_hash }
       response = client.call(method, message: message.deep_merge(params))
       puts response.as_json
-      puts '"response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?"'
+      puts %("response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?")
       if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
         response = response.body[:"#{method}_response"][:"#{method}_result"]
         if response[:errors].present?
