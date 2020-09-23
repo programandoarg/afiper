@@ -13,7 +13,3 @@ en Administración de Certificados Digitales crear un alias, y subir "pedido.csr
 
 en Administrador de Relaciones de Clave Fiscal, habilitar el webservice "Facturacion electronica" para el alias creado
 
-
-
-Instalar sqlite
-sudo apt-get install sqlite3 libsqlite3-dev
