@@ -1,0 +1,42 @@
+---
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.1.1
+jobs:
+  build:
+    working_directory: ~/afiper
+    docker:
+      - image: circleci/ruby:2.6.3-node
+        environment:
+          PGHOST: localhost
+          PGUSER: afiper
+          RAILS_ENV: test
+          BUNDLE_PATH: vendor/bundle
+      - image: postgres:9.5
+        environment:
+          POSTGRES_USER: afiper
+          POSTGRES_DB: afiper_test
+          POSTGRES_PASSWORD: afiper
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - afiper-1-{{ checksum "Gemfile.lock" }}
+      - run: gem install bundler
+      - run: bundle install
+      - save_cache:
+          key: afiper-1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # - run: cp .rbenv-vars.example .env
+      - run: bundle exec rake db:schema:load
+      - run: bundle exec rspec
+      - codecov/upload:
+          file: coverage/.resultset.json
+          token: '345de0ab-a0d3-4180-8e8e-c300601ed8d5'
+
+workflows:
+  build-test:
+    jobs:
+      - build
