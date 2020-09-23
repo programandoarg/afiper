@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    afiper (0.1.1)
+    afiper (1.0.0.pre.alpha)
       barby (~> 0.6.4)
       enumerize
       paranoia
