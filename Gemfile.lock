@@ -95,6 +95,7 @@ GEM
       socksify
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    json (2.3.1)
     loofah (2.7.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -202,10 +203,11 @@ GEM
       rack (~> 2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 4.2)
-    simplecov (0.19.0)
+    simplecov (0.17.1)
       docile (~> 1.1)
-      simplecov-html (~> 0.11)
-    simplecov-html (0.12.3)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     socksify (1.7.1)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
@@ -244,7 +246,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-rspec
-  simplecov
+  simplecov (~> 0.17.1)
 
 BUNDLED WITH
    2.1.4
