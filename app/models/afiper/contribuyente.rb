@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Afiper
+  # Datos del contribuyente y claves para acceder a la API de la AFIP
   class Contribuyente < ActiveRecord::Base
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id
 
@@ -37,7 +38,8 @@ module Afiper
       Comprobante.configuracion_tipos.select do |t|
         t[:nombre].in?(%i[factura_a nota_de_credito_a nota_de_debito_a
                           factura_b nota_de_credito_b nota_de_debito_b
-                          ticket_no_fiscal devolucion_no_fiscal factura_e nota_de_credito_e nota_de_debito_e])
+                          ticket_no_fiscal devolucion_no_fiscal
+                          factura_e nota_de_credito_e nota_de_debito_e])
       end
     end
 

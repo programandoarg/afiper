@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Afiper
+  # Cada una de las líneas de un comprobante
   class Item < ActiveRecord::Base
     class << self
       def tipos_for_select
@@ -25,7 +26,8 @@ module Afiper
       end
     end
 
-    belongs_to :comprobante, class_name: 'Afiper::Comprobante', foreign_key: :afiper_comprobante_id, inverse_of: :items, optional: true
+    belongs_to :comprobante, class_name: 'Afiper::Comprobante',
+                             foreign_key: :afiper_comprobante_id, inverse_of: :items, optional: true
 
     acts_as_paranoid without_default_scope: true
 
@@ -73,6 +75,14 @@ module Afiper
 
     def total
       cantidad * (importe - descuento + recargo)
+    end
+
+    def importe_alicuota
+      (cantidad * importe_neto * 0.01 * percepcion_iva).round(2)
+    end
+
+    def total_neto
+      (cantidad * importe_neto).round(2)
     end
 
     def importe_neto

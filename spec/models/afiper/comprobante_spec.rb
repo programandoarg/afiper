@@ -2,10 +2,8 @@
 
 require 'rails_helper'
 
-module Afiper
-  RSpec.describe Comprobante do
-    it do
-      c = described_class.new
-    end
+RSpec.describe Afiper::Comprobante do
+  it do
+    described_class.new
   end
 end

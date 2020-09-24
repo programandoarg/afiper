@@ -121,7 +121,8 @@ module Afiper
       client = build_client
       message = { Auth: auth_hash }
       response = client.call(method, message: message.deep_merge(params))
-      if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
+      if response.body[:"#{method}_response"].present? &&
+         response.body[:"#{method}_response"][:"#{method}_result"].present?
         response = response.body[:"#{method}_response"][:"#{method}_result"]
         if response[:fex_err].present? && response[:fex_err][:err_code].to_i.positive?
           messages = [response[:fex_err]].flatten.map do |error|
@@ -131,7 +132,8 @@ module Afiper
         end
         response
       else
-        raise Afiper::Errors::WsfeClientError, [{ code: 0, msg: 'Error en el Web Service de la AFIP' }].to_json
+        raise Afiper::Errors::WsfeClientError,
+              [{ code: 0, msg: 'Error en el Web Service de la AFIP' }].to_json
       end
     end
 
@@ -140,7 +142,8 @@ module Afiper
       validar_tipo(tipo)
       ultimo = ultimo_cmp(tipo, pto_vta)
       (1..ultimo).each do |numero|
-        if @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: pto_vta, numero: numero).exists?
+        if @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo],
+                                             punto_de_venta: pto_vta, numero: numero).exists?
           next
         end
 
@@ -165,11 +168,15 @@ module Afiper
           vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
           afip_result: result
         )
-        comprobante.items << Item.new(tipo: 6, codigo: '', detalle: 'No gravado', importe: result[:imp_tot_conc])
-        comprobante.items << Item.new(tipo: 7, codigo: '', detalle: 'Exento', importe: result[:imp_op_ex])
+        comprobante.items << Item.new(tipo: 6, codigo: '', detalle: 'No gravado',
+                                      importe: result[:imp_tot_conc])
+        comprobante.items << Item.new(tipo: 7, codigo: '', detalle: 'Exento',
+                                      importe: result[:imp_op_ex])
         if result[:iva] && result[:iva][:alic_iva]
           [result[:iva][:alic_iva]].flatten.each do |iva|
-            comprobante.items << Item.new(tipo: Item.tipo_from_afip(iva[:id]), codigo: '', detalle: "Gravado #{iva[:id]}", importe: iva[:base_imp])
+            comprobante.items << Item.new(tipo: Item.tipo_from_afip(iva[:id]),
+                                          codigo: '', detalle: "Gravado #{iva[:id]}",
+                                          importe: iva[:base_imp])
           end
         end
         comprobante.save!
