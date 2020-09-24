@@ -6,7 +6,7 @@
 #
 #  id                        :bigint           not null, primary key
 #  afiper_contribuyente_id   :bigint           not null
-#  comprobante_asociado_id   :bigint           not null
+#  comprobante_asociado_id   :bigint
 #  tipo                      :integer          not null
 #  fecha                     :date             not null
 #  punto_de_venta            :integer          not null
@@ -210,7 +210,9 @@ module Afiper
     end
 
     validates :contribuyente, :punto_de_venta, :numero, :tipo,
-              :fecha, :receptor_razon_social, presence: true
+              :fecha, :receptor_razon_social, :receptor_doc_tipo,
+              :items,
+              presence: true
     validates :receptor_doc_nro, numericality: { only_integer: true }
 
     def default_tipo_iva

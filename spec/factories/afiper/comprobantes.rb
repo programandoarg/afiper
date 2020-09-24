@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: afiper_comprobantes
@@ -39,11 +37,17 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
-require 'rails_helper'
-
-RSpec.describe Afiper::Comprobante do
-  let(:comprobante) { create :afiper_comprobante }
-  it do
-    expect(comprobante).to be_valid
+FactoryBot.define do
+  factory :afiper_comprobante, class: 'Afiper::Comprobante' do
+    contribuyente { create(:afiper_contribuyente) }
+    items { build_list :afiper_item, 1 }
+    fecha { Faker::Date.backward }
+    punto_de_venta { rand(1..40) }
+    numero { rand(1..99999) }
+    receptor_razon_social { Faker::Name.name }
+    receptor_doc_nro { rand(100000..999999999) }
+    receptor_doc_tipo { Afiper::Comprobante.configuracion_doc_tipos.sample[:id] }
+    tipo { Afiper::Comprobante.configuracion_tipos.sample[:id] }
+    creado_por_el_sistema { Faker::Boolean.boolean }
   end
 end

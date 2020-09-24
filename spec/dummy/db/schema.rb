@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_174849) do
 
   create_table "afiper_comprobantes", force: :cascade do |t|
     t.bigint "afiper_contribuyente_id", null: false
-    t.bigint "comprobante_asociado_id", null: false
+    t.bigint "comprobante_asociado_id"
     t.integer "tipo", null: false
     t.date "fecha", null: false
     t.integer "punto_de_venta", null: false
