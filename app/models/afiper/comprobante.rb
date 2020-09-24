@@ -40,14 +40,11 @@
 #  updated_at                :datetime         not null
 #
 module Afiper
-  # rubocop:todo Metrics/ClassLength
   # Comprobante de pago, puede ser fiscal o no fiscal
   class Comprobante < ActiveRecord::Base
-    # rubocop:enable Metrics/ClassLength
     extend Enumerize
 
     class << self
-      # rubocop:todo all
       def configuracion_tipos
         [
           { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',                                      codigo_afip: 1,    nombre_print: 'FACTURA',                                              letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
@@ -115,7 +112,6 @@ module Afiper
       end
 
       def build(params)
-        # rubocop:enable all
         comprobante = new(params)
         unless comprobante.contribuyente.present?
           comprobante.contribuyente = Afiper::Contribuyente.for_wsfe
