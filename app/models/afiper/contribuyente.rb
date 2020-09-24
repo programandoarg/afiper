@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Afiper
+  # Datos del contribuyente y claves para acceder a la API de la AFIP
   class Contribuyente < ActiveRecord::Base
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id
 
@@ -6,11 +9,11 @@ module Afiper
     enum condicion_iva: { iva_responsable_inscripto: 0, monotributo: 1 }
 
     def self.for_wsfe
-      self.where(service_wsfe: true).first
+      where(service_wsfe: true).first
     end
 
     def self.for_padron
-      self.where(service_padron: true).first
+      where(service_padron: true).first
     end
 
     def wsfe_client
@@ -33,9 +36,10 @@ module Afiper
 
     def tipos_de_comprobante_que_emite
       Comprobante.configuracion_tipos.select do |t|
-        t[:nombre].in?([:factura_a, :nota_de_credito_a, :nota_de_debito_a,
-          :factura_b, :nota_de_credito_b, :nota_de_debito_b,
-          :ticket_no_fiscal, :devolucion_no_fiscal, :factura_e, :nota_de_credito_e, :nota_de_debito_e])
+        t[:nombre].in?(%i[factura_a nota_de_credito_a nota_de_debito_a
+                          factura_b nota_de_credito_b nota_de_debito_b
+                          ticket_no_fiscal devolucion_no_fiscal
+                          factura_e nota_de_credito_e nota_de_debito_e])
       end
     end
 

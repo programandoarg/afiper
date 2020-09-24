@@ -1,0 +1,55 @@
+# This is the configuration used to check the rubocop source code.
+
+require: rubocop-rspec
+
+Layout/LineLength:
+  Max: 100
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+Metrics/AbcSize:
+  Max: 22
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'spec/**/*'
+Metrics/MethodLength:
+  Max: 20
+
+# Metrics/ModuleLength:
+#   Max: 150
+# Metrics/ClassLength:
+#   Max: 210
+
+# RSpec/MultipleMemoizedHelpers:
+#   Enabled: false
+RSpec/ContextWording:
+  Enabled: false
+# RSpec/NestedGroups:
+#   Max: 7
+# RSpec/MultipleExpectations:
+#   Max: 5
+
+# Lint/AmbiguousBlockAssociation:
+#   Enabled: false
+
+# Style/Semicolon:
+#   Enabled: false
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Exclude:
+    - lib/**/engine.rb
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'Gemfile'
+    - 'config/routes.rb'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'spec/dummy/**/*'
+  DefaultFormatter: fuubar

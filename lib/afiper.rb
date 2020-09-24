@@ -1,6 +1,9 @@
-require "afiper/engine"
-require "afiper/configuration"
+# frozen_string_literal: true
 
+require 'afiper/engine'
+require 'afiper/configuration'
+
+# Afiper
 module Afiper
   class << self
     attr_writer :configuration

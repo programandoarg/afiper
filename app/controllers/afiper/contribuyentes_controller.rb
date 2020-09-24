@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Afiper
   module ContribuyentesController
     def self.included(a)
-      a.before_action :set_contribuyente, only: [:show, :edit, :update, :destroy]
+      a.before_action :set_contribuyente, only: %i[show edit update destroy]
     end
 
     def index
@@ -48,16 +50,17 @@ module Afiper
     end
 
     def edit; end
+
     def show; end
 
     private
 
-    def set_contribuyente
-      @contribuyente = Contribuyente.find(params[:id])
-    end
+      def set_contribuyente
+        @contribuyente = Contribuyente.find(params[:id])
+      end
 
-    def contribuyente_params
-      params.require(:contribuyente).permit(:razon_social, :cuit, :iibb, :inicio_actividades, :condicion_iva, :domicilio, :service_wsfe, :service_padron, :afip_certificado, :afip_clave, :afip_certificado_homologacion, :afip_clave_homologacion)
-    end
+      def contribuyente_params
+        params.require(:contribuyente).permit(:razon_social, :cuit, :iibb, :inicio_actividades, :condicion_iva, :domicilio, :service_wsfe, :service_padron, :afip_certificado, :afip_clave, :afip_certificado_homologacion, :afip_clave_homologacion)
+      end
   end
 end

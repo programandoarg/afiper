@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-module Afiper
-  RSpec.describe Comprobante do
-    it do
-      c = Comprobante.new
-    end
+RSpec.describe Afiper::Comprobante do
+  it do
+    described_class.new
   end
 end
