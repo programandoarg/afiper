@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: afiper_items
+#
+#  id                    :bigint           not null, primary key
+#  afiper_comprobante_id :bigint           not null
+#  tipo                  :integer          not null
+#  percepcion_iva        :decimal(, )      not null
+#  codigo                :string           not null
+#  detalle               :string           not null
+#  cantidad              :integer          default(1), not null
+#  importe               :decimal(15, 2)   not null
+#  descuento             :decimal(15, 2)   default(0.0), not null
+#  recargo               :decimal(15, 2)   default(0.0), not null
+#  deleted_at            :datetime
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#
 module Afiper
   # Cada una de las líneas de un comprobante
   class Item < ActiveRecord::Base
