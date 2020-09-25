@@ -10,11 +10,25 @@ describe Afiper::WsfeClient do
   end
   let(:instancia) { described_class.new(contribuyente) }
 
-  # describe '#get_puntos_venta', vcr_cassettes: ['get_puntos_venta', 'wsaa']  do
-  #   subject { instancia.get_puntos_venta.length }
+  describe '#ultimo_cmp', vcr_cassettes: ['ultimo_cmp', 'wsaa']  do
+    subject { instancia.ultimo_cmp(:factura_a, 1) }
     
-  #   it { is_expected.to eq [] }
-  # end
+    it { is_expected.to eq 0 }
+  end
+
+  describe '#solicitar_cae', vcr_cassettes: ['solicitar_cae', 'wsaa']  do
+    let(:item) { build :afiper_item, cantidad: 1, importe: 300 }
+    let(:pventa) { 1 }
+    let(:numero) { 2 }
+    let(:comprobante) do
+      create :afiper_comprobante, tipo_comprobante: :factura_a, punto_de_venta: pventa,
+                           numero: numero, receptor_doc_tipo: 1, receptor_doc_nro: '20120791827',
+                           fecha: Date.today, items: [item]
+    end
+    subject { instancia.solicitar_cae(comprobante) }
+    
+    it { is_expected.to be_a Hash }
+  end
 
   describe '#get_tipos_cbte', vcr_cassettes: ['get_tipos_cbte', 'wsaa'] do
     subject { instancia.get_tipos_cbte.length }

@@ -171,6 +171,8 @@ module Afiper
 
     accepts_nested_attributes_for :items, allow_destroy: true
 
+    alias_attribute :tipo_comprobante, :tipo
+
     before_save do |comprobante|
       comprobante.moneda_cotizacion = 1 if comprobante.moneda.pesos?
     end
@@ -223,7 +225,7 @@ module Afiper
         pesos_uruguayos: '011',
         pesos_mexicanos: '010',
         libras: '021'
-      }[moneda]
+      }[moneda.to_sym]
     end
 
     def conceptos_posibles

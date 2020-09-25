@@ -47,7 +47,8 @@ FactoryBot.define do
     receptor_razon_social { Faker::Name.name }
     receptor_doc_nro { rand(100000..999999999) }
     receptor_doc_tipo { Afiper::Comprobante.configuracion_doc_tipos.sample[:id] }
-    tipo { Afiper::Comprobante.configuracion_tipos.sample[:id] }
+    tipo_comprobante { Afiper::Comprobante.configuracion_tipos.sample[:id] }
     creado_por_el_sistema { Faker::Boolean.boolean }
+    moneda { :pesos }
   end
 end
