@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'faker'
   spec.add_development_dependency 'fuubar'
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-rspec'
@@ -49,4 +50,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'annotate'
   spec.add_development_dependency 'spring'
   spec.add_development_dependency 'spring-commands-rspec'
+  spec.add_development_dependency 'dotenv-rails'
 end

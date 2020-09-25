@@ -12,3 +12,8 @@ sftp-config.json
 *.sublime-workspace
 
 coverage/
+
+.env
+
+tmp/
+.byebug_history
