@@ -8,8 +8,8 @@ require 'webmock/rspec'
 require 'dotenv'
 
 Dotenv.load(
-  '.env.test',
-  '.env'
+  '.env',
+  '.env.test'
 )
 
 VCR.configure do |config|

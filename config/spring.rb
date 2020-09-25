@@ -1,8 +1,8 @@
-
 require 'dotenv'
+
 Dotenv.load(
-  '.env.test',
-  '.env'
+  '.env',
+  '.env.test'
 )
 
 Spring.application_root = 'spec/dummy'

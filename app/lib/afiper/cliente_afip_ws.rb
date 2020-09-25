@@ -66,11 +66,10 @@ module Afiper
         key_file = @contribuyente.afip_clave
         url = 'https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl'
       end
-      certificate = OpenSSL::X509::Certificate.new raw
-
-      key = OpenSSL::PKey::RSA.new(key_file)
 
       if !Rails.env.test? || ENV['FORCE_WSAA'] == 'true'
+        certificate = OpenSSL::X509::Certificate.new raw
+        key = OpenSSL::PKey::RSA.new(key_file)
         signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
         signed = signed.to_pem.lines.to_a[1..-2].join
       else
