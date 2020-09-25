@@ -6,7 +6,7 @@
 #
 #  id                        :bigint           not null, primary key
 #  afiper_contribuyente_id   :bigint           not null
-#  comprobante_asociado_id   :bigint           not null
+#  comprobante_asociado_id   :bigint
 #  tipo                      :integer          not null
 #  fecha                     :date             not null
 #  punto_de_venta            :integer          not null
@@ -40,14 +40,11 @@
 #  updated_at                :datetime         not null
 #
 module Afiper
-  # rubocop:todo Metrics/ClassLength
   # Comprobante de pago, puede ser fiscal o no fiscal
   class Comprobante < ActiveRecord::Base
-    # rubocop:enable Metrics/ClassLength
     extend Enumerize
 
     class << self
-      # rubocop:todo all
       def configuracion_tipos
         [
           { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',                                      codigo_afip: 1,    nombre_print: 'FACTURA',                                              letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
@@ -115,7 +112,6 @@ module Afiper
       end
 
       def build(params)
-        # rubocop:enable all
         comprobante = new(params)
         unless comprobante.contribuyente.present?
           comprobante.contribuyente = Afiper::Contribuyente.for_wsfe
@@ -181,18 +177,12 @@ module Afiper
 
     before_create do |comprobante|
       comprobante.concepto = :productos unless comprobante.concepto.present? # Productos
-      unless comprobante.emisor_razon_social.present?
-        comprobante.emisor_razon_social = comprobante.contribuyente.razon_social
-      end
-      unless comprobante.emisor_inicio_actividades.present?
-        comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades
-      end
-      unless comprobante.emisor_cuit.present?
-        comprobante.emisor_cuit = comprobante.contribuyente.cuit
-      end
-      unless comprobante.emisor_iibb.present?
-        comprobante.emisor_iibb = comprobante.contribuyente.iibb
-      end
+
+      comprobante.emisor_razon_social = comprobante.contribuyente.razon_social
+      comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades
+      comprobante.emisor_cuit = comprobante.contribuyente.cuit
+      comprobante.emisor_iibb = comprobante.contribuyente.iibb
+
       unless comprobante.numero.present?
         comprobante.numero = comprobante.contribuyente.proximo_numero(
           comprobante.tipo.to_sym, comprobante.punto_de_venta
@@ -210,7 +200,9 @@ module Afiper
     end
 
     validates :contribuyente, :punto_de_venta, :numero, :tipo,
-              :fecha, :receptor_razon_social, presence: true
+              :fecha, :receptor_razon_social, :receptor_doc_tipo,
+              :items,
+              presence: true
     validates :receptor_doc_nro, numericality: { only_integer: true }
 
     def default_tipo_iva

@@ -24,7 +24,7 @@ class ModelosBase < ActiveRecord::Migration[5.2]
 
     create_table :afiper_comprobantes do |t|
       t.references :afiper_contribuyente, null: false, foreign_key: true, index: true
-      t.references :comprobante_asociado, null: false, index: true
+      t.references :comprobante_asociado, index: true
 
       t.integer :tipo, null: false
       t.date :fecha, null: false

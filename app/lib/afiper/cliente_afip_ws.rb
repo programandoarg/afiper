@@ -12,7 +12,11 @@ module Afiper
 
     def homologacion
       unless Afiper.configuration.wsfe_homologacion.in?([true, false])
-        raise 'Configurar Afiper.configuration.wsfe_homologacion'
+        raise 'Afiper: Error de configuración' \
+              'Agregar config/initializers/afiper.rb' \
+              '  Afiper.configure do |config|' \
+              '    config.wsfe_homologacion = true' \
+              '  end'
       end
 
       Afiper.configuration.wsfe_homologacion
@@ -22,8 +26,8 @@ module Afiper
       client = build_client
       message = { Auth: auth_hash }
       response = client.call(method, message: message.deep_merge(params))
-      puts response.as_json
-      puts %("response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?")
+      # puts response.as_json
+      # puts %("response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?")
       if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
         response = response.body[:"#{method}_response"][:"#{method}_result"]
         if response[:errors].present?
@@ -62,12 +66,15 @@ module Afiper
         key_file = @contribuyente.afip_clave
         url = 'https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl'
       end
-      certificate = OpenSSL::X509::Certificate.new raw
 
-      key = OpenSSL::PKey::RSA.new(key_file)
-
-      signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
-      signed = signed.to_pem.lines.to_a[1..-2].join
+      if !Rails.env.test? || ENV['FORCE_WSAA'] == 'true'
+        certificate = OpenSSL::X509::Certificate.new raw
+        key = OpenSSL::PKey::RSA.new(key_file)
+        signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
+        signed = signed.to_pem.lines.to_a[1..-2].join
+      else
+        signed = 'vcr_mock'
+      end
       client = Savon.client do
         wsdl url
         convert_request_keys_to :none # or one of [:lower_camelcase, :upcase, :none]
