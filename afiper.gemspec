@@ -51,4 +51,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'spring'
   spec.add_development_dependency 'spring-commands-rspec'
   spec.add_development_dependency 'dotenv-rails'
+  spec.add_development_dependency 'vcr'
+  spec.add_development_dependency 'webmock', '3.7.6'
 end

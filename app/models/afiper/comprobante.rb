@@ -177,18 +177,12 @@ module Afiper
 
     before_create do |comprobante|
       comprobante.concepto = :productos unless comprobante.concepto.present? # Productos
-      unless comprobante.emisor_razon_social.present?
-        comprobante.emisor_razon_social = comprobante.contribuyente.razon_social
-      end
-      unless comprobante.emisor_inicio_actividades.present?
-        comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades
-      end
-      unless comprobante.emisor_cuit.present?
-        comprobante.emisor_cuit = comprobante.contribuyente.cuit
-      end
-      unless comprobante.emisor_iibb.present?
-        comprobante.emisor_iibb = comprobante.contribuyente.iibb
-      end
+
+      comprobante.emisor_razon_social = comprobante.contribuyente.razon_social
+      comprobante.emisor_inicio_actividades = comprobante.contribuyente.inicio_actividades
+      comprobante.emisor_cuit = comprobante.contribuyente.cuit
+      comprobante.emisor_iibb = comprobante.contribuyente.iibb
+
       unless comprobante.numero.present?
         comprobante.numero = comprobante.contribuyente.proximo_numero(
           comprobante.tipo.to_sym, comprobante.punto_de_venta

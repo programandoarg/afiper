@@ -70,6 +70,7 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
+    crack (0.4.4)
     crass (1.0.6)
     database_cleaner (1.8.4)
     diff-lcs (1.3)
@@ -95,6 +96,7 @@ GEM
       activesupport (>= 4.2.0)
     gyoku (1.3.1)
       builder (>= 2.1.2)
+    hashdiff (1.0.1)
     httpi (2.4.5)
       rack
       socksify
@@ -232,10 +234,15 @@ GEM
     unicode-display_width (1.7.0)
     uuid (2.3.9)
       macaddr (~> 1.0)
+    vcr (6.0.0)
     wasabi (3.6.1)
       addressable
       httpi (~> 2.0)
       nokogiri (>= 1.4.2)
+    webmock (3.7.6)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -259,6 +266,8 @@ DEPENDENCIES
   simplecov (~> 0.17.1)
   spring
   spring-commands-rspec
+  vcr
+  webmock (= 3.7.6)
 
 BUNDLED WITH
    2.1.4
