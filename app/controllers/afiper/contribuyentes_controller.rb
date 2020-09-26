@@ -1,10 +1,9 @@
 # frozen_string_literal: true
+require 'afiper/application_controller'
 
 module Afiper
-  module ContribuyentesController
-    def self.included(a)
-      a.before_action :set_contribuyente, only: %i[show edit update destroy]
-    end
+  class ContribuyentesController < ApplicationController
+    before_action :set_contribuyente, only: %i[show edit update destroy]
 
     def index
       @contribuyentes = Contribuyente.order(:id)
