@@ -69,14 +69,11 @@ module Afiper
         url = 'https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl'
       end
 
-      if !Rails.env.test? || ENV['FORCE_WSAA'] == 'true'
-        certificate = OpenSSL::X509::Certificate.new raw
-        key = OpenSSL::PKey::RSA.new(key_file)
-        signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
-        signed = signed.to_pem.lines.to_a[1..-2].join
-      else
-        signed = 'vcr_mock'
-      end
+      certificate = OpenSSL::X509::Certificate.new raw
+      key = OpenSSL::PKey::RSA.new(key_file)
+      signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
+      signed = signed.to_pem.lines.to_a[1..-2].join
+
       client = Savon.client do
         wsdl url
         convert_request_keys_to :none # or one of [:lower_camelcase, :upcase, :none]
