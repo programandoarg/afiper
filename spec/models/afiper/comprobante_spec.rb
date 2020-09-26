@@ -46,4 +46,11 @@ RSpec.describe Afiper::Comprobante do
   it do
     expect(comprobante).to be_valid
   end
+
+  describe '#payload' do
+    let(:comprobante) { create :afiper_comprobante, vencimiento_cae: Faker::Date.backward }
+    subject { comprobante.payload }
+
+    it { is_expected.to be_a String }
+  end
 end

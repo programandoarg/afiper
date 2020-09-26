@@ -420,7 +420,7 @@ module Afiper
     end
 
     def payload
-      data = ''
+      data = +''
       data << emisor_cuit.to_s
       data << config[:codigo_afip].to_s.rjust(2, '0')
       data << punto_de_venta.to_s.rjust(4, '0')

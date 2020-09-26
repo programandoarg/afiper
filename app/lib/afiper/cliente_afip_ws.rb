@@ -38,6 +38,8 @@ module Afiper
       else
         raise Afiper::Errors::WsfeClientError, [{ code: 0, msg: 'Error en el Web Service de la AFIP' }].to_json
       end
+    rescue SocketError => e
+      raise Afiper::Errors::WsfeClientError, [{ code: 90000111, message: 'Error de conexión' }].to_json
     end
 
     def auth_hash

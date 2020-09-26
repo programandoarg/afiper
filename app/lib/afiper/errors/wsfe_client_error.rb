@@ -8,10 +8,14 @@ module Afiper
       end
 
       def error_code
-        JSON.parse(@original_message)[0]["code"]
+        original_json[0]["code"]
       end
 
-      def to_s
+      def original_json
+        JSON.parse(@original_message)
+      end
+
+      def message
         case error_code
         when '10013'
           'Para comprobantes tipo A y M se debe ingresar un CUIT'
@@ -24,7 +28,7 @@ module Afiper
         when '10015'
           'El documento (CUIT, DNI, etc) no es válido'
         else
-          'Hubo un error' # TODO: mensaje
+          original_json[0]["message"] || 'Error al conectar con el sistema de la AFIP'
         end
       end
     end
