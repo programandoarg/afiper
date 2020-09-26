@@ -67,7 +67,17 @@ module Afiper
       # TODO: parsear fecha
       # fch_vto = Date.strptime(result[:fch_vto], '%Y%m%d'),
       comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
-      response
+      true
+    rescue Afiper::Errors::WsfeClientError => e
+      if e.error_code == '10016'
+        begin
+          actualizar_comprobante(comprobante)
+        rescue Afiper::Errors::WsfeClientError
+          raise e
+        end
+      else
+        raise e
+      end
     end
 
     def get_cmp(comprobante)
@@ -78,6 +88,7 @@ module Afiper
     def actualizar_comprobante(comprobante)
       res = get_cmp(comprobante)
       comprobante.update_attributes!(cae: res[:cod_autorizacion], vencimiento_cae: res[:fch_vto]) # TODO: tal vez agregar afip_result?
+      true
     end
 
     def get_cmp_det(tipo, punto_de_venta, numero)

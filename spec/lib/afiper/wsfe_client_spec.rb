@@ -10,24 +10,38 @@ describe Afiper::WsfeClient do
   end
   let(:instancia) { described_class.new(contribuyente) }
 
-  describe '#ultimo_cmp', vcr_cassettes: ['ultimo_cmp', 'wsaa']  do
+  describe '#ultimo_cmp', vcr_cassettes: ['ultimo_cmp', 'wsaa'] do
     subject { instancia.ultimo_cmp(:factura_a, 1) }
     
     it { is_expected.to eq 0 }
   end
 
-  describe '#solicitar_cae', vcr_cassettes: ['solicitar_cae', 'wsaa']  do
+  describe '#solicitar_cae', vcr_cassettes: ['solicitar_cae', 'wsaa'] do
     let(:item) { build :afiper_item, cantidad: 1, importe: 300 }
     let(:pventa) { 1 }
     let(:numero) { 2 }
     let(:comprobante) do
-      create :afiper_comprobante, tipo_comprobante: :factura_a, punto_de_venta: pventa,
-                           numero: numero, receptor_doc_tipo: 1, receptor_doc_nro: '20120791827',
-                           fecha: Date.today, items: [item]
+      create :afiper_comprobante, tipo_comprobante: :factura_a, items: [item],
+                                  numero: numero, receptor_doc_tipo: 1, punto_de_venta: pventa,
+                                  receptor_doc_nro: '20120791827', fecha: Date.today
     end
     subject { instancia.solicitar_cae(comprobante) }
     
-    it { is_expected.to be_a Hash }
+    it { is_expected.to be_truthy }
+
+    context 'cuando no es el próximo a autorizar', vcr_cassettes: ['solicitar_cae_fail', 'wsaa'] do
+      let(:numero) { 656 }
+      
+      it { expect { subject }.to raise_error having_attributes(error_code: "10016") }
+      it { expect { subject }.to raise_error /no es el próximo a autorizar/i }
+    end
+
+    context 'cuando ya fue autorizado', vcr_cassettes: ['solicitar_cae_ya_autorizado', 'wsaa'] do
+      let(:numero) { 1 }
+      
+      it { is_expected.to be_truthy }
+      it { subject; expect(comprobante).to be_autorizado }
+    end
   end
 
   describe '#get_tipos_cbte', vcr_cassettes: ['get_tipos_cbte', 'wsaa'] do
@@ -47,4 +61,6 @@ describe Afiper::WsfeClient do
 
     it { is_expected.to eq 2 }
   end
+
+  pending 'error codes'
 end
