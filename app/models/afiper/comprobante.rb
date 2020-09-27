@@ -39,9 +39,12 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
+
+require 'afiper/application_record'
+
 module Afiper
   # Comprobante de pago, puede ser fiscal o no fiscal
-  class Comprobante < ActiveRecord::Base
+  class Comprobante < ApplicationRecord
     extend Enumerize
 
     class << self

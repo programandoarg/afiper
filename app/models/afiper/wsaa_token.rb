@@ -14,9 +14,12 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
+
+require 'afiper/application_record'
+
 module Afiper
   # Token para pegarle a la API de la AFIP
-  class WsaaToken < ActiveRecord::Base
+  class WsaaToken < ApplicationRecord
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente',
                                foreign_key: :afiper_contribuyente_id
 
