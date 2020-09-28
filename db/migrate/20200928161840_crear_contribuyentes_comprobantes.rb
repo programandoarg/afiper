@@ -1,4 +1,4 @@
-class ModelosBase < ActiveRecord::Migration[5.2]
+class CrearContribuyentesComprobantes < ActiveRecord::Migration[5.2]
   def change
     create_table :afiper_contribuyentes do |t|
       t.string :razon_social, null: false
@@ -83,18 +83,6 @@ class ModelosBase < ActiveRecord::Migration[5.2]
       t.decimal :recargo, precision: 15, scale: 2, null: false, default: 0
 
       t.datetime :deleted_at
-
-      t.timestamps null: false
-    end
-
-    create_table :afiper_wsaa_tokens do |t|
-      t.references :afiper_contribuyente, null: false, foreign_key: true, index: true
-
-      t.string :token, null: false
-      t.string :sign, null: false
-      t.string :cuit, null: false
-      t.string :service, null: false
-      t.boolean :homologacion, null: false
 
       t.timestamps null: false
     end

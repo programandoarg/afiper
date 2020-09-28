@@ -3,9 +3,11 @@
 module Afiper
   # Factura electrónica
   class WsfeClient < ClienteAfipWs
-    def initialize(contribuyente)
+    def initialize(cuit, afip_clave_privada, afip_certificado)
       super(
-        contribuyente: contribuyente,
+        cuit: cuit,
+        afip_clave_privada: afip_clave_privada,
+        afip_certificado: afip_certificado,
         service_name: 'wsfe',
         service_url: service_url
       )
@@ -185,45 +187,45 @@ module Afiper
     end
 
     # fetch_comprobantes(:factura_a, 1)
-    def fetch_comprobantes(tipo, pto_vta)
-      validar_tipo(tipo)
-      ultimo = ultimo_cmp(tipo, pto_vta)
-      (1..ultimo).each do |numero|
-        if @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: pto_vta, numero: numero).exists?
-          next
-        end
+    # def fetch_comprobantes(tipo, pto_vta)
+    #   validar_tipo(tipo)
+    #   ultimo = ultimo_cmp(tipo, pto_vta)
+    #   (1..ultimo).each do |numero|
+    #     if @contribuyente.comprobantes.where(tipo: Comprobante.tipos[tipo], punto_de_venta: pto_vta, numero: numero).exists?
+    #       next
+    #     end
 
-        result = get_cmp_det(tipo, pto_vta, numero)
-        comprobante = @contribuyente.comprobantes.new(
-          tipo: tipo,
-          fecha: Date.strptime(result[:cbte_fch], '%Y%m%d'),
-          punto_de_venta: pto_vta,
-          numero: numero,
-          receptor_doc_tipo: result[:doc_tipo],
-          receptor_doc_nro: result[:doc_nro],
-          receptor_razon_social: '-', # TODO
+    #     result = get_cmp_det(tipo, pto_vta, numero)
+    #     comprobante = @contribuyente.comprobantes.new(
+    #       tipo: tipo,
+    #       fecha: Date.strptime(result[:cbte_fch], '%Y%m%d'),
+    #       punto_de_venta: pto_vta,
+    #       numero: numero,
+    #       receptor_doc_tipo: result[:doc_tipo],
+    #       receptor_doc_nro: result[:doc_nro],
+    #       receptor_razon_social: '-', # TODO
 
-          concepto: result[:concepto].to_i,
-          mon_id: result[:mon_id],
-          mon_cotiz: result[:mon_cotiz],
+    #       concepto: result[:concepto].to_i,
+    #       mon_id: result[:mon_id],
+    #       mon_cotiz: result[:mon_cotiz],
 
-          creado_por_el_sistema: false,
-          fiscal: true,
+    #       creado_por_el_sistema: false,
+    #       fiscal: true,
 
-          cae: result[:cod_autorizacion],
-          vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
-          afip_result: result
-        )
-        comprobante.items << Item.new(tipo: 6, codigo: '', detalle: 'No gravado', importe: result[:imp_tot_conc])
-        comprobante.items << Item.new(tipo: 7, codigo: '', detalle: 'Exento', importe: result[:imp_op_ex])
-        if result[:iva] && result[:iva][:alic_iva]
-          [result[:iva][:alic_iva]].flatten.each do |iva|
-            comprobante.items << Item.new(tipo: Item.tipo_from_afip(iva[:id]), codigo: '', detalle: "Gravado #{iva[:id]}", importe: iva[:base_imp])
-          end
-        end
-        comprobante.save!
-      end
-    end
+    #       cae: result[:cod_autorizacion],
+    #       vencimiento_cae: Date.strptime(result[:fch_vto], '%Y%m%d'),
+    #       afip_result: result
+    #     )
+    #     comprobante.items << Item.new(tipo: 6, codigo: '', detalle: 'No gravado', importe: result[:imp_tot_conc])
+    #     comprobante.items << Item.new(tipo: 7, codigo: '', detalle: 'Exento', importe: result[:imp_op_ex])
+    #     if result[:iva] && result[:iva][:alic_iva]
+    #       [result[:iva][:alic_iva]].flatten.each do |iva|
+    #         comprobante.items << Item.new(tipo: Item.tipo_from_afip(iva[:id]), codigo: '', detalle: "Gravado #{iva[:id]}", importe: iva[:base_imp])
+    #       end
+    #     end
+    #     comprobante.save!
+    #   end
+    # end
 
     def validar_tipo(tipo)
       return unless Comprobante.find_config(:nombre, tipo).nil?

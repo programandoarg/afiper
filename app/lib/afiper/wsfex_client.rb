@@ -3,9 +3,11 @@
 module Afiper
   # Factura electrónica de exportación
   class WsfexClient < ClienteAfipWs
-    def initialize(contribuyente)
+    def initialize(cuit, afip_clave_privada, afip_certificado)
       super(
-        contribuyente: contribuyente,
+        cuit: cuit,
+        afip_clave_privada: afip_clave_privada,
+        afip_certificado: afip_certificado,
         service_name: 'wsfex',
         service_url: service_url
       )

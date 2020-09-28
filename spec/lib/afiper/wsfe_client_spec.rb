@@ -1,15 +1,10 @@
 require 'rails_helper'
 
 describe Afiper::WsfeClient do
-  let(:contribuyente) do
-    create :afiper_contribuyente,
-      cuit: ENV['AFIP_CUIT'],
-      afip_certificado: ENV['AFIP_CERTIFICADO'],
-      afip_clave: ENV['AFIP_CLAVE'],
-      afip_certificado_homologacion: ENV['AFIP_CERTIFICADO'],
-      afip_clave_homologacion: ENV['AFIP_CLAVE']
-  end
-  let(:instancia) { described_class.new(contribuyente) }
+  let(:cuit) { ENV['AFIP_CUIT'] }
+  let(:afip_certificado) { ENV['AFIP_CERTIFICADO'] }
+  let(:afip_clave_privada) { ENV['AFIP_CLAVE'] }
+  let(:instancia) { described_class.new(cuit, afip_clave_privada, afip_certificado) }
 
   let(:item) { build :afiper_item, cantidad: 1, importe: 300 }
   let(:pventa) { 1 }
@@ -29,24 +24,23 @@ describe Afiper::WsfeClient do
     it { is_expected.to eq 2 }
   end
 
-  describe '#auth_hash', vcr_cassettes: ['wsfe/wsaa'] do
-    subject(:auth_hash) { instancia.auth_hash }
+  describe '#token', vcr_cassettes: ['wsfe/wsaa'] do
+    subject(:token) { instancia.token }
 
-    it { is_expected.to be_a Hash }
-    it { expect { auth_hash }.to change(Afiper::WsaaToken, :count).by 1 }
+    it { is_expected.to be_a Afiper::WsaaToken }
+    it { expect { token }.to change(Afiper::WsaaToken, :count).by 1 }
 
     context 'si ya hay un token en la db' do
       before do
         Afiper::WsaaToken.create(
-          contribuyente: contribuyente,
+          cuit: cuit,
           service: 'wsfe',
           homologacion: true,
-          cuit: '',
           sign: '',
           token: ''
         )
       end
-      it { expect { auth_hash }.not_to change(Afiper::WsaaToken, :count) }
+      it { expect { token }.not_to change(Afiper::WsaaToken, :count) }
     end
   end
 
