@@ -1,15 +1,10 @@
 require 'rails_helper'
 
 describe Afiper::WsfeClient do
-  let(:contribuyente) do
-    create :afiper_contribuyente,
-      cuit: ENV['AFIP_CUIT'],
-      afip_certificado: ENV['AFIP_CERTIFICADO'],
-      afip_clave: ENV['AFIP_CLAVE'],
-      afip_certificado_homologacion: ENV['AFIP_CERTIFICADO'],
-      afip_clave_homologacion: ENV['AFIP_CLAVE']
-  end
-  let(:instancia) { described_class.new(contribuyente) }
+  let(:cuit) { ENV['AFIP_CUIT'] }
+  let(:afip_certificado) { ENV['AFIP_CERTIFICADO'] }
+  let(:afip_clave_privada) { ENV['AFIP_CLAVE'] }
+  let(:instancia) { described_class.new(cuit, afip_clave_privada, afip_certificado) }
 
   let(:item) { build :afiper_item, cantidad: 1, importe: 300 }
   let(:pventa) { 1 }
@@ -38,7 +33,7 @@ describe Afiper::WsfeClient do
     context 'si ya hay un token en la db' do
       before do
         Afiper::WsaaToken.create(
-          cuit: contribuyente.cuit,
+          cuit: cuit,
           service: 'wsfe',
           homologacion: true,
           sign: '',

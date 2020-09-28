@@ -6,20 +6,14 @@ module Afiper
   # WSAA: Autenticación para todos los web services de AFIP
   class ClienteAfipWs
     def initialize(options = {})
-      @contribuyente = options[:contribuyente]
+      @cuit = options[:cuit]
+      @afip_clave_privada = options[:afip_clave_privada]
+      @afip_certificado = options[:afip_certificado]
       @service_name = options[:service_name]
       @service_url = options[:service_url]
     end
 
     def homologacion
-      unless Afiper.configuration.wsfe_homologacion.in?([true, false])
-        raise Error, 'Afiper: Error de configuración' \
-                     'Agregar config/initializers/afiper.rb' \
-                     '  Afiper.configure do |config|' \
-                     '    config.wsfe_homologacion = true' \
-                     '  end'
-      end
-
       Afiper.configuration.wsfe_homologacion
     end
 
@@ -46,10 +40,10 @@ module Afiper
 
     def token
       unless @token.present?
-        @token = WsaaToken.where(cuit: @contribuyente.cuit, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
+        @token = WsaaToken.where(cuit: @cuit, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
         unless @token.present?
           new_token = wsaa
-          @token = WsaaToken.create(cuit: @contribuyente.cuit, service: @service_name, homologacion: homologacion, token: new_token[0], sign: new_token[1])
+          @token = WsaaToken.create(cuit: @cuit, service: @service_name, homologacion: homologacion, token: new_token[0], sign: new_token[1])
         end
       end
       @token
@@ -68,22 +62,18 @@ module Afiper
     end
 
     def wsaa
-      unless @contribuyente.afip_configured?(homologacion)
+      unless @afip_clave_privada.present? && @afip_certificado.present?
         raise Error, 'Los certificados de la AFIP no están configurados'
       end
 
       if homologacion
-        raw = @contribuyente.afip_certificado_homologacion
-        key_file = @contribuyente.afip_clave_homologacion
         url = 'https://wsaahomo.afip.gov.ar/ws/services/LoginCms?wsdl'
       else
-        raw = @contribuyente.afip_certificado
-        key_file = @contribuyente.afip_clave
         url = 'https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl'
       end
 
-      certificate = OpenSSL::X509::Certificate.new raw
-      key = OpenSSL::PKey::RSA.new(key_file)
+      certificate = OpenSSL::X509::Certificate.new @afip_certificado
+      key = OpenSSL::PKey::RSA.new(@afip_clave_privada)
       signed = OpenSSL::PKCS7.sign certificate, key, generar_tra
       signed = signed.to_pem.lines.to_a[1..-2].join
 

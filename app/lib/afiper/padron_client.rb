@@ -5,9 +5,11 @@ require 'savon'
 module Afiper
   # API Padrón
   class PadronClient < ClienteAfipWs
-    def initialize(contribuyente)
+    def initialize(cuit, afip_clave_privada, afip_certificado)
       super(
-        contribuyente: contribuyente,
+        cuit: cuit,
+        afip_clave_privada: afip_clave_privada,
+        afip_certificado: afip_certificado,
         service_name: 'ws_sr_padron_a5',
         service_url: service_url
       )
@@ -22,10 +24,6 @@ module Afiper
     end
 
     def homologacion
-      unless Afiper.configuration.padron_homologacion.in?([true, false])
-        raise 'Configurar Afiper.configuration.padron_homologacion'
-      end
-
       Afiper.configuration.padron_homologacion
     end
 

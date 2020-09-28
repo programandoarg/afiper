@@ -41,11 +41,19 @@ module Afiper
     end
 
     def wsfe_client
-      WsfeClient.new(self)
+      if Afiper.configuration.wsfe_homologacion
+        WsfeClient.new(cuit, afip_clave_homologacion, afip_certificado_homologacion)
+      else
+        WsfeClient.new(cuit, afip_clave, afip_certificado)
+      end
     end
 
     def wsfex_client
-      WsfexClient.new(self)
+      if Afiper.configuration.wsfe_homologacion
+        WsfexClient.new(cuit, afip_clave_homologacion, afip_certificado_homologacion)
+      else
+        WsfexClient.new(cuit, afip_clave, afip_certificado)
+      end
     end
 
     def default_punto_de_venta(tipo)

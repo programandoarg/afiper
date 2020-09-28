@@ -1,15 +1,10 @@
 require 'rails_helper'
 
 describe Afiper::PadronClient do
-  let(:contribuyente) do
-    create :afiper_contribuyente,
-      cuit: ENV['AFIP_CUIT'],
-      afip_certificado: ENV['AFIP_CERTIFICADO'],
-      afip_clave: ENV['AFIP_CLAVE'],
-      afip_certificado_homologacion: ENV['AFIP_CERTIFICADO'],
-      afip_clave_homologacion: ENV['AFIP_CLAVE']
-  end
-  let(:instancia) { described_class.new(contribuyente) }
+  let(:cuit) { ENV['AFIP_CUIT'] }
+  let(:afip_certificado) { ENV['AFIP_CERTIFICADO'] }
+  let(:afip_clave_privada) { ENV['AFIP_CLAVE'] }
+  let(:instancia) { described_class.new(cuit, afip_clave_privada, afip_certificado) }
 
   describe '#wsaa', :wsaa, vcr_cassettes: ['padron/wsaa'] do
     subject { instancia.wsaa.length }
