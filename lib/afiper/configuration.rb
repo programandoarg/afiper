@@ -17,6 +17,7 @@ module Afiper
                      '    config.wsfe_homologacion = true' \
                      '  end'
       end
+      @wsfe_homologacion
     end
 
     def padron_homologacion
@@ -27,6 +28,7 @@ module Afiper
                      '    config.padron_homologacion = true' \
                      '  end'
       end
+      @padron_homologacion
     end
   end
 end
