@@ -19,11 +19,11 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 25 Sep 2020 16:17:12 GMT
+      - Sun, 27 Sep 2020 17:02:38 GMT
       Content-Type:
       - text/xml;charset=utf-8
       Set-Cookie:
-      - TS01b14f84=0145b27a97b55122112c04807febc430811edd0a0c335c69e48edfe4f7fb95b0cc1771a1f7;
+      - TS01b14f84=0145b27a9772f5a96d06f192ffe01e04615d9a80bd4e3844b02d98e056c2cc573ebf62fb57;
         Path=/
       Transfer-Encoding:
       - chunked
@@ -145,14 +145,53 @@ http_interactions:
            </wsdl:service>
 
         </wsdl:definitions>
-  recorded_at: Fri, 25 Sep 2020 16:17:11 GMT
+  recorded_at: Sun, 27 Sep 2020 17:02:38 GMT
 - request:
     method: post
     uri: https://wsaahomo.afip.gov.ar/ws/services/LoginCms
     body:
       encoding: UTF-8
       string: |-
-        <?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns1="https://wsaahomo.afip.gov.ar/ws/services/LoginCms" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ins0="http://wsaa.view.sua.dvadac.desein.afip.gov"><env:Body><ins0:loginCms><ins0:in0>vcr_mock</ins0:in0></ins0:loginCms></env:Body></env:Envelope>
+        <?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns1="https://wsaahomo.afip.gov.ar/ws/services/LoginCms" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ins0="http://wsaa.view.sua.dvadac.desein.afip.gov"><env:Body><ins0:loginCms><ins0:in0>MIIHJQYJKoZIhvcNAQcCoIIHFjCCBxICAQExDzANBglghkgBZQMEAgEFADCCAU0G
+        CSqGSIb3DQEHAaCCAT4EggE6PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0i
+        VVRGLTgiPz4NCjxsb2dpblRpY2tldFJlcXVlc3QgdmVyc2lvbj0iMSI+DQogIDxo
+        ZWFkZXI+DQogICAgPHVuaXF1ZUlkPjE2MDEyMjYxNTg8L3VuaXF1ZUlkPg0KICAg
+        IDxnZW5lcmF0aW9uVGltZT4yMDIwLTA5LTI3VDA4OjI5OjE4LTAzOjAwPC9nZW5l
+        cmF0aW9uVGltZT4NCiAgICA8ZXhwaXJhdGlvblRpbWU+MjAyMC0wOS0yN1QxOToz
+        NTo1OC0wMzowMDwvZXhwaXJhdGlvblRpbWU+DQogIDwvaGVhZGVyPg0KICA8c2Vy
+        dmljZT53c2ZlPC9zZXJ2aWNlPg0KPC9sb2dpblRpY2tldFJlcXVlc3Q+DQqgggNP
+        MIIDSzCCAjOgAwIBAgIIXOZpOW9EAi8wDQYJKoZIhvcNAQENBQAwODEaMBgGA1UE
+        AwwRQ29tcHV0YWRvcmVzIFRlc3QxDTALBgNVBAoMBEFGSVAxCzAJBgNVBAYTAkFS
+        MB4XDTIwMDkyNDIxMTQwOVoXDTIyMDkyNDIxMTQwOVowMTEUMBIGA1UEAwwLcHJv
+        Z3JhbWFuZG8xGTAXBgNVBAUTEENVSVQgMjAzNTE0MDQ0NzgwggEiMA0GCSqGSIb3
+        DQEBAQUAA4IBDwAwggEKAoIBAQDv/h8pWvChDtlIg57oDwlBb1+/qHX5F7KhVfHg
+        z1czVIdjXe0zkfY4cqteBGYF1BQh20DihLUdKiAIaeCZKhNPD01etiOGblGcmj3E
+        uQKyT7RwMmpQ5BjpsvZ0/0OzLAXGOigh3DGitM7IGbZKSMx79JswW6lbJ6M5IHPs
+        pHTYf0h/uOmLF6NwBYDBHlpKlNuPqS7ZAJVAZu54SyJ/daG/vsn7NWHDosHvL0ex
+        SrewpfPBKHTt0INvX7ayhFuCg7iYpJ+abX9U/wc19+/oTqdElNCb2OifYaaRyj/8
+        fCKcgu9LwZjK+NknRBb8HwVEiEWUH88badeNhsW/J3Q+YCAvAgMBAAGjYDBeMAwG
+        A1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUs7LT//3put7eja8RIZzWIH3yT28wHQYD
+        VR0OBBYEFGH+4GEWqbxr4r6fdE8N+nAbMyocMA4GA1UdDwEB/wQEAwIF4DANBgkq
+        hkiG9w0BAQ0FAAOCAQEABt8/jzbgDkKiat2QZ7TkE04S8RerWtV8odxDU31JYkR+
+        +fMi68/KkJvuNxm1xvYf0Aju6MtDSei/drvsokId2E4T9niYgvkvLydG2WquqWju
+        SJx4UQ4XBW5BdvqCMMzohpGMc8EZ1kEXNO9mfyz2LDIIh6aT9hFvEpkW8JtRN2dd
+        cwxqxupcUZOSYw0MqhSBS+in3coKwCqHKghQMTaN5o/Kx0C/YqDI+nacNlh0nAch
+        FW55OMUCGThZY2/gYqNoMuOdLmTC+eRC1Q6BxQdVYmXA7JCH0D5yJhuovNYFwX/V
+        D9ouSQUXxYA6dmGrJM5hwq6HaOtuPlASuPHMR/AGQzGCAlYwggJSAgEBMEQwODEa
+        MBgGA1UEAwwRQ29tcHV0YWRvcmVzIFRlc3QxDTALBgNVBAoMBEFGSVAxCzAJBgNV
+        BAYTAkFSAghc5mk5b0QCLzANBglghkgBZQMEAgEFAKCB5DAYBgkqhkiG9w0BCQMx
+        CwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMDA5MjcxNzAyMzhaMC8GCSqG
+        SIb3DQEJBDEiBCCdEVCfGBYgx1/LbvHqrp3hHCBgbAuJmDpDbMEOG2TwcDB5Bgkq
+        hkiG9w0BCQ8xbDBqMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUD
+        BAECMAoGCCqGSIb3DQMHMA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAH
+        BgUrDgMCBzANBggqhkiG9w0DAgIBKDANBgkqhkiG9w0BAQEFAASCAQAcaaLUs67s
+        NI9afT9U9yIhcNp2pmNZw1tFzAlvlWQVkLpcpvOS3X6MUhtmoiLS4el98yvS9Suz
+        wM8PKFtel7JNbchfVC/wLAWFSGHFvBv3Wi+u4nYjzT1O8sQu+tKnXGSariBF01EC
+        p0Wt5d+QRSr/E0mpui9huwi4LxGq5cMFeNuDYrdszITDPlX0b3jid0BpzYhXG4Hd
+        QtfhwPyAcWAzFl2jjZXhoY2ITkCn5SMCkK1VeycfDtDQHONW7NsFwtIUIv80NqaU
+        Wr3YbglhdUe9CK9ZvqGhzfzPtb5eVDYAQTFQnD+kwxnZ+UuEK9VqFQ2nrqQ5gM9z
+        krLSI0qAIfeE
+        </ins0:in0></ins0:loginCms></env:Body></env:Envelope>
     headers:
       Soapaction:
       - '"loginCms"'
@@ -172,11 +211,11 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 25 Sep 2020 16:17:12 GMT
+      - Sun, 27 Sep 2020 17:02:38 GMT
       Content-Type:
       - text/xml;charset=utf-8
       Set-Cookie:
-      - TS01b14f84=0145b27a975e26919af04262da03536fbffefe9af3f7c422dc2895f57af4607c196f3cab24;
+      - TS01b14f84=0145b27a97563b054840cd61ee30854796a8bb0f2b0aa3d6df06b8d5bff3cdadf03f2e9433;
         Path=/
       Transfer-Encoding:
       - chunked
@@ -188,15 +227,15 @@ http_interactions:
             &lt;header&gt;
                 &lt;source&gt;CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239&lt;/source&gt;
                 &lt;destination&gt;SERIALNUMBER=CUIT 20351404478, CN=programando&lt;/destination&gt;
-                &lt;uniqueId&gt;4067638975&lt;/uniqueId&gt;
-                &lt;generationTime&gt;2020-09-25T13:17:12.200-03:00&lt;/generationTime&gt;
-                &lt;expirationTime&gt;2020-09-26T01:17:12.200-03:00&lt;/expirationTime&gt;
+                &lt;uniqueId&gt;4145964054&lt;/uniqueId&gt;
+                &lt;generationTime&gt;2020-09-27T14:02:38.515-03:00&lt;/generationTime&gt;
+                &lt;expirationTime&gt;2020-09-28T02:02:38.515-03:00&lt;/expirationTime&gt;
             &lt;/header&gt;
             &lt;credentials&gt;
-                &lt;token&gt;PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iMzQwMjY2NDYzNiIgZ2VuX3RpbWU9IjE2MDEwNTA1NzIiIGV4cF90aW1lPSIxNjAxMDkzODMyIi8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjAzNTE0MDQ0NzgsIENOPXByb2dyYW1hbmRvIiBhdXRobWV0aG9kPSJjbXMiIHJlZ21ldGhvZD0iMjIiPgogICAgICAgICAgICA8cmVsYXRpb25zPgogICAgICAgICAgICAgICAgPHJlbGF0aW9uIGtleT0iMjAzNTE0MDQ0NzgiIHJlbHR5cGU9IjQiLz4KICAgICAgICAgICAgPC9yZWxhdGlvbnM+CiAgICAgICAgPC9sb2dpbj4KICAgIDwvb3BlcmF0aW9uPgo8L3Nzbz4K&lt;/token&gt;
-                &lt;sign&gt;e94YTEATWuHPdcBzIBGR1aAjnlGHbYlVJtnjyNaTmvR5EuvzHoPfwl+jQZTHelBAUJIl2Br8ys5eB9ePsta6qZu92s2gtfRJK8BCBdXQ3puew+w4kScAFJOVI3QyPsEY8bvRte8X8W98sqPgGXN1NuHvglo22irr6RLLWAUjhTY=&lt;/sign&gt;
+                &lt;token&gt;PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iMTEzMDMwODU4NyIgZ2VuX3RpbWU9IjE2MDEyMjYwOTgiIGV4cF90aW1lPSIxNjAxMjY5MzU4Ii8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjAzNTE0MDQ0NzgsIENOPXByb2dyYW1hbmRvIiBhdXRobWV0aG9kPSJjbXMiIHJlZ21ldGhvZD0iMjIiPgogICAgICAgICAgICA8cmVsYXRpb25zPgogICAgICAgICAgICAgICAgPHJlbGF0aW9uIGtleT0iMjAzNTE0MDQ0NzgiIHJlbHR5cGU9IjQiLz4KICAgICAgICAgICAgPC9yZWxhdGlvbnM+CiAgICAgICAgPC9sb2dpbj4KICAgIDwvb3BlcmF0aW9uPgo8L3Nzbz4K&lt;/token&gt;
+                &lt;sign&gt;r38gZiPZ+9pkqgHp8RbGIzcELkZdPRhCVnQCSeK68LY6FxLDWzXz/lzKeBa46zBVc7rFBcpyk0c5cGjtcegScw2J9Mq1qaQ92LBsgXLC3K5ZjZUsgAuejuqrPFISWieDA7tto+iHlUZkZhaNycKV8hy/EVXiEWiOput8G46Jyas=&lt;/sign&gt;
             &lt;/credentials&gt;
         &lt;/loginTicketResponse&gt;
         </loginCmsReturn></loginCmsResponse></soapenv:Body></soapenv:Envelope>
-  recorded_at: Fri, 25 Sep 2020 16:17:12 GMT
+  recorded_at: Sun, 27 Sep 2020 17:02:38 GMT
 recorded_with: VCR 6.0.0
