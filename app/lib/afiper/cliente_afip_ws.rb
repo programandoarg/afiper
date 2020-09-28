@@ -24,7 +24,7 @@ module Afiper
     end
 
     def call_auth(method, params = {})
-      message = { Auth: auth_hash }
+      message = { Auth: token.auth_hash_wsfe }
       response = call_raw(@service_url, method, message.deep_merge(params))
 
       if response.body[:"#{method}_response"].present? &&
@@ -44,16 +44,15 @@ module Afiper
       excs
     end
 
-    def auth_hash
-      unless @auth_hash.present?
-        token = WsaaToken.where(contribuyente: @contribuyente, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
-        unless token.present?
+    def token
+      unless @token.present?
+        @token = WsaaToken.where(contribuyente: @contribuyente, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
+        unless @token.present?
           new_token = wsaa
-          token = WsaaToken.create(contribuyente: @contribuyente, service: @service_name, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
+          @token = WsaaToken.create(contribuyente: @contribuyente, service: @service_name, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
         end
-        @auth_hash = token.auth_hash
       end
-      @auth_hash
+      @token
     end
 
     def call_raw(url, method, message)

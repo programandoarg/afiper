@@ -29,11 +29,11 @@ describe Afiper::WsfeClient do
     it { is_expected.to eq 2 }
   end
 
-  describe '#auth_hash', vcr_cassettes: ['wsfe/wsaa'] do
-    subject(:auth_hash) { instancia.auth_hash }
+  describe '#token', vcr_cassettes: ['wsfe/wsaa'] do
+    subject(:token) { instancia.token }
 
-    it { is_expected.to be_a Hash }
-    it { expect { auth_hash }.to change(Afiper::WsaaToken, :count).by 1 }
+    it { is_expected.to be_a Afiper::WsaaToken }
+    it { expect { token }.to change(Afiper::WsaaToken, :count).by 1 }
 
     context 'si ya hay un token en la db' do
       before do
@@ -46,7 +46,7 @@ describe Afiper::WsfeClient do
           token: ''
         )
       end
-      it { expect { auth_hash }.not_to change(Afiper::WsaaToken, :count) }
+      it { expect { token }.not_to change(Afiper::WsaaToken, :count) }
     end
   end
 
