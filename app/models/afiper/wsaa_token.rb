@@ -20,9 +20,6 @@ require 'afiper/application_record'
 module Afiper
   # Token para pegarle a la API de la AFIP
   class WsaaToken < ApplicationRecord
-    belongs_to :contribuyente, class_name: 'Afiper::Contribuyente',
-                               foreign_key: :afiper_contribuyente_id
-
     def auth_hash_wsfe
       { Token: token, Sign: sign, Cuit: cuit }
     end

@@ -46,10 +46,10 @@ module Afiper
 
     def token
       unless @token.present?
-        @token = WsaaToken.where(contribuyente: @contribuyente, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
+        @token = WsaaToken.where(cuit: @contribuyente.cuit, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
         unless @token.present?
           new_token = wsaa
-          @token = WsaaToken.create(contribuyente: @contribuyente, service: @service_name, cuit: @contribuyente.cuit, homologacion: homologacion, token: new_token[0], sign: new_token[1])
+          @token = WsaaToken.create(cuit: @contribuyente.cuit, service: @service_name, homologacion: homologacion, token: new_token[0], sign: new_token[1])
         end
       end
       @token

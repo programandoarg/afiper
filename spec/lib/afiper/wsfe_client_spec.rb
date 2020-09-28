@@ -38,10 +38,9 @@ describe Afiper::WsfeClient do
     context 'si ya hay un token en la db' do
       before do
         Afiper::WsaaToken.create(
-          contribuyente: contribuyente,
+          cuit: contribuyente.cuit,
           service: 'wsfe',
           homologacion: true,
-          cuit: '',
           sign: '',
           token: ''
         )

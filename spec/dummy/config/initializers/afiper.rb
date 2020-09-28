@@ -1,4 +1,4 @@
 Afiper.configure do |config|
-  config.wsfe_homologacion = ENV['AFIP_ENV'] != 'produccion'
+  config.wsfe_homologacion = true
   config.padron_homologacion = false
 end
