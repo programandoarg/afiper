@@ -1,0 +1,239 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://wsaa.afip.gov.ar/ws/services/LoginCms?wsdl
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 28 Sep 2020 15:37:14 GMT
+      Content-Type:
+      - text/xml;charset=utf-8
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <wsdl:definitions targetNamespace="https://wsaa.afip.gov.ar/ws/services/LoginCms" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="https://wsaa.afip.gov.ar/ws/services/LoginCms" xmlns:intf="https://wsaa.afip.gov.ar/ws/services/LoginCms" xmlns:tns1="http://wsaa.view.sua.dvadac.desein.afip.gov" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <!--WSDL created by Apache Axis version: 1.4
+        Built on Apr 22, 2006 (06:55:48 PDT)-->
+         <wsdl:types>
+          <schema elementFormDefault="qualified" targetNamespace="http://wsaa.view.sua.dvadac.desein.afip.gov" xmlns="http://www.w3.org/2001/XMLSchema">
+           <import namespace="https://wsaa.afip.gov.ar/ws/services/LoginCms"/>
+           <element name="loginCms">
+            <complexType>
+             <sequence>
+              <element name="in0" type="xsd:string"/>
+             </sequence>
+            </complexType>
+           </element>
+           <element name="loginCmsResponse">
+            <complexType>
+             <sequence>
+              <element name="loginCmsReturn" type="xsd:string"/>
+             </sequence>
+            </complexType>
+           </element>
+          </schema>
+          <schema elementFormDefault="qualified" targetNamespace="https://wsaa.afip.gov.ar/ws/services/LoginCms" xmlns="http://www.w3.org/2001/XMLSchema">
+           <complexType name="LoginFault">
+            <sequence/>
+           </complexType>
+           <element name="fault" type="impl:LoginFault"/>
+          </schema>
+         </wsdl:types>
+
+           <wsdl:message name="loginCmsResponse">
+
+              <wsdl:part element="tns1:loginCmsResponse" name="parameters">
+
+              </wsdl:part>
+
+           </wsdl:message>
+
+           <wsdl:message name="LoginFault">
+
+              <wsdl:part element="impl:fault" name="fault">
+
+              </wsdl:part>
+
+           </wsdl:message>
+
+           <wsdl:message name="loginCmsRequest">
+
+              <wsdl:part element="tns1:loginCms" name="parameters">
+
+              </wsdl:part>
+
+           </wsdl:message>
+
+           <wsdl:portType name="LoginCMS">
+
+              <wsdl:operation name="loginCms">
+
+                 <wsdl:input message="impl:loginCmsRequest" name="loginCmsRequest">
+
+               </wsdl:input>
+
+                 <wsdl:output message="impl:loginCmsResponse" name="loginCmsResponse">
+
+               </wsdl:output>
+
+                 <wsdl:fault message="impl:LoginFault" name="LoginFault">
+
+               </wsdl:fault>
+
+              </wsdl:operation>
+
+           </wsdl:portType>
+
+           <wsdl:binding name="LoginCmsSoapBinding" type="impl:LoginCMS">
+
+              <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+              <wsdl:operation name="loginCms">
+
+                 <wsdlsoap:operation soapAction=""/>
+
+                 <wsdl:input name="loginCmsRequest">
+
+                    <wsdlsoap:body use="literal"/>
+
+                 </wsdl:input>
+
+                 <wsdl:output name="loginCmsResponse">
+
+                    <wsdlsoap:body use="literal"/>
+
+                 </wsdl:output>
+
+                 <wsdl:fault name="LoginFault">
+
+                    <wsdlsoap:fault name="LoginFault" use="literal"/>
+
+                 </wsdl:fault>
+
+              </wsdl:operation>
+
+           </wsdl:binding>
+
+           <wsdl:service name="LoginCMSService">
+
+              <wsdl:port binding="impl:LoginCmsSoapBinding" name="LoginCms">
+
+                 <wsdlsoap:address location="https://wsaa.afip.gov.ar/ws/services/LoginCms"/>
+
+              </wsdl:port>
+
+           </wsdl:service>
+
+        </wsdl:definitions>
+  recorded_at: Mon, 28 Sep 2020 15:37:13 GMT
+- request:
+    method: post
+    uri: https://wsaa.afip.gov.ar/ws/services/LoginCms
+    body:
+      encoding: UTF-8
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns1="https://wsaa.afip.gov.ar/ws/services/LoginCms" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ins0="http://wsaa.view.sua.dvadac.desein.afip.gov"><env:Body><ins0:loginCms><ins0:in0>MIIHIAYJKoZIhvcNAQcCoIIHETCCBw0CAQExDzANBglghkgBZQMEAgEFADCCAVgG
+        CSqGSIb3DQEHAaCCAUkEggFFPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0i
+        VVRGLTgiPz4NCjxsb2dpblRpY2tldFJlcXVlc3QgdmVyc2lvbj0iMSI+DQogIDxo
+        ZWFkZXI+DQogICAgPHVuaXF1ZUlkPjE2MDEzMDc0MzM8L3VuaXF1ZUlkPg0KICAg
+        IDxnZW5lcmF0aW9uVGltZT4yMDIwLTA5LTI4VDA3OjAzOjUzLTAzOjAwPC9nZW5l
+        cmF0aW9uVGltZT4NCiAgICA8ZXhwaXJhdGlvblRpbWU+MjAyMC0wOS0yOFQxODox
+        MDozMy0wMzowMDwvZXhwaXJhdGlvblRpbWU+DQogIDwvaGVhZGVyPg0KICA8c2Vy
+        dmljZT53c19zcl9wYWRyb25fYTU8L3NlcnZpY2U+DQo8L2xvZ2luVGlja2V0UmVx
+        dWVzdD4NCqCCA0QwggNAMIICKKADAgECAggnU3KQjXd2ITANBgkqhkiG9w0BAQ0F
+        ADAzMRUwEwYDVQQDDAxDb21wdXRhZG9yZXMxDTALBgNVBAoMBEFGSVAxCzAJBgNV
+        BAYTAkFSMB4XDTE5MDkyMzE3MzgyOFoXDTIxMDkyMjE3MzgyOFowKzEOMAwGA1UE
+        AwwFc2FlbmkxGTAXBgNVBAUTEENVSVQgMzA3MTU1ODIzNjQwggEiMA0GCSqGSIb3
+        DQEBAQUAA4IBDwAwggEKAoIBAQDB1ZtCbyFJcORuiFWDwPbelZNYQozyARm6GNz5
+        0eu8l4XKHokTpnCE7w0zRev7mywo+FM/8FP+ANbbfcYHbFXY/TdK64yzYETZVUxE
+        qzG6dBqzSexaa841OIUhnpfFULU7mCGofXs9ax0hAGB+TM+aLSXXZCgH0AV16W7w
+        f3/Te1pFeYj5TzeLoeptL1rHvPbVGGfwZJaUjfRM5YljgL8R/3iyOIbq+VDYEq0G
+        Lz9DlhzA4/I7Bz+ZNXujHszz8jRMQfEXrNB9h9px7VMt+C08IX44de7JErj+R38+
+        b9Ej2wholnWsZDMUIMKXJO8DzqlbA0gRJHGiCVjBRScObvhvAgMBAAGjYDBeMAwG
+        A1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUW0BRMOfDKracVpyTheNCgLBQ6/YwHQYD
+        VR0OBBYEFHx8uL1nuqSL7YPEwWyHrVj5WtVRMA4GA1UdDwEB/wQEAwIF4DANBgkq
+        hkiG9w0BAQ0FAAOCAQEAFzRn5CP/jDp9e25tuC+f2Qps6zDvtg9dWAO1fuHRoutf
+        Rq9mlcjqPef2zPtEyhKlyFmfGsP6Mcyh4SEjzve7+qq+2WEiqE7/3rYdapVlPTJK
+        zhexP/Bqxuw7aPa6Qc28TRVoQgik0kQZr5XYfndIHLQf6pSijRMxsIS37jxDIf8f
+        Y+fUfpom5tVMco3fFYluA6VJU/Yp+fBGPkq20wL7hUqY2Co+c4kTw/ChYEtStpxm
+        7VC/HAxYNZn1BWjbL81GC+syCbDOyqscnsHwFrZpanH3oEJtd1jHRB2ROp8qIRRs
+        5N/N/nOgeoeKsyUwx/c8QhXnpSKizbjlAkcRNg4VdjGCAlEwggJNAgEBMD8wMzEV
+        MBMGA1UEAwwMQ29tcHV0YWRvcmVzMQ0wCwYDVQQKDARBRklQMQswCQYDVQQGEwJB
+        UgIIJ1NykI13diEwDQYJYIZIAWUDBAIBBQCggeQwGAYJKoZIhvcNAQkDMQsGCSqG
+        SIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAwOTI4MTUzNzEzWjAvBgkqhkiG9w0B
+        CQQxIgQgvgMz0kLjp9+1Vy+/4FQKJhnXq69XLC2OM3ct2XTGT+oweQYJKoZIhvcN
+        AQkPMWwwajALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAK
+        BggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4D
+        AgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAeOzU94Dk/5GeOzN/
+        mqD8ulZYfsWNNzBrLOAQyEaQvwRMawigubNDdR+AWRwHCJw++hqjqo3O7sSoZZQx
+        EhS0vO+8tq+NblvVA5bEFAQ/aOSe0N3WIa1sJ5g2OhA62BHiAqAeekc1AO8ioqdd
+        7PuHaZUn3Eiy9YqYfSvcyACzJ6oxsF1bGwXqdo3xCOaU/XbnoIAUyTIGZdCMKve+
+        +KINYsIvToEQ24XihLxF5xgZbANnzPKABgYrdPrDanQd0nRy7EpLnc5pzXTLCDb8
+        cWpvmi14KiJz3QAA80I6sbNvij2yQfCIVbzjCqEqzjLIrbOAT0AGGUTJ8BmVJL5O
+        KyF69w==
+        </ins0:in0></ins0:loginCms></env:Body></env:Envelope>
+    headers:
+      Soapaction:
+      - '"loginCms"'
+      Content-Type:
+      - text/xml;charset=UTF-8
+      Content-Length:
+      - '2888'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 28 Sep 2020 15:37:14 GMT
+      Content-Type:
+      - text/xml;charset=utf-8
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><loginCmsResponse xmlns="http://wsaa.view.sua.dvadac.desein.afip.gov"><loginCmsReturn>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+        &lt;loginTicketResponse version=&quot;1.0&quot;&gt;
+            &lt;header&gt;
+                &lt;source&gt;CN=wsaa, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239&lt;/source&gt;
+                &lt;destination&gt;SERIALNUMBER=CUIT 30715582364, CN=saeni&lt;/destination&gt;
+                &lt;uniqueId&gt;1662501419&lt;/uniqueId&gt;
+                &lt;generationTime&gt;2020-09-28T12:37:14.251-03:00&lt;/generationTime&gt;
+                &lt;expirationTime&gt;2020-09-29T00:37:14.251-03:00&lt;/expirationTime&gt;
+            &lt;/header&gt;
+            &lt;credentials&gt;
+                &lt;token&gt;PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhLCBPPUFGSVAsIEM9QVIsIFNFUklBTE5VTUJFUj1DVUlUIDMzNjkzNDUwMjM5IiB1bmlxdWVfaWQ9IjkzMzExMjcxNyIgZ2VuX3RpbWU9IjE2MDEzMDczNzQiIGV4cF90aW1lPSIxNjAxMzUwNjM0Ii8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzX3NyX3BhZHJvbl9hNSIgdWlkPSJTRVJJQUxOVU1CRVI9Q1VJVCAzMDcxNTU4MjM2NCwgQ049c2FlbmkiIGF1dGhtZXRob2Q9ImNtcyIgcmVnbWV0aG9kPSIyMiI+CiAgICAgICAgICAgIDxyZWxhdGlvbnM+CiAgICAgICAgICAgICAgICA8cmVsYXRpb24ga2V5PSIzMDcxNTU4MjM2NCIgcmVsdHlwZT0iNCIvPgogICAgICAgICAgICA8L3JlbGF0aW9ucz4KICAgICAgICA8L2xvZ2luPgogICAgPC9vcGVyYXRpb24+Cjwvc3NvPgo=&lt;/token&gt;
+                &lt;sign&gt;blXvIrH1f2ygti+JnB4htUUlz0jLEEIgsTwVIRG7xFtDkr8zmyd5yuNONTOGCpDdto6gQbnfS2F3vAW76ok4hMZCQ4QP0RxKNVxqxwvrS30clA1WgWjQiEKxS9wGbqIoljrRfsgIk/2K02hifkXIxUAu/H6CF0Djd0tS/drJu+E=&lt;/sign&gt;
+            &lt;/credentials&gt;
+        &lt;/loginTicketResponse&gt;
+        </loginCmsReturn></loginCmsResponse></soapenv:Body></soapenv:Envelope>
+  recorded_at: Mon, 28 Sep 2020 15:37:13 GMT
+recorded_with: VCR 6.0.0
