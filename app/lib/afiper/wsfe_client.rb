@@ -1,15 +1,28 @@
 # frozen_string_literal: true
 
 module Afiper
-  # para debuguear
-  # client = self.build_client
-  # response = client.call(:fecae_solicitar, message: me)
-  # request = client.build_request(:fecae_solicitar, message: me)
-
   # Factura electrónica
   class WsfeClient < ClienteAfipWs
-    def solicitar_cae(comprobante)
-      raise 'Guarda al parche' if !homologacion && Rails.env != 'production'
+    def initialize(contribuyente)
+      super(
+        contribuyente: contribuyente,
+        service_name: 'wsfe',
+        service_url: service_url
+      )
+    end
+
+    def service_url
+      if homologacion
+        'https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL'
+      else
+        'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL'
+      end
+    end
+
+    def autorizar_comprobante(comprobante)
+      if !homologacion && Rails.env != 'production'
+        raise Error, 'No se puede crear un comprobante real fuera del entorno de producción'
+      end
 
       parameters = {
         FeCAEReq: {
@@ -57,26 +70,30 @@ module Afiper
           end
         }
       end
-      response = call(:fecae_solicitar, parameters)
+      response = call_auth(:fecae_solicitar, parameters)
       if response[:fe_cab_resp][:resultado] != 'A'
         messages = response[:fe_det_resp][:fecae_det_response][:observaciones][:obs]
-        raise Afiper::Errors::WsfeClientError, [messages].flatten.to_json
+        raise AfipWsError, messages
       end
       cae = response[:fe_det_resp][:fecae_det_response][:cae]
       fch_vto = response[:fe_det_resp][:fecae_det_response][:cae_fch_vto]
-      # TODO: parsear fecha
+      # parsear fecha?
       # fch_vto = Date.strptime(result[:fch_vto], '%Y%m%d'),
       comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
       true
-    rescue Afiper::Errors::WsfeClientError => e
-      if e.error_code == '10016'
+    end
+
+    def autorizar_o_actualizar(comprobante)
+      autorizar_comprobante(comprobante)
+    rescue AfipWsError => error_original
+      if error_original.error_code == '10016' # Si no es el próximo a autorizar
         begin
           actualizar_comprobante(comprobante)
-        rescue Afiper::Errors::WsfeClientError
-          raise e
+        rescue Error
+          raise error_original
         end
       else
-        raise e
+        raise error_original
       end
     end
 
@@ -94,7 +111,7 @@ module Afiper
     def get_cmp_det(tipo, punto_de_venta, numero)
       validar_tipo(tipo)
       tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
-      response = call(:fe_comp_consultar,
+      response = call_auth(:fe_comp_consultar,
                       FeCompConsReq: {
                         PtoVta: punto_de_venta,
                         CbteNro: numero,
@@ -106,71 +123,53 @@ module Afiper
     def ultimo_cmp(tipo, pto_vta)
       validar_tipo(tipo)
       tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
-      response = call(:fe_comp_ultimo_autorizado, PtoVta: pto_vta, CbteTipo: tipo_afip)
+      response = call_auth(:fe_comp_ultimo_autorizado, PtoVta: pto_vta, CbteTipo: tipo_afip)
       response[:cbte_nro].to_i
     end
 
     def get_comp_tot_x_request
-      response = call(:fe_comp_tot_x_request)
+      response = call_auth(:fe_comp_tot_x_request)
       response[:reg_x_req]
     end
 
     def get_puntos_venta
-      response = call(:fe_param_get_ptos_venta)
+      response = call_auth(:fe_param_get_ptos_venta)
       response[:result_get][:pto_venta]
     end
 
     def get_tipos_cbte
-      response = call(:fe_param_get_tipos_cbte)
+      response = call_auth(:fe_param_get_tipos_cbte)
       response[:result_get][:cbte_tipo]
     end
 
     def get_tipos_doc
-      response = call(:fe_param_get_tipos_doc)
+      response = call_auth(:fe_param_get_tipos_doc)
       response[:result_get][:doc_tipo]
     end
 
     def get_tipos_monedas
-      response = call(:fe_param_get_tipos_monedas)
+      response = call_auth(:fe_param_get_tipos_monedas)
       response[:result_get][:moneda]
     end
 
     def get_tipos_concepto
-      response = call(:fe_param_get_tipos_concepto)
+      response = call_auth(:fe_param_get_tipos_concepto)
       response[:result_get][:concepto_tipo]
     end
 
     def get_tipos_iva
-      response = call(:fe_param_get_tipos_iva)
+      response = call_auth(:fe_param_get_tipos_iva)
       response[:result_get][:iva_tipo]
     end
 
     def get_tipos_tributos
-      response = call(:fe_param_get_tipos_tributos)
+      response = call_auth(:fe_param_get_tipos_tributos)
       response[:result_get][:tributo_tipo]
     end
 
     def get_tipos_cotizaciones(mon_id)
-      response = call(:fe_param_get_cotizacion, MonId: mon_id)
+      response = call_auth(:fe_param_get_cotizacion, MonId: mon_id)
     end
-
-    def service_name
-      'wsfe'
-    end
-
-    def service_url
-      if homologacion
-        'https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL'
-      else
-        'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL'
-      end
-    end
-
-    # def dummy
-    #   client = build_client
-    #   response = client.call(:fe_dummy)
-    #   response.body
-    # end
 
     # fetch_comprobantes(:factura_a, 1)
     def fetch_comprobantes(tipo, pto_vta)
@@ -216,7 +215,7 @@ module Afiper
     def validar_tipo(tipo)
       return unless Comprobante.find_config(:nombre, tipo).nil?
 
-      raise Afiper::Errors::WsfeClientError, "Tipo erróneo #{tipo}"
+      raise Error, "Tipo erróneo #{tipo}"
     end
   end
 end
