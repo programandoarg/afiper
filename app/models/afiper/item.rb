@@ -58,6 +58,21 @@ module Afiper
 
     before_save :set_percepcion_iva
 
+    validate :importe_positivo
+    validate :importe_mayor_a_descuento
+
+    def importe_positivo
+      return if importe.positive? && descuento >= 0 && cantidad.positive?
+
+      errors.add(:base, 'El importe no puede ser negativo')
+    end
+
+    def importe_mayor_a_descuento
+      return if importe > descuento
+
+      errors.add(:base, 'El descuento no puede ser mayor al importe')
+    end
+
     def set_percepcion_iva
       self.tipo = default_tipo_iva unless tipo.present?
       self.percepcion_iva = if Item.tipos[tipo][:percepcion_iva].present?

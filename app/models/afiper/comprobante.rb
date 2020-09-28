@@ -209,6 +209,7 @@ module Afiper
               :items,
               presence: true
     validates :receptor_doc_nro, numericality: { only_integer: true }
+    validates_associated :items
 
     def default_tipo_iva
       if config[:exportacion]
