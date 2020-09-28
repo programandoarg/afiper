@@ -56,6 +56,14 @@ module Afiper
       end
     end
 
+    def padron_client
+      if Afiper.configuration.padron_homologacion
+        PadronClient.new(cuit, afip_clave_homologacion, afip_certificado_homologacion)
+      else
+        PadronClient.new(cuit, afip_clave, afip_certificado)
+      end
+    end
+
     def default_punto_de_venta(tipo)
       puntos_de_venta[tipo]
     end
