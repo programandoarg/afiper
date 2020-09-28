@@ -19,12 +19,55 @@ module Afiper
       end
     end
 
+    def handle_errores(response)
+      if response[:errors].present?
+        errores = response[:errors][:err]
+        raise AfipWsError, errores
+      end
+    end
+
     def autorizar_comprobante(comprobante)
       if !homologacion && Rails.env != 'production'
         raise Error, 'No se puede crear un comprobante real fuera del entorno de producción'
       end
 
-      parameters = {
+      response = call_auth(:fecae_solicitar, parameters(comprobante))
+      if response[:fe_cab_resp][:resultado] != 'A'
+        messages = response[:fe_det_resp][:fecae_det_response][:observaciones][:obs]
+        raise AfipWsError, messages
+      end
+      cae = response[:fe_det_resp][:fecae_det_response][:cae]
+      fch_vto = response[:fe_det_resp][:fecae_det_response][:cae_fch_vto]
+      comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
+      true
+    end
+
+    def parameters(comprobante)
+      ret = atributos_basicos(comprobante)
+      if comprobante.tiene_servicios?
+        begin
+          ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServDesde] = comprobante.fecha_servicio_desde.strftime('%Y%m%d')
+          ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServHasta] = comprobante.fecha_servicio_hasta.strftime('%Y%m%d')
+          ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchVtoPago] = comprobante.fecha_vencimiento_pago.strftime('%Y%m%d')
+        rescue NoMethodError => e
+        end
+      end
+      if comprobante.subtotal_gravado.positive?
+        ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
+          AlicIva: comprobante.alicuotas.map do |alicuota|
+            {
+              Id: alicuota[:codigo_alicuota],
+              BaseImp: alicuota[:base_imponible],
+              Importe: alicuota[:importe]
+            }
+          end
+        }
+      end
+      ret
+    end
+
+    def atributos_basicos(comprobante)
+      {
         FeCAEReq: {
           FeCabReq: {
             CantReg: 1,
@@ -51,36 +94,6 @@ module Afiper
           }
         }
       }
-      if comprobante.tiene_servicios?
-        begin
-          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServDesde] = comprobante.fecha_servicio_desde.strftime('%Y%m%d')
-          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchServHasta] = comprobante.fecha_servicio_hasta.strftime('%Y%m%d')
-          parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:FchVtoPago] = comprobante.fecha_vencimiento_pago.strftime('%Y%m%d')
-        rescue NoMethodError => e
-        end
-      end
-      if comprobante.subtotal_gravado.positive?
-        parameters[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
-          AlicIva: comprobante.alicuotas.map do |alicuota|
-            {
-              Id: alicuota[:codigo_alicuota],
-              BaseImp: alicuota[:base_imponible],
-              Importe: alicuota[:importe]
-            }
-          end
-        }
-      end
-      response = call_auth(:fecae_solicitar, parameters)
-      if response[:fe_cab_resp][:resultado] != 'A'
-        messages = response[:fe_det_resp][:fecae_det_response][:observaciones][:obs]
-        raise AfipWsError, messages
-      end
-      cae = response[:fe_det_resp][:fecae_det_response][:cae]
-      fch_vto = response[:fe_det_resp][:fecae_det_response][:cae_fch_vto]
-      # parsear fecha?
-      # fch_vto = Date.strptime(result[:fch_vto], '%Y%m%d'),
-      comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
-      true
     end
 
     def autorizar_o_actualizar(comprobante)

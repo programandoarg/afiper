@@ -30,10 +30,8 @@ module Afiper
       if response.body[:"#{method}_response"].present? &&
          response.body[:"#{method}_response"][:"#{method}_result"].present?
         response = response.body[:"#{method}_response"][:"#{method}_result"]
-        if response[:errors].present?
-          errores = response[:errors][:err]
-          raise AfipWsError, errores
-        end
+        handle_errores(response)
+
         response
       else
         raise ErrorTemporal, 'Error en el Web Service de la AFIP'

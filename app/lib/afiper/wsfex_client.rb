@@ -19,12 +19,50 @@ module Afiper
       end
     end
 
+    def handle_errores(response)
+      if response[:fex_err].present? && response[:fex_err][:err_code].to_i.positive?
+        errores = [response[:fex_err]].flatten.map do |error|
+          { code: error[:err_code], msg: error[:err_msg] }
+        end
+        raise AfipWsError, errores
+      end
+    end
+
     def autorizar_comprobante(comprobante)
       if !homologacion && Rails.env != 'production'
         raise Error, 'No se puede crear un comprobante real fuera del entorno de producción'
       end
 
-      parameters = {
+      response = call_auth(:fex_authorize, parameters(comprobante))
+      unless response[:fex_result_auth].present?
+        messages = response[:fex_err][:err_msg]
+        raise Afiper::Error, [messages].flatten.to_json
+      end
+      cae = response[:fex_result_auth][:cae]
+      fch_vto = response[:fex_result_auth][:fch_venc_cae]
+      comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
+      true
+    end
+
+    def parameters(comprobante)
+      ret = atributos_basicos(comprobante)
+      if comprobante.comprobante_asociado.present?
+        ret[:Cmp][:Cmps_asoc] = {
+          Cmp_asoc: {
+            Cbte_tipo: comprobante.comprobante_asociado.config[:codigo_afip],
+            Cbte_punto_vta: comprobante.comprobante_asociado.punto_de_venta,
+            Cbte_nro: comprobante.comprobante_asociado.numero,
+            Cbte_cuit: comprobante.comprobante_asociado.emisor_cuit
+          }
+        }
+      else
+        ret[:Cmp][:Fecha_pago] = comprobante.fecha.strftime('%Y%m%d')
+      end
+      ret
+    end
+
+    def atributos_basicos(comprobante)
+      {
         Cmp: {
           Id: 100_000_000 + comprobante.id,
           Cbte_Tipo: comprobante.config[:codigo_afip],
@@ -57,103 +95,61 @@ module Afiper
           }
         }
       }
-      if comprobante.comprobante_asociado.present?
-        parameters[:Cmp][:Cmps_asoc] = {
-          Cmp_asoc: {
-            Cbte_tipo: comprobante.comprobante_asociado.config[:codigo_afip],
-            Cbte_punto_vta: comprobante.comprobante_asociado.punto_de_venta,
-            Cbte_nro: comprobante.comprobante_asociado.numero,
-            Cbte_cuit: comprobante.comprobante_asociado.emisor_cuit
-          }
-        }
-      else
-        parameters[:Cmp][:Fecha_pago] = comprobante.fecha.strftime('%Y%m%d')
-      end
-      response = call_auth(:fex_authorize, parameters)
-      unless response[:fex_result_auth].present?
-        messages = response[:fex_err][:err_msg]
-        raise Afiper::Error, [messages].flatten.to_json
-      end
-      cae = response[:fex_result_auth][:cae]
-      fch_vto = response[:fex_result_auth][:fch_venc_cae]
-      # parsear fecha?
-      # fch_vto = Date.strptime(result[:fch_vto], '%Y%m%d'),
-      comprobante.update_attributes(cae: cae, vencimiento_cae: fch_vto, afip_result: response.to_json)
-      response
     end
 
-    def autorizar_o_actualizar(comprobante)
-      autorizar_comprobante(comprobante)
-    rescue AfipWsError => error_original
-      if error_original.error_code == '1535' # Si no es el próximo a autorizar
-        begin
-          actualizar_comprobante(comprobante)
-        rescue Error
-          raise error_original
-        end
-      else
-        raise error_original
-      end
-    end
+    # def autorizar_o_actualizar(comprobante)
+    #   autorizar_comprobante(comprobante)
+    # rescue AfipWsError => error_original
+    #   if error_original.error_code == '1535' # Si no es el próximo a autorizar
+    #     begin
+    #       actualizar_comprobante(comprobante)
+    #     rescue Error
+    #       raise error_original
+    #     end
+    #   else
+    #     raise error_original
+    #   end
+    # end
 
-    def get_cmp(comprobante)
-      @comprobante = comprobante # No borrar
-      get_cmp_det(comprobante.tipo.to_sym, comprobante.punto_de_venta, comprobante.numero)
-    end
+    # def get_cmp(comprobante)
+    #   @comprobante = comprobante # No borrar
+    #   get_cmp_det(comprobante.tipo.to_sym, comprobante.punto_de_venta, comprobante.numero)
+    # end
 
-    def actualizar_comprobante(comprobante)
-      res = get_cmp(comprobante)
-      comprobante.update_attributes!(cae: res[:cod_autorizacion], vencimiento_cae: res[:fch_vto]) # TODO: tal vez agregar afip_result?
-    end
+    # def actualizar_comprobante(comprobante)
+    #   res = get_cmp(comprobante)
+    #   comprobante.update_attributes!(cae: res[:cod_autorizacion], vencimiento_cae: res[:fch_vto]) # TODO: tal vez agregar afip_result?
+    # end
 
-    def get_cmp_det(tipo, punto_de_venta, numero)
-      validar_tipo(tipo)
-      tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
-      response = call_auth(:fex_get_cmp,
-                      Cmp: {
-                        Tipo_cbte: tipo_afip,
-                        Punto_vta: punto_de_venta,
-                        Cbte_nro: numero,
-                      })
-      # TODO: no se pudo probar en homologacion
-      response[:result_get]
-    end
+    # def get_cmp_det(tipo, punto_de_venta, numero)
+    #   validar_tipo(tipo)
+    #   tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
+    #   response = call_auth(:fex_get_cmp,
+    #                   Cmp: {
+    #                     Tipo_cbte: tipo_afip,
+    #                     Punto_vta: punto_de_venta,
+    #                     Cbte_nro: numero,
+    #                   })
+    #   # TODO: no se pudo probar en homologacion
+    #   response[:result_get]
+    # end
 
-    def ultimo_cmp(tipo_cbte, punto_de_venta)
-      validar_tipo(tipo_cbte)
-      tipo_afip = Comprobante.find_config(:nombre, tipo_cbte)[:codigo_afip]
-      response = call_auth(:fex_get_last_cmp,
-                   Auth: {
-                     Pto_venta: punto_de_venta,
-                     Tipo_cbte: tipo_afip,
-                   }
-                 )
-      response[:fex_result_last_cmp][:cbte_nro].to_i
-    end
+    # def ultimo_cmp(tipo_cbte, punto_de_venta)
+    #   validar_tipo(tipo_cbte)
+    #   tipo_afip = Comprobante.find_config(:nombre, tipo_cbte)[:codigo_afip]
+    #   response = call_auth(:fex_get_last_cmp,
+    #                Auth: {
+    #                  Pto_venta: punto_de_venta,
+    #                  Tipo_cbte: tipo_afip,
+    #                }
+    #              )
+    #   response[:fex_result_last_cmp][:cbte_nro].to_i
+    # end
 
-    def call_auth(method, params = {})
-      message = { Auth: auth_hash }
-      response = call_raw(@service_url, method, message.deep_merge(params))
+    # def validar_tipo(tipo)
+    #   return unless Comprobante.find_config(:nombre, tipo).nil?
 
-      if response.body[:"#{method}_response"].present? &&
-         response.body[:"#{method}_response"][:"#{method}_result"].present?
-        response = response.body[:"#{method}_response"][:"#{method}_result"]
-        if response[:fex_err].present? && response[:fex_err][:err_code].to_i.positive?
-          errores = [response[:fex_err]].flatten.map do |error|
-            { code: error[:err_code], msg: error[:err_msg] }
-          end
-          raise AfipWsError, errores
-        end
-        response
-      else
-        raise ErrorTemporal, 'Error en el Web Service de la AFIP'
-      end
-    end
-
-    def validar_tipo(tipo)
-      return unless Comprobante.find_config(:nombre, tipo).nil?
-
-      raise Afiper::Error, "Tipo erróneo #{tipo}"
-    end
+    #   raise Afiper::Error, "Tipo erróneo #{tipo}"
+    # end
   end
 end

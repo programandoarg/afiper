@@ -390,7 +390,7 @@ module Afiper
 
     def solicitar_cae
       if config[:exportacion]
-        contribuyente.wsfex_client.autorizar_o_actualizar(self)
+        contribuyente.wsfex_client.autorizar_comprobante(self)
       else
         contribuyente.wsfe_client.autorizar_o_actualizar(self)
       end
