@@ -39,9 +39,12 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
+
+require 'afiper/application_record'
+
 module Afiper
   # Comprobante de pago, puede ser fiscal o no fiscal
-  class Comprobante < ActiveRecord::Base
+  class Comprobante < ApplicationRecord
     extend Enumerize
 
     class << self
@@ -171,6 +174,8 @@ module Afiper
 
     accepts_nested_attributes_for :items, allow_destroy: true
 
+    alias_attribute :tipo_comprobante, :tipo
+
     before_save do |comprobante|
       comprobante.moneda_cotizacion = 1 if comprobante.moneda.pesos?
     end
@@ -223,7 +228,7 @@ module Afiper
         pesos_uruguayos: '011',
         pesos_mexicanos: '010',
         libras: '021'
-      }[moneda]
+      }[moneda.to_sym]
     end
 
     def conceptos_posibles
@@ -385,9 +390,9 @@ module Afiper
 
     def solicitar_cae
       if config[:exportacion]
-        contribuyente.wsfex_client.solicitar_cae(self)
+        contribuyente.wsfex_client.autorizar_comprobante(self)
       else
-        contribuyente.wsfe_client.solicitar_cae(self)
+        contribuyente.wsfe_client.autorizar_o_actualizar(self)
       end
     end
 
@@ -418,7 +423,7 @@ module Afiper
     end
 
     def payload
-      data = ''
+      data = +''
       data << emisor_cuit.to_s
       data << config[:codigo_afip].to_s.rjust(2, '0')
       data << punto_de_venta.to_s.rjust(4, '0')

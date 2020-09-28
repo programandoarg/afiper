@@ -3,13 +3,14 @@
   = link_to new_contribuyente_path, class: 'btn btn-primary' do 
     span.glyphicon.glyphicon-plus
     |  Nuevo contribuyente
-
 table.table.table-bordered.table-striped.table-condensed
   tr
     th Razón social
     th CUIT
     th Ingresos brutos
     th Inicio de actividades
+    th WSFE
+    th Padrón
     th Acciones
   - @contribuyentes.each do |contribuyente|
     tr
@@ -17,6 +18,8 @@ table.table.table-bordered.table-striped.table-condensed
       td = contribuyente.cuit
       td = contribuyente.iibb
       td = dmy contribuyente.inicio_actividades
+      td = contribuyente.service_wsfe? ? 'SI' : '-'
+      td = contribuyente.service_padron? ? 'SI' : '-'
       td
         span rel="tooltip" title="Ver"
           = link_to contribuyente, class: 'btn btn-xs btn-primary' do

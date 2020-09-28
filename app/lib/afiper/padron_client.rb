@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'savon'
-require 'afiper/errors/wsfe_client_error'
 
 module Afiper
   class PadronClient
@@ -20,7 +19,7 @@ module Afiper
     def get_persona(cuit)
       response = call(:get_persona, { idPersona: cuit })
       if response.body[:get_persona_response][:persona_return][:error_constancia].present?
-        raise Afiper::Errors::WsfeClientError, response.body[:get_persona_response][:persona_return][:error_constancia][:error]
+        raise Afiper::Error, response.body[:get_persona_response][:persona_return][:error_constancia][:error]
       end
 
       response = response.body[:get_persona_response][:persona_return][:datos_generales]
@@ -42,20 +41,20 @@ module Afiper
       message = { token: token.token, sign: token.sign, cuitRepresentada: @contribuyente.cuit }
       client.call(method, message: message.merge(params))
     rescue OpenSSL::X509::CertificateError => e
-      raise Afiper::Errors::WsfeClientError, 'Las credenciales para acceder al servicio de AFIP son incorrectas'
+      raise Afiper::Error, 'Las credenciales para acceder al servicio de AFIP son incorrectas'
     rescue Savon::SOAPFault => e
-      raise Afiper::Errors::WsfeClientError, e.message
+      raise Afiper::Error, e.message
     rescue Savon::HTTPError => e
-      raise Afiper::Errors::WsfeClientError, 'Hubo un error al comunicarse con el sistema de AFIP. Por favor intentalo nuevamente más tarde.'
+      raise Afiper::Error, 'Hubo un error al comunicarse con el sistema de AFIP. Por favor intentalo nuevamente más tarde.'
       # if response.body[:"#{method}_response"].present? && response.body[:"#{method}_response"][:"#{method}_result"].present?
       #   response = response.body[:"#{method}_response"][:"#{method}_result"]
       #   if response[:errors].present?
       #     messages = response[:errors][:err]
-      #     fail Afiper::Errors::WsfeClientError.new ([messages].flatten).to_json
+      #     fail Afiper::Error.new ([messages].flatten).to_json
       #   end
       #   response
       # else
-      #   fail Afiper::Errors::WsfeClientError.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
+      #   fail Afiper::Error.new ([{code: 0, msg: 'Error en el Web Service de la AFIP'}]).to_json
       # end
     end
 
@@ -113,7 +112,7 @@ module Afiper
         xml.header do
           xml.uniqueId Time.now.to_i
           xml.generationTime xsd_datetime Time.now - ttl
-          # TODO: me parece que no le da mucha bola el WS al expirationTime
+          # me parece que no le da mucha bola el WS al expirationTime
           xml.expirationTime xsd_datetime Time.now + ttl
         end
         xml.service service_name

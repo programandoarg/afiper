@@ -21,9 +21,12 @@
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #
+
+require 'afiper/application_record'
+
 module Afiper
   # Datos del contribuyente y claves para acceder a la API de la AFIP
-  class Contribuyente < ActiveRecord::Base
+  class Contribuyente < ApplicationRecord
     has_many :comprobantes, class_name: 'Afiper::Comprobante', foreign_key: :afiper_contribuyente_id
 
     validates :razon_social, :cuit, :iibb, :inicio_actividades, presence: true

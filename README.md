@@ -4,30 +4,12 @@
 
 
 # Afiper
-Short description and motivation.
+Interfaz con los web services de la AFIP
 
-## Usage
-How to use my plugin.
+## Testing
 
-## Installation
-Add this line to your application's Gemfile:
+### Renovar cassetes
 
-```ruby
-gem 'afiper'
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install afiper
-```
-
-## Contributing
-Contribution directions go here.
-
-## License
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+1. Borrar archivo spec/cassetes/wsaa.yml
+2. Poner credenciales válidas de homologación en .env
+3. Correr bundle exec rspec --tag wsaa

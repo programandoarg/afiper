@@ -18,9 +18,12 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
+
+require 'afiper/application_record'
+
 module Afiper
   # Cada una de las líneas de un comprobante
-  class Item < ActiveRecord::Base
+  class Item < ApplicationRecord
     class << self
       def tipos_for_select
         tipos.map { |k, v| [v[:descripcion], k] }

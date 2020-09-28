@@ -2,6 +2,7 @@
 
 require 'afiper/engine'
 require 'afiper/configuration'
+require File.expand_path('../app/lib/afiper/errors', __dir__)
 
 # Afiper
 module Afiper
