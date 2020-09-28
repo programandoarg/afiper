@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_174849) do
+ActiveRecord::Schema.define(version: 2020_09_28_161840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2020_09_23_174849) do
   end
 
   create_table "afiper_wsaa_tokens", force: :cascade do |t|
-    t.bigint "afiper_contribuyente_id", null: false
     t.string "token", null: false
     t.string "sign", null: false
     t.string "cuit", null: false
@@ -96,11 +95,9 @@ ActiveRecord::Schema.define(version: 2020_09_23_174849) do
     t.boolean "homologacion", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["afiper_contribuyente_id"], name: "index_afiper_wsaa_tokens_on_afiper_contribuyente_id"
   end
 
   add_foreign_key "afiper_comprobantes", "afiper_comprobantes", column: "comprobante_asociado_id"
   add_foreign_key "afiper_comprobantes", "afiper_contribuyentes"
   add_foreign_key "afiper_items", "afiper_comprobantes"
-  add_foreign_key "afiper_wsaa_tokens", "afiper_contribuyentes"
 end
