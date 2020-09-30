@@ -71,6 +71,15 @@ describe Afiper::WsfeClient do
       end
       it { expect { subject }.to raise_error /Por favor intente nuevamente más tarde/i }
     end
+
+    context 'cuando el servidor tira error', vcr_cassettes: ['wsfe/wsaa'] do
+      before do
+        http_error = Savon::HTTPError.new(OpenStruct.new(code: 500, body: 'server error'))
+        allow_any_instance_of(Savon::Client).to receive(:call).and_raise(http_error)
+      end
+      it { expect { subject }.to raise_error /Error interno en el servidor de la AFIP/i }
+      it { expect { subject }.to raise_error /Por favor intente nuevamente más tarde/i }
+    end
   end
 
   describe '#autorizar_comprobante' do

@@ -32,12 +32,6 @@ module Afiper
       end
     end
 
-    def timeout_errors
-      excs = [HTTPI::TimeoutError]
-      defined?(HTTPClient) && excs << HTTPClient::ReceiveTimeoutError
-      excs
-    end
-
     def token
       unless @token.present?
         @token = WsaaToken.where(cuit: @cuit, service: @service_name, homologacion: homologacion).where('created_at > ?', Time.zone.now - 6.hours).first
@@ -49,6 +43,12 @@ module Afiper
       @token
     end
 
+    def timeout_errors
+      excs = [HTTPI::TimeoutError, Errno::ECONNRESET]
+      defined?(HTTPClient) && excs << HTTPClient::ReceiveTimeoutError
+      excs
+    end
+
     def call_raw(url, method, message)
       client = Savon.client do
         wsdl url
@@ -56,7 +56,9 @@ module Afiper
       end
       response = client.call(method, message: message)
     rescue *timeout_errors
-      raise ErrorTemporal, 'La solicitud tardó demasiado en completarse'
+      raise ErrorTemporal, 'Error interno en el servidor de la AFIP'
+    rescue Savon::Error
+      raise ErrorTemporal, 'Error interno en el servidor de la AFIP'
     rescue SocketError
       raise ErrorTemporal, 'Error de conexión'
     end
