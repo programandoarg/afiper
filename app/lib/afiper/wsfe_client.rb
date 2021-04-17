@@ -54,6 +54,15 @@ module Afiper
         rescue NoMethodError => e
         end
       end
+      if comprobante.comprobante_asociado.present?
+        ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:CbtesAsoc] = {
+          CbteAsoc: {
+            Tipo: comprobante.comprobante_asociado.config[:codigo_afip],
+            PtoVta: comprobante.punto_de_venta,
+            Nro: comprobante.numero
+          }
+        }
+      end
       if comprobante.subtotal_gravado.positive?
         ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
           AlicIva: comprobante.alicuotas.map do |alicuota|
