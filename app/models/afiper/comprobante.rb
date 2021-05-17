@@ -445,5 +445,37 @@ module Afiper
         '-'
       end
     end
+
+    def usa_qr?
+      created_at.to_date > Date.parse("01/05/2021")
+    end
+
+    def qr_string
+      ret = "https://www.afip.gob.ar/fe/qr?p="
+
+      el_json = {}
+      el_json[:ver] = "1"
+      el_json[:fecha] = fecha.strftime("%Y-%m-%d")
+      el_json[:cuit] = emisor_cuit
+      el_json[:ptoVta] = punto_de_venta
+      el_json[:tipoCmp] = config[:codigo_afip]
+      el_json[:nroCmp] = numero
+
+      #TODO total está bien siempre?
+      el_json[:importe] = total
+
+      el_json[:moneda] = moneda_codigo_afip
+      el_json[:ctz] = moneda_cotizacion
+
+      #Estos no son obligatorios por eso les pongo el ||
+      el_json[:tipoDocRec] = receptor_doc_tipo_values[:codigo_afip] || ""
+      el_json[:nroDocRec] = receptor_doc_nro || ""
+
+      el_json[:tipoCodAut] = "E" #Aparentemente siempre es CAE
+      el_json[:codAut] = cae
+
+      ret += Base64.strict_encode64(el_json.to_json)
+      return ret
+    end
   end
 end
