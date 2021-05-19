@@ -447,7 +447,7 @@ module Afiper
     end
 
     def usa_qr?
-      created_at.to_date > Date.parse("01/05/2021")
+      created_at.to_date >= Date.parse("01/05/2021")
     end
 
     def qr_string
@@ -461,7 +461,6 @@ module Afiper
       el_json[:tipoCmp] = config[:codigo_afip]
       el_json[:nroCmp] = numero
 
-      #TODO total está bien siempre?
       el_json[:importe] = total
 
       el_json[:moneda] = moneda_codigo_afip
