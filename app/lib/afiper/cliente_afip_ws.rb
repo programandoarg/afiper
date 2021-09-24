@@ -28,6 +28,7 @@ module Afiper
 
         response
       else
+        Rollbar.warning('AFIP response inválido: ' + response.body)
         raise ErrorTemporal, 'Error en el Web Service de la AFIP'
       end
     end
@@ -55,12 +56,15 @@ module Afiper
         convert_request_keys_to :none
       end
       response = client.call(method, message: message)
-    rescue *timeout_errors
-      raise ErrorTemporal, 'Error interno en el servidor de la AFIP'
-    rescue Savon::Error
-      raise ErrorTemporal, 'Error interno en el servidor de la AFIP'
-    rescue SocketError
-      raise ErrorTemporal, 'Error de conexión'
+    rescue *timeout_errors => e
+      Rollbar.warning(e)
+      raise ErrorTemporal.new('Error interno en el servidor de la AFIP', e)
+    rescue Savon::Error => e
+      Rollbar.warning(e)
+      raise ErrorTemporal.new('Error interno en el servidor de la AFIP', e)
+    rescue SocketError => e
+      Rollbar.warning(e)
+      raise ErrorTemporal.new('Error de conexión', e)
     end
 
     def wsaa

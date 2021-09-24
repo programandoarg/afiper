@@ -5,7 +5,10 @@ module Afiper
 
   # Timeout o error de conexión
   class ErrorTemporal < Error
-    def initialize(msg = '')
+    attr_accessor :original_exception
+
+    def initialize(msg = '', original_exception = nil)
+      self.original_exception = original_exception
       ret = +'Por favor intente nuevamente más tarde.'
       if msg.present?
         ret << " Detalle del error: #{msg}"
