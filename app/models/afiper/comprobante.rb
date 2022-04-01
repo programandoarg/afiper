@@ -201,7 +201,7 @@ module Afiper
       end
       comprobante.fiscal = comprobante.fiscal?
       comprobante.condicion_venta = 0 unless comprobante.condicion_venta.present?
-      comprobante.receptor_condicion_iva = 0 unless comprobante.receptor_condicion_iva.present?
+      comprobante.receptor_condicion_iva = :consumidor_final unless comprobante.receptor_condicion_iva.present?
       true
     end
 
