@@ -154,8 +154,9 @@ module Afiper
     acts_as_paranoid without_default_scope: true
 
     enumerize :concepto, in: { productos: 1, servicios: 2, productos_y_servicios: 3 }
-    enumerize :receptor_condicion_iva, in: { consumidor_final: 0,
-                                             responsable_inscripto: 1, monotributo: 2 }
+    enumerize :receptor_condicion_iva, in: { iva_responsable_inscripto: 0, iva_responsable_no_inscripto: 1, iva_no_responsable: 2,
+                                             iva_sujeto_exento: 3, consumidor_final: 4, responsable_monotributo: 5 }
+
     enumerize :condicion_venta, in: { contado: 0 }
     enumerize :moneda, in: { pesos: 0, dolares: 1, euros: 2, reales: 3,
                              pesos_chilenos: 4, pesos_uruguayos: 5, pesos_mexicanos: 6, libras: 7 }
