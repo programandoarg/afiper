@@ -26,7 +26,7 @@ module Afiper
   class Item < ApplicationRecord
     class << self
       def tipos_for_select
-        tipos.map { |k, v| [v[:descripcion], k] }
+        tipos.select { |k,v| [0, 1, 3, 7].include?(k) }.map { |k, v| [v[:descripcion], k] }
       end
 
       def tipos

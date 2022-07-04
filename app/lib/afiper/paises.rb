@@ -4,6 +4,7 @@ module Afiper
   class Paises
     def self.opciones
       {
+        '200' => 'ARGENTINA',
         '101' => 'BURKINA FASO',
         '102' => 'ARGELIA',
         '103' => 'BOTSWANA',
@@ -64,7 +65,6 @@ module Afiper
         '163' => 'SUDAN DEL SUR',
         '197' => 'RESTO (AFRICA)',
         '198' => 'INDETERMINADO (AFRICA)',
-        '200' => 'ARGENTINA',
         '201' => 'BARBADOS',
         '202' => 'BOLIVIA',
         '203' => 'BRASIL',
