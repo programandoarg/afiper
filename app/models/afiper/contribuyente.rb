@@ -69,9 +69,21 @@ module Afiper
     end
 
     def proximo_numero(tipo, punto_de_venta)
-      # wsfe_client.ultimo_cmp(tipo, punto_de_venta) + 1
-      last = comprobantes.where(tipo: tipo, punto_de_venta: punto_de_venta).order(:numero).last
-      (last.try(:numero) || 0) + 1
+      if Rails.env.test? && Comprobante.find_config(:nombre, tipo)[:codigo_afip].present?
+        proximo_numero_segun_afip(tipo, punto_de_venta)
+      else
+        # wsfe_client.ultimo_cmp(tipo, punto_de_venta) + 1
+        last = comprobantes.where(tipo: tipo, punto_de_venta: punto_de_venta).order(:numero).last
+        (last.try(:numero) || 0) + 1
+      end
+    end
+
+    def proximo_numero_segun_afip(tipo, punto_de_venta)
+      if Comprobante.find_config(:nombre, tipo)[:exportacion]
+        (wsfex_client.fex_get_last_cmp(tipo, punto_de_venta) || 0) + 1
+      else
+        (wsfe_client.ultimo_cmp(tipo, punto_de_venta) || 0) + 1
+      end
     end
 
     def tipos_de_comprobante_que_emite

@@ -30,11 +30,21 @@ module Afiper
       end
     end
 
+    def fex_get_last_cmp(tipo, pto_vta)
+      tipo_afip = Comprobante.find_config(:nombre, tipo)[:codigo_afip]
+      response = call_auth(:fex_get_last_cmp, :'Auth' => { :'Pto_venta' => pto_vta, :'Cbte_Tipo' => tipo_afip })
+      # unless response[:fex_result_last_cmp].present?
+      #   messages = response[:fex_err][:err_msg]
+      #   raise Afiper::Error, [messages].flatten.to_json
+      # end
+      nro = response[:fex_result_last_cmp][:cbte_nro].to_i
+      nro
+    end
+
     def autorizar_comprobante(comprobante)
       if !homologacion && Rails.env != 'production'
         raise Error, 'No se puede crear un comprobante real fuera del entorno de producción'
       end
-
       response = call_auth(:fex_authorize, parameters(comprobante))
       unless response[:fex_result_auth].present?
         messages = response[:fex_err][:err_msg]
@@ -64,9 +74,10 @@ module Afiper
     end
 
     def atributos_basicos(comprobante)
+      id = Rails.env.test? ? rand(5000000000) : 100_000_000 + comprobante.id
       {
         Cmp: {
-          Id: 100_000_000 + comprobante.id,
+          Id: id,
           Cbte_Tipo: comprobante.config[:codigo_afip],
           Fecha_cbte: comprobante.fecha.strftime('%Y%m%d'),
           Punto_vta: comprobante.punto_de_venta,

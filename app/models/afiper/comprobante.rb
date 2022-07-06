@@ -390,6 +390,15 @@ module Afiper
       alic.select { |alicuota| (alicuota[:base_imponible]).positive? }
     end
 
+    # Solo genera un token. Lo uso fuera de las transacciones para preservar el token en la DB
+    def generar_token_afip
+      if config[:exportacion]
+        contribuyente.wsfex_client.token
+      else
+        contribuyente.wsfe_client.token
+      end
+    end
+
     def solicitar_cae
       if config[:exportacion]
         contribuyente.wsfex_client.autorizar_comprobante(self)
