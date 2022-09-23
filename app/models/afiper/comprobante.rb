@@ -210,6 +210,8 @@ module Afiper
               :items,
               presence: true
     validates :receptor_doc_nro, numericality: { only_integer: true }
+    validates :numero, uniqueness: { scope: [:punto_de_venta, :tipo] }
+
     validates_associated :items
 
     def default_tipo_iva
