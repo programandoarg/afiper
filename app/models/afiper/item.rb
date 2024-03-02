@@ -30,6 +30,8 @@ module Afiper
       end
 
       def tipos
+        # TODO: agregar un tipo "No indicado" para tipo C? o si no que sea nullable?
+        # Este nuevo tipo tendría que estar incluido en el scope "gravado"
         {
           0 => { descripcion: '21%',         codigo_alicuota: 5,    percepcion_iva: 21    },
           1 => { descripcion: '10.5%',       codigo_alicuota: 4,    percepcion_iva: 10.5  },

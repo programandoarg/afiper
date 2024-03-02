@@ -7,12 +7,13 @@ describe Afiper::WsfeClient do
   let(:instancia) { described_class.new(cuit, afip_clave_privada, afip_certificado) }
 
   let(:item) { build :afiper_item, cantidad: 1, importe: 300 }
-  let(:pventa) { 1 }
-  let(:numero) { 2 }
+  let(:pventa) { 2 }
+  let(:numero) { 1 }
   let(:receptor_doc_tipo) { 1 } # CUIT
   let(:receptor_doc_nro) { '20120791827' }
+  let(:tipo_factura) { :factura_a }
   let(:comprobante) do
-    create :afiper_comprobante, tipo_comprobante: :factura_a, items: [item], numero: numero,
+    create :afiper_comprobante, tipo_comprobante: tipo_factura, items: [item], numero: numero,
                                 receptor_doc_tipo: receptor_doc_tipo, punto_de_venta: pventa,
                                 receptor_doc_nro: receptor_doc_nro, fecha: Date.today
   end
@@ -89,6 +90,40 @@ describe Afiper::WsfeClient do
       it { is_expected.to be_truthy }
     end
 
+    context 'cuando autoriza correctamente tipo C', vcr_cassettes: ['wsfe/autorizar_c', 'wsfe/wsaa']  do
+      let(:tipo_factura) { :factura_c }
+      let(:pventa) { 2 }
+      let(:numero) { 2 }
+      let(:comprobante) do
+        create :afiper_comprobante, tipo_comprobante: tipo_factura, items: [item], numero: numero,
+                                    receptor_doc_tipo: receptor_doc_tipo, punto_de_venta: pventa,
+                                    receptor_doc_nro: receptor_doc_nro, fecha: Date.today
+      end
+
+      it do
+        is_expected.to be_truthy
+      end
+
+      context 'cuando autoriza correctamente tipo nota de credito C', vcr_cassettes: ['wsfe/autorizar_nc_c', 'wsfe/wsaa']  do
+        let(:numero) { 1 }
+        let(:tipo_factura) { :nota_de_credito_c }
+        let(:item_asoc) { build :afiper_item, cantidad: 1, importe: 300 }
+        let(:comprobante_asoc) do
+          create :afiper_comprobante, tipo_comprobante: :factura_c, items: [item_asoc], numero: 1,
+                                      receptor_doc_tipo: receptor_doc_tipo, punto_de_venta: pventa,
+                                      receptor_doc_nro: receptor_doc_nro, fecha: Date.today
+        end
+
+        before do
+          comprobante.update(comprobante_asociado: comprobante_asoc)
+        end
+
+        it do
+          is_expected.to be_truthy
+        end
+      end
+    end
+
     context 'cuando hace falta el CUIT', vcr_cassettes: ['wsfe/falta_cuit', 'wsfe/wsaa'] do
       let(:numero) { 3 }
       let(:receptor_doc_tipo) { 2 } # CUIL
@@ -114,7 +149,7 @@ describe Afiper::WsfeClient do
                                     receptor_doc_nro: receptor_doc_nro, fecha: Date.today,
                                     concepto: :servicios
       end
-      
+
       it { expect { autorizar_comprobante }.to raise_error having_attributes(error_code: '10049') }
       it { expect { autorizar_comprobante }.to raise_error /Debe ingresar las fechas de servicio/i }
     end

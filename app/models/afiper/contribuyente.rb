@@ -95,6 +95,14 @@ module Afiper
       end
     end
 
+    def tipos_monotributo
+      Comprobante.configuracion_tipos.select do |t|
+        t[:nombre].in?(%i[factura_c nota_de_credito_c nota_de_debito_c
+                          ticket_no_fiscal devolucion_no_fiscal
+                          factura_e nota_de_credito_e nota_de_debito_e])
+      end
+    end
+
     def afip_configured?(homologacion)
       if homologacion
         afip_certificado_homologacion.present? && afip_clave_homologacion.present?
