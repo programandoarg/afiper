@@ -1,8 +1,4 @@
 default: &default
-  host: localhost
-  port: 5432
-  username: afiper
-  password: afiper
   adapter: postgresql
   encoding: unicode
   min_messages: WARNING

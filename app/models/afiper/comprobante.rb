@@ -52,13 +52,13 @@ module Afiper
         [
           { id: 1,  nombre: :factura_a,            descripcion: 'Factura A',                                      codigo_afip: 1,    nombre_print: 'FACTURA',                                              letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
           { id: 2,  nombre: :factura_b,            descripcion: 'Factura B',                                      codigo_afip: 6,    nombre_print: 'FACTURA',                                              letra: 'B', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',                                      codigo_afip: 11,   nombre_print: 'FACTURA',                                              letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 3,  nombre: :factura_c,            descripcion: 'Factura C',                                      codigo_afip: 11,   nombre_print: 'FACTURA',                                              letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
           { id: 4,  nombre: :nota_de_credito_a,    descripcion: 'Nota de crédito A',                              codigo_afip: 3,    nombre_print: 'NOTA DE CREDITO',                                      letra: 'A', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
           { id: 5,  nombre: :nota_de_credito_b,    descripcion: 'Nota de crédito B',                              codigo_afip: 8,    nombre_print: 'NOTA DE CREDITO',                                      letra: 'B', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',                              codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                                      letra: 'C', exportacion: false, multiplicador_saldo: -1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 6,  nombre: :nota_de_credito_c,    descripcion: 'Nota de crédito C',                              codigo_afip: 13,   nombre_print: 'NOTA DE CREDITO',                                      letra: 'C', exportacion: false, multiplicador_saldo: -1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
           { id: 7,  nombre: :nota_de_debito_a,     descripcion: 'Nota de débito A',                               codigo_afip: 2,    nombre_print: 'NOTA DE DEBITO',                                       letra: 'A', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: true,  recibo: false },
           { id: 8,  nombre: :nota_de_debito_b,     descripcion: 'Nota de débito B',                               codigo_afip: 7,    nombre_print: 'NOTA DE DEBITO',                                       letra: 'B', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
-          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',                               codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                                       letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: false },
+          { id: 9,  nombre: :nota_de_debito_c,     descripcion: 'Nota de débito C',                               codigo_afip: 12,   nombre_print: 'NOTA DE DEBITO',                                       letra: 'C', exportacion: false, multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
           { id: 10, nombre: :recibo_a,             descripcion: 'Recibo A',                                       codigo_afip: 4,    nombre_print: 'RECIBO',                                               letra: 'A', exportacion: false, multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
           { id: 11, nombre: :recibo_b,             descripcion: 'Recibo B',                                       codigo_afip: 9,    nombre_print: 'RECIBO',                                               letra: 'B', exportacion: false, multiplicador_saldo:  0, tiene_iva: true,  adicionar_iva: false, mostrar_iva: false, recibo: true  },
           { id: 12, nombre: :ticket_no_fiscal,     descripcion: I18n.t('tipo_comprobante.ticket_no_fiscal'),      codigo_afip: nil,  nombre_print: I18n.t('tipo_comprobante.ticket_no_fiscal_print'),      letra: 'X', exportacion: false, multiplicador_saldo:  1, tiene_iva: false, adicionar_iva: false, mostrar_iva: false, recibo: false },
@@ -214,11 +214,19 @@ module Afiper
 
     validates_associated :items
 
+    def tipo_c?
+      tipo.in? %w[factura_c nota_de_credito_c nota_de_debito_c]
+    end
+
     def default_tipo_iva
       if config[:exportacion]
         7 # Exento
       else
-        6 # No gravado
+        if tipo_c?
+          0 # 21 %
+        else
+          6 # No gravado
+        end
       end
     end
 
@@ -295,6 +303,18 @@ module Afiper
       end
     end
 
+    def subtotal_iva
+      return 0 unless config[:tiene_iva]
+
+      if config[:adicionar_iva]
+        items.gravado.sum('round(cantidad * (importe - descuento + recargo)' \
+                                         '* 0.01 * percepcion_iva, 2)')
+      else
+        items.gravado.sum('round(cantidad * (importe - descuento + recargo)' \
+                                         '* (1 - 1 / (1 + 0.01 * percepcion_iva)), 2)')
+      end
+    end
+
     def total
       if config[:adicionar_iva]
         items.sum('round(cantidad * (importe - descuento + recargo)' \
@@ -359,16 +379,6 @@ module Afiper
 
     def recargo_total_en_pesos
       (recargo_total * moneda_cotizacion).round(2)
-    end
-
-    def subtotal_iva
-      if config[:adicionar_iva]
-        items.gravado.sum('round(cantidad * (importe - descuento + recargo)' \
-                                         '* 0.01 * percepcion_iva, 2)')
-      else
-        items.gravado.sum('round(cantidad * (importe - descuento + recargo)' \
-                                         '* (1 - 1 / (1 + 0.01 * percepcion_iva)), 2)')
-      end
     end
 
     def subtotal_tributos

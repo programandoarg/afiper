@@ -63,7 +63,7 @@ module Afiper
           }
         }
       end
-      if comprobante.subtotal_gravado.positive?
+      if comprobante.config[:tiene_iva] && comprobante.subtotal_gravado.positive?
         ret[:FeCAEReq][:FeDetReq][:FECAEDetRequest][:Iva] = {
           AlicIva: comprobante.alicuotas.map do |alicuota|
             {
