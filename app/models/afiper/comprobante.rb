@@ -169,6 +169,7 @@ module Afiper
     belongs_to :contribuyente, class_name: 'Afiper::Contribuyente',
                                foreign_key: :afiper_contribuyente_id
     belongs_to :comprobante_asociado, class_name: 'Afiper::Comprobante', optional: true
+    has_many :comprobantes_asociados, class_name: 'Afiper::Comprobante', foreign_key: :comprobante_asociado_id, dependent: :destroy
 
     has_many :items, class_name: 'Afiper::Item', foreign_key: :afiper_comprobante_id,
                      inverse_of: :comprobante, dependent: :destroy
