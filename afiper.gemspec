@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'pg'
   spec.add_dependency 'rails', '~> 5.2'
   spec.add_dependency 'savon', '~> 2.10.0'
-  spec.add_dependency 'sidekiq', '~> 5.2'
+  spec.add_dependency 'sidekiq', '>= 5.2', '< 7.0'
 
   spec.add_development_dependency 'database_cleaner'
   spec.add_development_dependency 'factory_bot_rails'
