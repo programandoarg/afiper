@@ -53,6 +53,7 @@ module Afiper
     def call_raw(url, method, message)
       client = Savon.client do
         wsdl url
+        ssl_ca_cert_file ENV.fetch("SSL_CERT_FILE")
         convert_request_keys_to :none
       end
       response = client.call(method, message: message)
