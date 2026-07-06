@@ -60,9 +60,12 @@ module Afiper
     rescue *timeout_errors => e
       Rollbar.warning(e)
       raise ErrorTemporal.new('Error interno en el servidor de la AFIP', e)
-    rescue Savon::Error => e
-      Rollbar.warning(e)
-      raise ErrorTemporal.new('Error interno en el servidor de la AFIP', e)
+
+    # Savon::SOAPFault (Savon::Error): "(soap:Server) No existe persona con ese Id"
+    #
+    # rescue Savon::Error => e
+    #   Rollbar.warning(e)
+    #   raise ErrorTemporal.new('Error interno en el servidor de la AFIP', e)
     rescue SocketError => e
       Rollbar.warning(e)
       raise ErrorTemporal.new('Error de conexión', e)
